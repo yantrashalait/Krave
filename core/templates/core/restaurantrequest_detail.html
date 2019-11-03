@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>
+            Restaurant Requests
+        </title>
+    </head>
+    <body>
+        <p>
+            These are the requests.
+        </p>
+        {{ req.name }}
+        <br>
+        {{ req.location }}
+        <br>
+        {{ req.email_of_owner }}
+        <br>
+        {{ req.contact }}
+        <br>
+        {{ req.name_of_owner }}
+        <br>
+        {{ req.registration_number }}
+        <br>
+        {{ req.message }}
+        <br>
+        <a href="{% url 'core:accept-request' req.pk %}">Accept</a>
+        <a href="{% url 'core:reject-request' req.pk %}">Reject</a>
+    </body>
+</html>

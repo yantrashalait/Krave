@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>
+            Restaurant Requests
+        </title>
+    </head>
+    <body>
+        <p>
+            {% if req %}These are the requests.{% else %}No pending requests.{% endif %}
+        </p>
+        <ul>
+            {% for req in req %}
+            <li>
+                <a href="{% url 'core:request-detail' req.pk %}">{{ req.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
