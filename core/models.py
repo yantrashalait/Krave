@@ -50,6 +50,7 @@ class FoodMenu(models.Model):
     new_price = models.FloatField()
     # The preparation time of each food may vary according to the restaurant.
     preparation_time = models.CharField(max_length=100, null=True)
+    image = models.ImageField(upload_to='menu/', null=True, blank=True)
 
     def __str__(self):
         return self.name

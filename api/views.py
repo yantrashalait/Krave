@@ -3,16 +3,20 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .serializers import RestaurantSerializer, RestaurantRequestSerializer, UserSerializer, UserProfileSerializer
-from core.models import Restaurant, RestaurantRequest
+from .serializers import RestaurantSerializer, RestaurantRequestSerializer, UserSerializer, \
+    UserProfileSerializer, FoodCategorySerializer, FoodMenuSerializer
+from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
+    RetrieveUpdateDestroyAPIView
 from django.contrib.auth.models import Group
 from userrole.models import UserRole
 from django.db import transaction
 from user.models import UserProfile
+import django_filters.rest_framework
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -35,8 +39,13 @@ class CustomAuthToken(ObtainAuthToken):
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
-    queryset = Restaurant.objects.all()
     serializer_class =  RestaurantSerializer
+
+    def get_queryset(self):
+        if self.request.query_params.get('name'):
+            name = self.request.query_params.get('name')
+            return Restaurant.objects.filter(name__icontains=name)
+        return Restaurant.objects.all()
 
 
 class RestaurantRequestViewSet(viewsets.ModelViewSet):
@@ -68,5 +77,47 @@ class UserProfileViewSet(viewsets.ModelViewSet):
             return UserProfile.objects.all()
         else:
             return UserProfile.objects.get(user__id=pk)
+
+
+class CategoryViewSet(ListCreateAPIView):
+    serializer_class = FoodCategorySerializer
+
+    def get_queryset(self):
+        return FoodCategory.objects.all()
+
+
+class CategorySingleViewSet(RetrieveUpdateAPIView):
+    serializer_class = FoodCategorySerializer
+    lookup_field = 'pk'
+
+    def get_object(self):
+        return FoodCategory.objects.get(id=self.kwargs.get('pk'))
+
+
+class FoodMenuViewSet(ListCreateAPIView):
+    serializer_class = FoodMenuSerializer
+
+    def get_queryset(self):
+        return FoodMenu.objects.filter(restaurant_id=self.kwargs.get('pk'))
+
+
+class FoodMenuSingleViewSet(RetrieveUpdateDestroyAPIView):
+    serializer_class = FoodMenuSerializer
+    
+    def get_object(self):
+        return FoodMenu.objects.get(pk=self.kwargs.get('pk'))
+
+
+class FoodSearch(ListAPIView):
+    serializer_class = FoodMenuSerializer
+
+    def get_queryset(self):
+        if self.request.query_params.get('name', None):
+            name = self.request.query_params.get('name')
+            return FoodMenu.objects.filter(name__icontains=name)
+        if self.request.query_params.get('category', None):
+            category = self.request.query_params.get('category')
+            return FoodMenu.objects.filter(category__name__icontains=category)
+        return FoodMenu.objects.all()
 
 

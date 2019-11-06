@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Restaurant, RestaurantRequest
+from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu
 from user.models import User, UserProfile
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
@@ -8,7 +8,7 @@ from rest_framework.validators import UniqueValidator
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
-        fields = ('id', 'name', 'contact', 'opening_time', 'closing_time', 'delivery_upto')
+        fields = ('id', 'name', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 'location')
 
 
 class RestaurantRequestSerializer(serializers.ModelSerializer):
@@ -51,3 +51,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_user(self, object):
         return object.user.username
+
+
+class FoodCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodCategory
+        fields = '__all__'
+
+
+class FoodMenuSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodMenu
+        fields = '__all__'
