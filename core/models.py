@@ -92,7 +92,7 @@ class RestaurantRating(models.Model):
 class FoodMenu(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="menu")
     meal_type = models.ForeignKey(MealType, on_delete=models.DO_NOTHING, related_name="menu", null=True)
-    category = models.ForeignKey(RestaurantFoodCategory, on_delete=models.CASCADE, related_name="food")
+    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, related_name="food")
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     recipe = models.TextField(null=True)
