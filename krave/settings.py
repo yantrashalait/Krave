@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'user',
     'userrole',
     'api',
+    'delivery',
     'django_filters',
 ]
 
