@@ -26,19 +26,30 @@ class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'username': user.username,
-            'email': user.email,
-            'restaurant': user.is_restaurant,
-            'customer': user.is_customer,
-            'delivery': user.is_deliveryman,
-        })
-
+        serializer.is_valid(raise_exception=False)
+        try:
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)            
+            return Response({
+                'status': True,
+                'msg': 'Login Successful',
+                'data': {
+                    'token': token.key,
+                    'user_id': user.pk,
+                    'username': user.username,
+                    'email': user.email,
+                    'restaurant': user.is_restaurant,
+                    'customer': user.is_customer,
+                    'delivery': user.is_deliveryman,
+                }
+                
+            })
+        except KeyError:
+            return Response({
+                'status': False,
+                'msg': 'Login Failed',
+            })
+            
 
 class CategoryViewSet(ListCreateAPIView):
     serializer_class = FoodCategorySerializer

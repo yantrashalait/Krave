@@ -22,11 +22,13 @@ class Order(models.Model):
     def __str__(self):
         return self.food.name + ' ' + self.ordered_by.username
 
+
 DELIVERY_CHOICES = (
     (0, 'Assigned'),
     (1, 'Ongoing'),
     (2, 'Received')
 )
+
 class Delivery(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="delivery")
     delivery_time = models.TimeField()

@@ -5,7 +5,8 @@ from user.models import User, UserProfile
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
 
-base_url = 'localhost:8000/api/v1/'
+# base_url = 'http://localhost:8000/api/v1/'
+base_url = 'http://157.245.213.171:8000/api/v1/'
 
 class FoodCategorySerializer(serializers.ModelSerializer):
     class Meta:
