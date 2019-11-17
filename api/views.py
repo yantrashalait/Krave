@@ -195,9 +195,17 @@ class UserCreationViewSet(APIView):
             userrole = UserRole.objects.get_or_create(user=user, group=group)
             user.groups.add(group)
             if user:
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                return Response(
+                    {
+                        'status': True, 
+                        'msg': 'User Registration Success',
+                    }
+                )
         else:
-            return Response(serializer.errors)
+            return Response({
+                'status': False,
+                'msg': serializer.errors,
+            })
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):

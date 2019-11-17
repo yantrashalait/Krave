@@ -4,9 +4,12 @@ from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, M
 from user.models import User, UserProfile
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
+from django.core.exceptions import ValidationError
+
 
 # base_url = 'http://localhost:8000/api/v1/'
 base_url = 'http://157.245.213.171:8000/api/v1/'
+
 
 class FoodCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -120,13 +123,8 @@ class RestaurantRequestSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
-    username = serializers.CharField(
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+    email = serializers.EmailField(max_length=500, required=True)
+    username = serializers.CharField(max_length=500, required=True)
     password = serializers.CharField(min_length=8)
     first_name = serializers.CharField(max_length=255)
     last_name = serializers.CharField(max_length=255)
@@ -139,6 +137,17 @@ class UserSerializer(serializers.ModelSerializer):
             first_name=validated_data['first_name'], 
             last_name=validated_data['last_name'])
         return user
+    
+    def validate_username(self, username):
+        print(username)
+        if User.objects.filter(username=username).exists():
+            raise ValidationError("User with this username already exists.")
+        return username
+    
+    def validate_email(self, email):
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("User with this email already exists.")
+        return email
 
     class Meta:
         model = User
