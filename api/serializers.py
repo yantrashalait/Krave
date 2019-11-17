@@ -12,9 +12,16 @@ base_url = 'http://157.245.213.171:8000/api/v1/'
 
 
 class FoodCategorySerializer(serializers.ModelSerializer):
+
     class Meta:
         model = FoodCategory
-        fields = '__all__'
+        fields = ('id', 'name')
+    
+    def validate_name(self, name):
+        print(name)
+        if FoodCategory.objects.filter(name__icontains=name).exists():
+            raise ValidationError("This category already exists.")
+        return name
 
 
 class MealSerializer(serializers.ModelSerializer):
@@ -28,10 +35,15 @@ class RestaurantFoodCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RestaurantFoodCategory
-        fields = ('id', 'category', 'category_name')
+        fields = ('id', 'category', 'restaurant', 'category_name')
     
     def get_category_name(self, obj):
         return obj.category.name
+    
+    def validate(self, data):
+        if RestaurantFoodCategory.objects.filter(category=data['category'], restaurant=data['restaurant']).exists():
+            raise ValidationError("Category already assigned to the restaurant.")
+        return data
 
 
 class RestaurantDetailFoodCategorySerializer(serializers.ModelSerializer):
