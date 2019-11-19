@@ -178,6 +178,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 class FoodMenuSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
+    description = serializers.CharField(required=True, max_length=500)
+    image = serializers.ImageField(required=True)
+    preparation_time = serializers.CharField(required=True, max_length=50)
 
     class Meta:
         model = FoodMenu

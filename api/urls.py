@@ -33,8 +33,8 @@ urlpatterns = [
     path('restaurant/<int:rest_id>', views.RestaurantSingleViewSet.as_view(), name='restaurant-single'),
 
     #apis for food menus of a restaurant
-    path('menu/list/<int:pk>', views.FoodMenuViewSet.as_view(), name='menu-list'),
-    path('food/<int:pk>', views.FoodMenuSingleViewSet.as_view(), name='food-single'),
+    path('menu/list/<int:rest_id>', views.FoodMenuViewSet.as_view(), name='menu-list'),
+    path('food/<int:food_id>', views.FoodMenuSingleViewSet.as_view(), name='food-single'),
     path('food/search', views.FoodSearch.as_view(), name='food-search'),
 ]
 
