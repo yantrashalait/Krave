@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+{% block content %}
+  <section class="gery__bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mx-auto">
+          <div class="hding">
+            Let's <strong>enter now</strong>
+          </div>
+          <div class="uniform">
+            <form>
+            <div class="formlist">
+              <input class="form-input" type="text" placeholder="Email Address">
+            </div>
+            <div class="formlist">
+              <input class="form-input" type="text" placeholder="password">
+            </div>
+            <p class="reverse-pass"><strong>forget password?</strong> <a href="#"> request password</a></p>
+            <div class="formlist">
+              <button class="form-submit">Login Now</button>
+            </div>
+            </form>
+          </div>
+          <div class="login-tit">
+            <span class="login-detail"> new to kravee?  <a class="login-btn" href="#">create an account!</a></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endblock %}

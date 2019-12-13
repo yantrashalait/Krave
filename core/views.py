@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 from .models import RestaurantRequest, Restaurant
 from django.conf import settings
 from userrole.models import UserRole
@@ -79,3 +79,19 @@ def generate_username(name):
         x += 1
         if x > 100000:
             raise Exception("Name is super popular")
+
+
+class DashboardView(TemplateView):
+    template_name = 'core/home.html'
+
+class LoginView(TemplateView):
+    template_name = 'core/login.html'
+
+
+class RegisterView(TemplateView):
+    template_name = 'core/register.html'
+
+
+class RestaurantDetail(TemplateView):
+    template_name = 'core/restaurant__detail.html'
+

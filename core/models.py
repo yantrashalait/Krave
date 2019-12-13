@@ -15,16 +15,6 @@ class FoodCategory(models.Model):
 
 
 """
-    This model denotes the type of food(breakfast, lunch or dinner)
-"""
-class MealType(models.Model):
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
-
-
-"""
     Restaurant model stores the details about restaurant profile that is visible to the public.
 """
 class Restaurant(models.Model):
@@ -34,6 +24,7 @@ class Restaurant(models.Model):
     opening_time = models.TimeField()
     closing_time = models.TimeField()
     delivery_upto = models.TextField(help_text="Where do you deliver?")
+    delivery_charge = models.FloatField(help_text="Delivery charges in dollars", null=True, blank=True)
 
     @property
     def longitude(self):
@@ -49,23 +40,19 @@ class Restaurant(models.Model):
         return self.name
 
 
+class RestaurantCuisine(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="cuisines")
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.restaurant.name + ' ' + self.name
+
 """
     This model stores the food categories 
 """
 class RestaurantFoodCategory(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='food_category')
     category = models.ForeignKey(FoodCategory, on_delete=models.DO_NOTHING, related_name='restaurants')
-
-
-"""
-    This model stores the meal types of restaurant
-"""
-class RestaurantMealType(models.Model):
-    meal_type = models.ForeignKey(MealType, on_delete=models.DO_NOTHING, related_name='restaurant')
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="meal")
-
-    def __str__(self):
-        return self.restaurant.name + ' ' + self.meal_type.name
 
 
 class RestaurantReview(models.Model):
@@ -91,11 +78,10 @@ class RestaurantRating(models.Model):
 """
 class FoodMenu(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="menu")
-    meal_type = models.ForeignKey(MealType, on_delete=models.DO_NOTHING, related_name="menu", null=True)
     category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, related_name="food")
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    recipe = models.TextField(null=True)
+    ingredients = models.TextField(null=True)
     old_price = models.FloatField()
     new_price = models.FloatField()
     # The preparation time of each food may vary according to the restaurant.
@@ -152,6 +138,7 @@ class RestaurantRequest(models.Model):
 
 class FoodCart(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.DO_NOTHING, related_name='cart')
+    number_of_food = models.IntegerField(default=1)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='cart')
     added_on = models.DateTimeField(auto_now_add=True)
     

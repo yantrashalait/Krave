@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, MealType, \
-    RestaurantMealType, RestaurantFoodCategory
+from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, RestaurantFoodCategory, \
+    FoodCart, RestaurantCuisine
 from user.models import User, UserProfile
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
@@ -22,12 +22,6 @@ class FoodCategorySerializer(serializers.ModelSerializer):
         if FoodCategory.objects.filter(name__icontains=name).exists():
             raise ValidationError("This category already exists.")
         return name
-
-
-class MealSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MealType
-        fields = '__all__'
 
 
 class RestaurantFoodCategorySerializer(serializers.ModelSerializer):
@@ -70,62 +64,35 @@ class RestaurantDetailFoodCategorySerializer(serializers.ModelSerializer):
         return FoodMenuSerializer(foods, many=True).data
 
 
-class RestaurantMealSerializer(serializers.ModelSerializer):
-    meal_name = serializers.SerializerMethodField()
-
-    class Meta:
-        model = RestaurantMealType
-        fields = ('id', 'meal_type', 'restaurant', 'meal_name')
-
-    def get_meal_name(self, obj):
-        return obj.meal_type.name
-
-
-class RestaurantDetailMealSerializer(serializers.ModelSerializer):
-    meal_name = serializers.SerializerMethodField()
-    create_url = serializers.SerializerMethodField()
-    detail_url = serializers.SerializerMethodField()
-    foods = serializers.SerializerMethodField()
-
-    class Meta:
-        model = RestaurantMealType
-        fields = ('id', 'meal_type', 'meal_name', 'restaurant', 'create_url', 'detail_url', 'foods')
-
-    def get_meal_name(self, obj):
-        return obj.meal_type.name
-
-    def get_create_url(self, obj):
-        return base_url + 'restaurant/' + str(obj.restaurant.id) + '/meal/'
-    
-    def get_detail_url(self, obj):
-        return base_url + 'restaurant/' + str(obj.restaurant.id) + '/meal/' + str(obj.meal_type.id) + '/'
-
-    def get_foods(self, obj):
-        foods = FoodMenu.objects.filter(restaurant=obj.restaurant, meal_type=obj.meal_type)
-        return FoodMenuSerializer(foods, many=True).data
-
-
 class RestaurantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         fields = ('id', 'name', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 'location')
 
 
+class RestaurantCuisineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantCuisine
+        fields = ('name')
+
+
 class RestaurantSingleSerializer(serializers.ModelSerializer):
     food_category = serializers.SerializerMethodField()
-    meal_type = serializers.SerializerMethodField()
+    cuisine = serializers.SerializerMethodField()
 
     class Meta:
         model = Restaurant
-        fields = ('name', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 'location', 'food_category', 'meal_type')
+        fields = ('name', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 
+        'location', 'food_category', 'cuisine', 'delivery_charge')
 
     def get_food_category(self, obj):
         categories = RestaurantFoodCategory.objects.filter(restaurant=obj)
         return RestaurantDetailFoodCategorySerializer(categories, many=True).data
+    
+    def get_cuisine(self, obj):
+        cuisines = RestaurantCuisine.objects.filter(restaurant=obj)
+        return RestaurantCuisineSerializer(cuisines, many=True).data
 
-    def get_meal_type(self, obj):
-        meals = RestaurantMealType.objects.filter(restaurant=obj)
-        return RestaurantDetailMealSerializer(meals, many=True).data
 
 
 class RestaurantRequestSerializer(serializers.ModelSerializer):
@@ -151,7 +118,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
     
     def validate_username(self, username):
-        print(username)
         if User.objects.filter(username=username).exists():
             raise ValidationError("User with this username already exists.")
         return username
@@ -184,8 +150,14 @@ class FoodMenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodMenu
-        fields = ('id', 'name', 'restaurant', 'meal_type', 'category', 'description', 
-        'image_url', 'image', 'recipe', 'old_price', 'new_price', 'preparation_time')
+        fields = ('id', 'name', 'restaurant', 'category', 'description', 
+        'image_url', 'image', 'ingredients', 'old_price', 'new_price', 'preparation_time')
     
     def get_image_url(self, obj):
         return base_url + str(obj.image)
+
+
+class UserCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodCart
+        fields = '__all__'

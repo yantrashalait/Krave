@@ -1,0 +1,445 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+    <section class="top__banner">
+      <div class="container ">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <div class="resturent_details">
+                  <div class="resturent__logo"> 
+                    <img src="{% static 'images/rest_logo.jpg' %}">
+                  </div>
+                  <div class="rest_info_wrapper">
+                  <div class="restaurants_name__item">
+                  <h4>smile house cafe</h4>
+                   <div class="restu_nav">
+                      <ul>
+                        <li>
+                          <a href="#">chinese</a>
+                          <a href="#">asian</a>
+                          <a href="#">asian fusion</a>
+                          <a href="#">dessert</a>
+
+                        </li>
+                      </ul> 
+                    </div>
+                  </div>
+                  <div class="res_info__bottom">
+                    <div class="review__delivery__address">
+                        <div class="rest_rating">
+                          <span class="rating__number">4.0</span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star checked"></span>
+                          <span class="fa fa-star"></span>
+                          <span class="review__count_time">reviews(200+)</span>
+
+                        </div>
+                        <div class="details__review___and__address">
+                            <span class="resturent_address">101 Travel, San Francisco, CA 6768</span>                        
+                        </div>
+                    </div>
+                    <div class="delivery__info__fees">
+                     <span class="food_delivery_fee btns__fees">$2.65 delivery fee</span>
+                      <span class="food_delivery_time btns__fees">20-30 min</span>
+                      <button id="more__info" class="resturent_more_info btns__fees">more info</button> 
+                    </div>
+                  </div>
+                  </div>
+            </div>           
+          </div>
+          <div class="col-lg-4">
+            <div class="resturent__opening__time">
+              <h2>Opens at 11:AM</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <section class="food__category">
+    <div class="container"><!-- 
+       <div class="row">
+        <div class="col-md-12 line__bar_psedo">
+          <div class="categ__list">
+            <div class="dinner__categ">
+              <span class="catrg_type">Dinner</span>
+              <span>12:00 AM - 11:30 PM</span>
+            </div>
+            <div class="lunch__brekf__categ">
+              <span class="catrg_type">Lunch|breakfast</span>
+              <span>12:00 AM - 11:30 PM</span>
+            </div>
+          </div>
+        </div>       
+       </div> -->
+       <div class="row">
+        <div class="category_nav">
+          <ul>
+            <li><a href="#">chef's special</a></li>
+             <li><a href="#">burger</a></li>
+              <li><a href="#">chicken</a></li>
+              <li><a href="#">drinks</a></li>
+              <li><a href="#">burger</a></li>
+              <li><a href="#">snakers</a></li>
+              <li><a href="#">shakes & desert</a></li>
+              <li><a href="#">burger</a></li>
+          </ul>
+        </div>
+       </div>
+    </div>
+  </section>
+  <section class="category__item__details">
+    <div class="container">
+      <div class="category_main_head">
+          <span>chef's special</span>
+      </div>
+      <div class="row">
+        
+        <div class="col-md-6 mb-4">
+          <div id="food__detail" class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/test.jpg' %}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sec__category__item">
+    <div class="container">
+      <div class="category_main_head">
+          <span>chef's special</span>
+      </div>
+      <div class="row">
+        
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="categ__info">
+            <div class="categ__head">
+              <span class="food_item__name">golden pumpkin</span>
+              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
+              <span class="food__item__price">$10</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{% static 'images/food__burger.png' %}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mt-5">
+          <div class="krave__details">
+            <div class="krave__footer__logo">
+              <img src="{% static 'images/logo.png' %}">
+            </div>
+            <div class="app__stores">
+              <div class="store">
+                <a href="#"><i class="fa fa-apple" aria-hidden="true"></i>
+                  <span>Availbale on the <strong>app store</strong></span>
+                </a>         
+              </div>
+              <div class="store">
+                <a href="#"><i class="fa fa-google" aria-hidden="true"></i>
+                  <span class="google_span">Get it on<strong>google play</strong></span>
+                </a>         
+              </div>
+              
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-5 about__karve__button">
+          <div class="nav__about__krave">
+           <h4 class="nav_h4">About krave</h4>
+            <ul>
+              <li>
+                <a href="#">Read our blog</a>
+                <a href="#">Buy gift card</a>
+                <a href="#">Sing up to deliver</a>
+                <a href="#">Add your resturent</a>
+
+              </li>
+            </ul>
+          </div>
+          <div class="nav__about__krave get__help">
+           <h4 class="nav_h4">get help</h4>
+           <ul>
+              <li>
+                <a href="#">Read FAQS</a>
+                <a href="#">View all cities</a>
+                <a href="#">Careers</a>
+
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copyright__divider"></div>
+    <div class="container footer__pad_cont">
+    <div class="row">
+        <div class="col-md-6 mt-4">
+           <div class="footer__copyright">
+            <p class="copyright__holder">2019 krave technology inc</p>
+        </div>
+        </div>
+        <div class="col-md-6 mt-4">
+          <div class="term__and_cond">
+            <ul>
+              <li>
+                <a href="">Privacy Policy</a>
+                <a href="">Terms of Use</a>
+                <a href="">Pricing</a>
+
+              </li>
+            </ul>
+          </div>
+        </div>       
+    </div>
+    </div>
+  </footer>
+  <div id="more__inf__hldr">
+    <div class="google__location__open__hrs" id="more__info__detail">
+        <div class="popupcontent__holder">
+          <div class="google__map">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.827643870256!2d-122.41009648483995!3d37.79407881882193!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808580c11a807e99%3A0x293305d29003ba3!2zQ2xheSBTdCwgU2FuIEZyYW5jaXNjbywgQ0EsIOCkuOCkguCkr-ClgeCkleCljeCkpCDgpLDgpL7gpJzgpY3gpK8g4KSF4KSu4KWH4KSw4KS_4KSV4KS-!5e0!3m2!1sne!2snp!4v1574324799165!5m2!1sne!2snp" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+            <span class="map__close__btn"><i class="fa fa-times" aria-hidden="true"></i></span>
+          </div>
+          <div class="location__hours__opening__days">
+                <div class="map__location">
+                  <h5>Location and hours</h5>
+                  <span class="location__cordinates">
+                    <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    <a href="#">752 clay st, San Franciso,CA 74623</a>
+                  </span>        
+                </div>
+
+                <div class="opening__day__wrapper">
+                  <div class="opening__days">
+                    <div class="days"><i class="fa fa-clock-o" aria-hidden="true"></i><span>Sunday - Monday</span></div>
+                    <div class="opening__hours">
+                      <span>11:00 AM - 3:00 PM</span>
+                      <span>Lunch</span>
+                    </div>
+                  </div>
+                  <div class="opening__days">
+                    <div class="days"><span>Tuesday</span></div>
+                    <div class="opening__hours">
+                      <span>11:00 AM - 3:00 PM</span>
+                      <span>Lunch</span>
+
+                    </div>
+                  </div>
+                  <div class="opening__days">
+                    <div class="days"><span>Wednesday - Thursday</span></div>
+                    <div class="opening__hours">
+                      <span>11:00 AM - 3:00 PM</span>
+                      <span>Lunch</span>
+
+                    </div>
+                    <div class="opening__hours">
+                      <span>11:00 AM - 3:00 PM</span>
+                      <span>Lunch</span>
+
+                    </div>
+                  </div>
+                  <div class="opening__days">
+                    <div class="days"><span>Friday - Saturday</span></div>
+                    <div class="opening__hours">
+                      <span>11:00 AM - 3:00 PM</span>
+                      <span>Lunch</span>
+                    </div>
+                    <div class="opening__hours">
+                      <span>11:00 AM - 3:00 PM</span>
+                      <span>Lunch</span>
+                    </div>
+                  </div>
+                </div>
+          </div>
+        </div>
+    </div>
+  </div><!-- more info popup -->
+  <div id="food__decspt__handler">
+   <div id="food__descpt__popup" class="popup__food__info">
+      <div class="popupcontent__holder">
+        <div class="popups__top__banner">
+            <img src="{% static 'images/pop__up_food.jpg' %}">
+            <span class="popups__close__button"><i class="fa fa-times" aria-hidden="true"></i></span>
+        </div>
+        <div class="food__detail__description">
+            <h3>Super star with cheese</h3>
+            <span>700cal</span>
+            <p class="food__content__popup">when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+        </div>
+        <div class="select__option__food">
+            <div class="top__select__intro">
+                <span class="option__head">Select option</span>
+                <span>Required</span>
+            </div>
+            <div class="popup__content__wrapper">
+            	<div class="checkbox__wrapper space__between">              
+		                <div class="checkbox__content">
+			                <label>
+			                <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
+			                	<span>Scrambled it to make a type specimen book</span>
+
+			                </label>
+						</div>
+						<div class="check__item__price">
+							<span class="radio__price__info">$40</span>
+						</div>
+                 </div>
+                 <div class="radio__box__wrapper space__between">
+	                <div class="radio__box__contain">
+						<label>
+		                	<input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+		                	<span> Scrambled</span>
+		                	<span class="qnty__cals">300 - 500 cal</span>
+
+	                	</label>	               
+	                 </div>
+	                 <div class="radio__box__price">
+	                 	<span class="radio__price__info">$50</span>
+	                 </div>
+                 </div>
+                 <div class="radio__box__wrapper space__between">
+	                <div class="radio__box__contain">
+						<label>
+		                	<input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+		                	<span> Scrambled</span>
+		                	<span class="qnty__cals"> 200 - 300 cals</span>
+
+	                	</label>	               
+	                 </div>
+	                 <div class="radio__box__price">
+	                 	<span class="radio__price__info">$50</span>
+	                 </div>
+                 </div>              
+                
+            </div>
+            <div class="popup__content__wrapper">
+                <div class="customize__item__popup">
+                    <a href="#" class="customize__content">Customize this item</a>
+                    <a href="#" class="customize__icon"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                </div>
+                <div class="caution__about__food">
+                    <p class="caution__contion">
+                        <strong>WARNING:</strong> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                    </p>
+                </div>
+            </div>
+            <div class="popup__divider__line"></div>
+            <div class="add__order__popup">
+                <div class="pop__up__add__sub">    
+                    <p>
+                      <span id="minus1" class="qty__btn food__qty__dec minus">
+                        <img src="{% static 'images/food__pop__desc.png' %}" alt="">
+                      </span>
+
+                      <input id="qty1" type="text" value="1" class="qty" />
+                      <span id="add1" class="qty__btn food__qty__inc add">
+                        <img src="{% static 'images/food__pop__inc.png' %}" alt="">
+                      </span>
+                    </p>
+                </div>
+                <div class="add__order__details">
+                    <a class="add_order__btn" href="#">
+                        <span class="order__btn__popup">Add 1 to Order</span>
+                        <span>$200</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+      </div>
+   </div> 
+  </div>
+{% endblock %}

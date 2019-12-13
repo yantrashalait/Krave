@@ -1,0 +1,100 @@
+@media screen and (max-width: 1200px) {
+
+}
+
+@media screen and (max-width: 1024px) {
+    .popup__food__info {
+        width: 60%;
+    }
+    .partnership__form {
+        width: 35%;
+    }
+    .resturent__logo {
+        margin-bottom: 20px;
+    }    
+
+    .categ__head {
+	    order: 2;    
+	    width: 100%;
+	}
+	.categ__info {
+	    flex-wrap: wrap;
+	}
+	.food__item_image {
+	    width: 100%;
+	    justify-content: center;    
+	    max-width: 100%;
+	}
+	.google__location__open__hrs{
+		width: 60%;
+	}
+}
+
+@media screen and (max-width: 992px) {
+    .create__accoutn__button button {
+        max-width: 100%;
+        width: 100%;
+        margin: 0 0 10px 0;
+    }
+    .resturent__opening__time {
+	    padding: 0 0 2rem 0;
+	}
+}
+
+@media screen and (max-width: 768px) {
+    .popup__food__info {
+        width: 80%;
+    }
+    .partnership__form {
+        position: inherit;
+        width: 100%;
+    }
+    .business__detail {
+        padding: 4rem 0 0 0;
+    }
+    .resp__menu__icn {
+        display: inline-flex;
+    }
+    .nav__hldr__resp {
+        padding: 0;
+    }
+    .delivery__info__fees {
+        padding-left: 0;
+        padding-top: 10px;
+    }
+	.google__location__open__hrs{
+		width: 80%;
+	}
+}
+
+@media screen and (max-width: 768px) {
+    .header__menu {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav__info {
+        padding: 20px 5px;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .order__detail {
+        width: 100% !important;
+    }
+}
+
+@media screen and (max-width: 375px) {
+    .delivery__info__fees {
+        width: 100%;
+        padding: 30px 0 0 0;
+    }
+    .btns__fees {
+        width: 100%;
+        margin: 10px 0 10px 0;
+        padding: 10px;
+    }
+}

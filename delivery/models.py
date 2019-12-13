@@ -1,6 +1,6 @@
 from django.db import models
 from django.conf import settings
-from core.models import FoodMenu, Restaurant
+from core.models import FoodMenu, Restaurant, FoodCart
 from django.contrib.gis.db.models import PointField
 
 
@@ -12,12 +12,13 @@ ORDER_STATUS = (
 )
 
 class Order(models.Model):
-    food = models.ForeignKey(FoodMenu, on_delete=models.SET_NULL, null=True, related_name="orders")
+    cart = models.ForeignKey(FoodCart, on_delete=models.SET_NULL, null=True, related_name="orders")
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="orders")
     ordered_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="orders")
     location = PointField(geography=True, srid=4326)
     order_number = models.CharField(max_length=255)
     status = models.IntegerField(choices=ORDER_STATUS)
+    delivery_time_in_minutes = models.IntegerField(default=0)
 
     def __str__(self):
         return self.food.name + ' ' + self.ordered_by.username

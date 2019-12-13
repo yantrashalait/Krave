@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework import viewsets
 from .serializers import RestaurantSerializer, RestaurantRequestSerializer, UserSerializer, \
     UserProfileSerializer, FoodCategorySerializer, FoodMenuSerializer, RestaurantSingleSerializer, \
-        RestaurantMealSerializer, MealSerializer, RestaurantFoodCategorySerializer
-from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, RestaurantMealType, \
-    MealType, RestaurantFoodCategory
+        RestaurantFoodCategorySerializer, UserCartSerializer
+from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, \
+    RestaurantFoodCategory, FoodCart
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework import permissions
 from rest_framework.views import APIView
@@ -113,34 +113,6 @@ class CategorySingleViewSet(RetrieveUpdateAPIView):
         })
 
 
-class MealViewSet(ListAPIView):
-    serializer_class = MealSerializer
-
-    def get_queryset(self):
-        return MealType.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response({
-            'status': True,
-            'data': serializer.data
-        })
-
-
-class MealSingleViewSet(RetrieveAPIView):
-    serializer_class = MealSerializer
-
-    def get_object(self):
-        return MealType.objects.get(id=self.kwargs.get('pk'))
-    
-    def retrieve(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object())
-        return Response({
-            'status': True,
-            'data': serializer.data
-        })
-
-
 class RestaurantFoodCategoryViewSet(ListCreateAPIView):
     serializer_class = RestaurantFoodCategorySerializer
 
@@ -197,61 +169,6 @@ class RestaurantFoodCategorySingleViewSet(RetrieveUpdateAPIView):
             'data': serializer.data
         })
 
-class RestaurantMealViewSet(ListCreateAPIView):
-    serializer_class = RestaurantMealSerializer
-
-    def get_queryset(self):
-        return RestaurantMealType.objects.filter(restaurant__id=self.kwargs.get('rest_id'))
-    
-    def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response({
-            'status': True,
-            'data': serializer.data
-        })
-    
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({
-                'status': False,
-                'msg': serializer.errors
-            })
-        self.perform_create(serializer)
-        return Response({
-            'status': True,
-            'msg': 'Successfully Created.',
-            'data': serializer.data
-        })
-
-
-class RestaurantMealSingleViewSet(RetrieveUpdateAPIView):
-    serializer_class = RestaurantMealSerializer
-
-    def get_object(self):
-        return RestaurantMealType.objects.get(id=self.kwargs.get('meal_id'))
-    
-    def retrieve(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object())
-        return Response({
-            'status': True,
-            'data': serializer.data
-        })
-
-    def put(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object(), data=request.data)
-        if not serializer.is_valid():
-            return Response({
-                'status': False,
-                'msg': serializer.errors
-            })
-
-        self.perform_update(serializer)
-        return Response({
-            'status': True,
-            'msg': 'Successfully updated',
-            'data': serializer.data
-        })
 
 class RestaurantViewSet(ListAPIView):
     serializer_class = RestaurantSerializer
@@ -356,7 +273,7 @@ class FoodMenuSingleViewSet(RetrieveUpdateDestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
-            self.perform_delete(instance)
+            self.perform_destroy(instance)
             return Response({
                 'status': True,
                 'msg': 'Deleted Successfully.'
@@ -451,3 +368,72 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         else:
             return UserProfile.objects.get(user__id=pk)
 
+
+class UserCartViewSet(ListCreateAPIView):
+    serializer_class = UserCartSerializer
+
+    def get_queryset(self):
+        return FoodCart.objects.filter(user__id=self.kwargs.get('user_id'))
+    
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        })
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                'status': False,
+                'msg': serializer.errors
+            })
+        self.perform_create(serializer)
+        return Response({
+            'status': True,
+            'msg': 'Added to cart',
+            'data': serializer.data
+        })
+
+
+class UserCartSingleViewSet(RetrieveUpdateDestroyAPIView):
+    serializer_class = UserCartSerializer
+
+    def get_object(self):
+        return FoodCart.objects.get(id=self.kwargs.get('cart_id'))
+    
+    def retrieve(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object())
+        return Response({
+            'status': True,
+            'data': serializer.data
+        })
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object(), data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                'status': False,
+                'msg': serializer.errors
+            })
+        self.perform_update(serializer)
+        return Response({
+            'status': True,
+            'msg': 'Successfully updated.',
+            'data': serializer.data
+        }) 
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response({
+                'status': True,
+                'msg': 'Deleted successfully.',
+            })
+        except Exception as e:
+            return Response({
+                'status': False,
+                'msg': 'Failed to delete item.'
+            })
