@@ -18,4 +18,6 @@ urlpatterns = [
 
     #restaurant views
     path('restaurant-detail/', views.RestaurantDetail.as_view(), name='restaurant-detail'),
+    path('search/', views.search, name='search'),
+    path('food-detail/', views.get_food_detail, name='get-food-detail'),
 ]

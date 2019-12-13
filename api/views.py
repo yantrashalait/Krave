@@ -199,7 +199,7 @@ class RestaurantSingleViewSet(RetrieveUpdateAPIView):
             'data': serializer.data
         })
     
-    def put(self, request, *args, **kwargs):
+    def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object(), data=request.data)
         if not serializer.is_valid():
             return Response({

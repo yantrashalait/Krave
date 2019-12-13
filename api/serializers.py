@@ -1,14 +1,14 @@
 from rest_framework import serializers
 from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, RestaurantFoodCategory, \
-    FoodCart, RestaurantCuisine
+    FoodCart, RestaurantCuisine, RestaurantImage
 from user.models import User, UserProfile
 from django.conf import settings
 from rest_framework.validators import UniqueValidator
 from django.core.exceptions import ValidationError
 
 
-# base_url = 'http://localhost:8000/api/v1/'
-base_url = 'http://157.245.213.171:8000/api/v1/'
+base_url = 'http://localhost:8000/api/v1/'
+# base_url = 'http://157.245.213.171:8000/api/v1/'
 
 
 class FoodCategorySerializer(serializers.ModelSerializer):
@@ -76,14 +76,21 @@ class RestaurantCuisineSerializer(serializers.ModelSerializer):
         fields = ('name')
 
 
+class RestaurantImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantImage
+        fields = ('image')
+
+
 class RestaurantSingleSerializer(serializers.ModelSerializer):
     food_category = serializers.SerializerMethodField()
     cuisine = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
 
     class Meta:
         model = Restaurant
-        fields = ('name', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 
-        'location', 'food_category', 'cuisine', 'delivery_charge')
+        fields = ('name', 'contact', 'logo', 'opening_time', 'closing_time', 'delivery_upto', 
+        'location', 'food_category', 'cuisine', 'delivery_charge', 'images')
 
     def get_food_category(self, obj):
         categories = RestaurantFoodCategory.objects.filter(restaurant=obj)
@@ -93,6 +100,9 @@ class RestaurantSingleSerializer(serializers.ModelSerializer):
         cuisines = RestaurantCuisine.objects.filter(restaurant=obj)
         return RestaurantCuisineSerializer(cuisines, many=True).data
 
+    def get_images(self, obj):
+        images = RestaurantImage.objects.filter(restaurant=obj)
+        return  RestaurantImageSerializer(images, many=True).data
 
 
 class RestaurantRequestSerializer(serializers.ModelSerializer):

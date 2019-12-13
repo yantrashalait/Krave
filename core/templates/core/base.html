@@ -122,8 +122,10 @@
     {% block content %}
     {% endblock %}
     <script src="{% static 'js/jquery.min.js' %}"></script>
-	<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+	  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script src="{% static 'js/simplemenu.js' %}"></script>
+    {% block scripts %}
+    {% endblock %}
   </body>
 </html>

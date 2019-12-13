@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
-from .models import RestaurantRequest, Restaurant
+from .models import RestaurantRequest, Restaurant, FoodMenu
 from django.conf import settings
 from userrole.models import UserRole
 from django.contrib.auth.models import Group
@@ -8,6 +8,10 @@ from user.models import User
 from django.db import transaction
 from django.contrib.gis.geos import Point
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
+import json
+from django.core import serializers
+
 
 class RequestList(ListView):
     template_name = 'core/restaurantrequests.html'
@@ -84,6 +88,7 @@ def generate_username(name):
 class DashboardView(TemplateView):
     template_name = 'core/home.html'
 
+
 class LoginView(TemplateView):
     template_name = 'core/login.html'
 
@@ -94,4 +99,24 @@ class RegisterView(TemplateView):
 
 class RestaurantDetail(TemplateView):
     template_name = 'core/restaurant__detail.html'
+
+
+def search(request, *args, **kwargs):
+    if request.method == 'POST':
+        food_menu = FoodMenu.objects.filter(name__icontains=request.POST.get('food_name', ''))
+        print(food_menu)
+        return render(request, 'core/listing.html', {'foods': food_menu})
+    
+    else:
+        return render(request, 'core/listing.html')
+
+
+def get_food_detail(request, *args, **kwargs):
+    if request.method == 'GET':
+        print(request.GET.get('food_id'))
+        food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
+        food = serializers.serialize('json', [food])
+        return JsonResponse(food, safe=False)
+
+
 

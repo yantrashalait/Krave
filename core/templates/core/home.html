@@ -11,10 +11,11 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad possimus error incidunt nostrum...</p>
               </div>
   					</div>
-  					<form class="search-box">
-  						<input class="search-input" type="text" placeholder="Search here..">
+					  <form class="search-box" action="{% url 'core:search' %}" method="post">
+						{% csrf_token %}
+  						<input class="search-input" type="text" name="food_name" placeholder="Search your food here..">
   						
-  						<button class="search-smt"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
+  						<button class="search-smt" type="submit"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
   					</form>
 
   				</div>
