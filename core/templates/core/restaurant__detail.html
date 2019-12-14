@@ -7,19 +7,17 @@
           <div class="col-lg-8">
             <div class="resturent_details">
                   <div class="resturent__logo"> 
-                    <img src="{% static 'images/rest_logo.jpg' %}">
+                    <img src="{{ restaurant.logo.url }}">
                   </div>
                   <div class="rest_info_wrapper">
                   <div class="restaurants_name__item">
-                  <h4>smile house cafe</h4>
+                  <h4>{{ restaurant.name }}</h4>
                    <div class="restu_nav">
                       <ul>
                         <li>
-                          <a href="#">chinese</a>
-                          <a href="#">asian</a>
-                          <a href="#">asian fusion</a>
-                          <a href="#">dessert</a>
-
+                          {% for item in restaurant.cuisines.all %}
+                            <a href="#">{{ item.name }}</a>
+                          {% endfor %}
                         </li>
                       </ul> 
                     </div>
@@ -37,11 +35,11 @@
 
                         </div>
                         <div class="details__review___and__address">
-                            <span class="resturent_address">101 Travel, San Francisco, CA 6768</span>                        
+                            <span class="resturent_address">{{ restaurant.location_text }}</span>                        
                         </div>
                     </div>
                     <div class="delivery__info__fees">
-                     <span class="food_delivery_fee btns__fees">$2.65 delivery fee</span>
+                     <span class="food_delivery_fee btns__fees">${{ restaurant.delivery_charge }} delivery fee</span>
                       <span class="food_delivery_time btns__fees">20-30 min</span>
                       <button id="more__info" class="resturent_more_info btns__fees">more info</button> 
                     </div>
@@ -51,39 +49,21 @@
           </div>
           <div class="col-lg-4">
             <div class="resturent__opening__time">
-              <h2>Opens at 11:AM</h2>
+              <h2>Opens at {{ restaurant.opening_time }}</h2>
             </div>
           </div>
         </div>
       </div>
   </section>
   <section class="food__category">
-    <div class="container"><!-- 
-       <div class="row">
-        <div class="col-md-12 line__bar_psedo">
-          <div class="categ__list">
-            <div class="dinner__categ">
-              <span class="catrg_type">Dinner</span>
-              <span>12:00 AM - 11:30 PM</span>
-            </div>
-            <div class="lunch__brekf__categ">
-              <span class="catrg_type">Lunch|breakfast</span>
-              <span>12:00 AM - 11:30 PM</span>
-            </div>
-          </div>
-        </div>       
-       </div> -->
+    <div class="container">
        <div class="row">
         <div class="category_nav">
           <ul>
             <li><a href="#">chef's special</a></li>
-             <li><a href="#">burger</a></li>
-              <li><a href="#">chicken</a></li>
-              <li><a href="#">drinks</a></li>
-              <li><a href="#">burger</a></li>
-              <li><a href="#">snakers</a></li>
-              <li><a href="#">shakes & desert</a></li>
-              <li><a href="#">burger</a></li>
+              {% for item in restaurant.food_category.all %}
+                <li><a href="#">{{ item.category }}</a></li>
+              {% endfor %}
           </ul>
         </div>
        </div>

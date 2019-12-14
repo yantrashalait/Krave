@@ -99,24 +99,46 @@ class RegisterView(TemplateView):
 
 class RestaurantDetail(TemplateView):
     template_name = 'core/restaurant__detail.html'
+    
+    def get_context_data(self, *args, **kwargs):
+        context = super(RestaurantDetail, self).get_context_data(**kwargs)
+        name = self.kwargs.get('rest_name').replace('_', ' ')
+        context['restaurant'] = Restaurant.objects.get(name=name)
+        return context
 
 
+"""
+    The search view
+"""
 def search(request, *args, **kwargs):
     if request.method == 'POST':
         food_menu = FoodMenu.objects.filter(name__icontains=request.POST.get('food_name', ''))
         print(food_menu)
-        return render(request, 'core/listing.html', {'foods': food_menu})
+        return render(request, 'core/search.html', {'foods': food_menu})
     
     else:
-        return render(request, 'core/listing.html')
+        return render(request, 'core/search.html')
 
 
+"""
+    This view is called by ajax request to get the detail of a food item
+"""
 def get_food_detail(request, *args, **kwargs):
     if request.method == 'GET':
         print(request.GET.get('food_id'))
         food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
         food = serializers.serialize('json', [food])
         return JsonResponse(food, safe=False)
+
+
+"""
+    This view is to display all the foods in a page
+"""
+class FoodListView(ListView):
+    template_name = 'core/food_listing.html'
+    queryset = FoodMenu.objects.all()
+    context_object_name = 'foods'
+
 
 
 

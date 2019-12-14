@@ -13,8 +13,8 @@ urlpatterns = [
     path('users/add', views.UserCreationViewSet.as_view(), name='add-user'),
 
     #apis for categories
-    path('category/list', views.CategoryViewSet.as_view(), name='category-list'),
-    path('category/<int:pk>', views.CategorySingleViewSet.as_view(), name='category-single'),
+    # path('category/list', views.CategoryViewSet.as_view(), name='category-list'),
+    # path('category/<int:pk>', views.CategorySingleViewSet.as_view(), name='category-single'),
 
     #apis for restaurant food category
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),

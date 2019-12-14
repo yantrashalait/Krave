@@ -30,7 +30,7 @@
     <div id="food__descpt__popup" class="popup__food__info">
         <div class="popupcontent__holder">
           <div class="popups__top__banner">
-              <img src="{% static 'images/pop__up_food.jpg' %}">
+              <img src="" id="food_image">
               <span class="popups__close__button"><i class="fa fa-times" aria-hidden="true"></i></span>
           </div>
           <div class="food__detail__description">
@@ -144,6 +144,10 @@
 
                     var desc = food_data[0].fields.description;
                     $(".food__detail__description p").html(desc);
+
+                    var base_url = "http://localhost:8000/";
+                    var src1 = base_url + 'media/' + food_data[0].fields.image;
+                    $("#food_image").attr("src", src1);
                 }
             });
             

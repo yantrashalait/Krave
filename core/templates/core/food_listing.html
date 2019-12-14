@@ -1,0 +1,157 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<section class="category__item__details">
+    <div class="container">
+      <div class="category_main_head">
+          <span>All Foods</span>
+      </div>
+      <div class="row">
+        {% for item in foods %}
+        <div class="col-md-6 mb-4">
+          <div class="categ__info" data-id="{{ item.id }}">
+            <div class="categ__head">
+              <span class="food_item__name">{{ item.name }}</span>
+              <p class="food__detail__contain">{{ item.description }}</p>
+              <span class="food__item__price">${{ item.new_price }}</span>
+            </div>
+
+            <div class="food__item_image">
+              <img src="{{ item.image.url }}">
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+  <div id="food__decspt__handler">
+    <div id="food__descpt__popup" class="popup__food__info">
+        <div class="popupcontent__holder">
+          <div class="popups__top__banner">
+              <img src="" id="food_image">
+              <span class="popups__close__button"><i class="fa fa-times" aria-hidden="true"></i></span>
+          </div>
+          <div class="food__detail__description">
+              <h3></h3>
+              <span></span>
+              <p class="food__content__popup"></p>
+          </div>
+          <div class="select__option__food">
+              <div class="top__select__intro">
+                  <span class="option__head">Select option</span>
+                  <span>Required</span>
+              </div>
+              <div class="popup__content__wrapper">
+                <div class="checkbox__wrapper space__between">              
+                      <div class="checkbox__content">
+                        <label>
+                        <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
+                          <span>Scrambled it to make a type specimen book</span>
+  
+                        </label>
+              </div>
+              <div class="check__item__price">
+                <span class="radio__price__info">$40</span>
+              </div>
+                  </div>
+                  <div class="radio__box__wrapper space__between">
+                    <div class="radio__box__contain">
+              <label>
+                        <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+                        <span> Scrambled</span>
+                        <span class="qnty__cals">300 - 500 cal</span>
+  
+                      </label>	               
+                    </div>
+                    <div class="radio__box__price">
+                      <span class="radio__price__info">$50</span>
+                    </div>
+                  </div>
+                  <div class="radio__box__wrapper space__between">
+                    <div class="radio__box__contain">
+              <label>
+                        <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+                        <span> Scrambled</span>
+                        <span class="qnty__cals"> 200 - 300 cals</span>
+  
+                      </label>	               
+                    </div>
+                    <div class="radio__box__price">
+                      <span class="radio__price__info">$50</span>
+                    </div>
+                  </div>              
+                  
+              </div>
+              <div class="popup__content__wrapper">
+                  <div class="customize__item__popup">
+                      <a href="#" class="customize__content">Customize this item</a>
+                      <a href="#" class="customize__icon"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+                  </div>
+                  <div class="caution__about__food">
+                      <p class="caution__contion">
+                          <strong>WARNING:</strong> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                      </p>
+                  </div>
+              </div>
+              <div class="popup__divider__line"></div>
+              <div class="add__order__popup">
+                  <div class="pop__up__add__sub">    
+                      <p>
+                        <span id="minus1" class="qty__btn food__qty__dec minus">
+                          <img src="{% static 'images/food__pop__desc.png' %}" alt="">
+                        </span>
+  
+                        <input id="qty1" type="text" value="1" class="qty" />
+                        <span id="add1" class="qty__btn food__qty__inc add">
+                          <img src="{% static 'images/food__pop__inc.png' %}" alt="">
+                        </span>
+                      </p>
+                  </div>
+                  <div class="add__order__details">
+                      <a class="add_order__btn" href="#">
+                          <span class="order__btn__popup">Add 1 to Order</span>
+                          <span>$200</span>
+                      </a>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div> 
+    </div>
+{% endblock %}
+{% block scripts %}
+<script>
+    $(document).ready(function(){
+        $(".categ__info").click(function(){
+            var food_id = $(this).attr('data-id');
+            $.ajax({
+                url: "{% url 'core:get-food-detail' %}",
+                data: {
+                    'food_id': food_id,
+                },
+                dataType: 'json',
+                success: function(result){
+                    food_data = jQuery.parseJSON(result);
+                    console.log(food_data[0].fields);
+                    $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
+                    
+                    $(".food__detail__description h3").html(food_data[0].fields.name);
+                    
+                    var cal = food_data[0].fields.calories + 'cal';
+                    $(".food__detail__description span").html(cal);
+
+                    var desc = food_data[0].fields.description;
+                    $(".food__detail__description p").html(desc);
+
+                    var base_url = "http://localhost:8000/";
+                    var src1 = base_url + 'media/' + food_data[0].fields.image;
+                    $("#food_image").attr("src", src1);
+                }
+            });
+            
+        });           
+    });
+</script>
+{% endblock %}

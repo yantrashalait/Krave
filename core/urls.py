@@ -16,8 +16,13 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('register/', views.RegisterView.as_view(), name='register'),
 
-    #restaurant views
-    path('restaurant-detail/', views.RestaurantDetail.as_view(), name='restaurant-detail'),
-    path('search/', views.search, name='search'),
+    # restaurant views
+    path('restaurant-detail/<slug:rest_name>', views.RestaurantDetail.as_view(), name='restaurant-detail'),
     path('food-detail/', views.get_food_detail, name='get-food-detail'),
+
+    # food listing views
+    # search food
+    path('food/search/', views.search, name='search'),
+    path('food/list/', views.FoodListView.as_view(), name='food-list'),
+
 ]

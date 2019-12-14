@@ -4,10 +4,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .serializers import RestaurantSerializer, RestaurantRequestSerializer, UserSerializer, \
-    UserProfileSerializer, FoodCategorySerializer, FoodMenuSerializer, RestaurantSingleSerializer, \
+    UserProfileSerializer, FoodMenuSerializer, RestaurantSingleSerializer, \
         RestaurantFoodCategorySerializer, UserCartSerializer
-from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, \
-    RestaurantFoodCategory, FoodCart
+from core.models import Restaurant, RestaurantRequest, FoodMenu, RestaurantFoodCategory, FoodCart
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework import permissions
 from rest_framework.views import APIView
@@ -49,68 +48,6 @@ class CustomAuthToken(ObtainAuthToken):
                 'status': False,
                 'msg': 'Login Failed',
             })
-            
-
-class CategoryViewSet(ListCreateAPIView):
-    serializer_class = FoodCategorySerializer
-
-    def get_queryset(self):
-        if self.request.query_params.get('name', None):
-            name = self.request.query_params.get('name')
-            return FoodCategory.objects.filter(name__icontains=name)
-        return FoodCategory.objects.all()
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        if not serializer.is_valid():
-
-            return Response({
-                'status': False,
-                'msg': serializer.errors
-            })
-        else:
-            self.perform_create(serializer)
-            return Response({
-                'status': True,
-                'msg': 'Category successfully created.',
-                'data': serializer.data
-            })
-
-    def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        return Response({
-            'status': True,
-            'data': serializer.data
-        })
-
-
-class CategorySingleViewSet(RetrieveUpdateAPIView):
-    serializer_class = FoodCategorySerializer
-    lookup_field = 'pk'
-
-    def get_object(self):
-        return FoodCategory.objects.get(id=self.kwargs.get('pk'))
-    
-    def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object())
-        return Response({
-            'status': True,
-            'data': serializer.data
-        })
-    
-    def put(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_object(), data=request.data)
-        if not serializer.is_valid():
-            return Response({
-                'status': False,
-                'msg': serializer.errors,
-            })
-        self.perform_update(serializer)
-        return Response({
-            'status': True,
-            'msg': 'Category updated successfully.',
-            'data': serializer.data
-        })
 
 
 class RestaurantFoodCategoryViewSet(ListCreateAPIView):

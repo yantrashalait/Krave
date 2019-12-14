@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Restaurant, RestaurantRequest, FoodCategory, FoodMenu, RestaurantFoodCategory, \
+from core.models import Restaurant, RestaurantRequest, FoodMenu, RestaurantFoodCategory, \
     FoodCart, RestaurantCuisine, RestaurantImage
 from user.models import User, UserProfile
 from django.conf import settings
@@ -7,21 +7,8 @@ from rest_framework.validators import UniqueValidator
 from django.core.exceptions import ValidationError
 
 
-base_url = 'http://localhost:8000/api/v1/'
-# base_url = 'http://157.245.213.171:8000/api/v1/'
-
-
-class FoodCategorySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = FoodCategory
-        fields = ('id', 'name')
-    
-    def validate_name(self, name):
-        print(name)
-        if FoodCategory.objects.filter(name__icontains=name).exists():
-            raise ValidationError("This category already exists.")
-        return name
+# base_url = 'http://localhost:8000/api/v1/'
+base_url = 'http://157.245.213.171:8000/api/v1/'
 
 
 class RestaurantFoodCategorySerializer(serializers.ModelSerializer):
@@ -29,10 +16,7 @@ class RestaurantFoodCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RestaurantFoodCategory
-        fields = ('id', 'category', 'restaurant', 'category_name')
-    
-    def get_category_name(self, obj):
-        return obj.category.name
+        fields = ('id', 'category', 'restaurant')
     
     def validate(self, data):
         if RestaurantFoodCategory.objects.filter(category=data['category'], restaurant=data['restaurant']).exists():
@@ -48,10 +32,7 @@ class RestaurantDetailFoodCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RestaurantFoodCategory
-        fields = ('id', 'category', 'category_name', 'create_url', 'detail_url', 'foods')
-    
-    def get_category_name(self, obj):
-        return obj.category.name
+        fields = ('id', 'category', 'create_url', 'detail_url', 'foods')
 
     def get_create_url(self, obj):
         return base_url + 'restaurant/' + str(obj.restaurant.id) + '/food/category/'

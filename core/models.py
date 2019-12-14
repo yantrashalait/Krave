@@ -5,21 +5,12 @@ from django.conf import settings
 
 
 """
-    Food categories are the types of food(e.g. Indian, Chinese, Nepali, etc.)
-"""
-class FoodCategory(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
-
-
-"""
     Restaurant model stores the details about restaurant profile that is visible to the public.
 """
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
-    location = PointField(geography=True, srid=4326, blank=True, null=True)
+    location_point = PointField(geography=True, srid=4326, blank=True, null=True)
+    location_text = models.CharField(max_length=500, default="")
     contact = models.CharField(max_length=20)
     opening_time = models.TimeField()
     closing_time = models.TimeField()
@@ -61,7 +52,7 @@ class RestaurantCuisine(models.Model):
 """
 class RestaurantFoodCategory(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='food_category')
-    category = models.ForeignKey(FoodCategory, on_delete=models.DO_NOTHING, related_name='restaurants')
+    category = models.CharField(max_length=500, default="")
 
 
 class RestaurantReview(models.Model):
@@ -87,7 +78,7 @@ class RestaurantRating(models.Model):
 """
 class FoodMenu(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="menu")
-    category = models.ForeignKey(FoodCategory, on_delete=models.CASCADE, related_name="food")
+    category = models.ForeignKey(RestaurantFoodCategory, on_delete=models.CASCADE, related_name="food")
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     ingredients = models.TextField(null=True)
