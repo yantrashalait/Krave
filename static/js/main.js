@@ -22,10 +22,6 @@ $(document).ready(function(){
             }
         });
 
-    $("#more__info").click(function(){
-        $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
-    });
-
     $(".map__close__btn").click(function(){
         $("#more__inf__hldr").css({'display': 'none'});
     });

@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 import json
 from django.core import serializers
+from django.db.models import Q
 
 
 class RequestList(ListView):
@@ -112,8 +113,7 @@ class RestaurantDetail(TemplateView):
 """
 def search(request, *args, **kwargs):
     if request.method == 'POST':
-        food_menu = FoodMenu.objects.filter(name__icontains=request.POST.get('food_name', ''))
-        print(food_menu)
+        food_menu = FoodMenu.objects.filter(Q(name__icontains=request.POST.get('search', '')) | Q(category__category__icontains=request.POST.get('search', '')))
         return render(request, 'core/search.html', {'foods': food_menu})
     
     else:

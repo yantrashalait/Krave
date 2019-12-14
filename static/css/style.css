@@ -1380,12 +1380,11 @@ p.caution__contion {
 /*    display: flex;
 */    align-items: center;
 }
-.google__map iframe{
-    width: 100%;
-    height: 300px;
-}
+
 .google__map {
     position: relative;
+    height: 300px;
+    width: 100%;
 }
 .map__close__btn {
     cursor: pointer;
@@ -1396,6 +1395,7 @@ p.caution__contion {
     padding: 11px 15px;
     border-radius: 50px;
     color: #000000;
+    z-index: 10000;
 }
 .map__close__btn:hover{
 color: #000000;

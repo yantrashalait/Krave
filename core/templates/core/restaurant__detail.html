@@ -193,97 +193,23 @@
       </div>
     </div>
   </section>
-  <footer>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 mt-5">
-          <div class="krave__details">
-            <div class="krave__footer__logo">
-              <img src="{% static 'images/logo.png' %}">
-            </div>
-            <div class="app__stores">
-              <div class="store">
-                <a href="#"><i class="fa fa-apple" aria-hidden="true"></i>
-                  <span>Availbale on the <strong>app store</strong></span>
-                </a>         
-              </div>
-              <div class="store">
-                <a href="#"><i class="fa fa-google" aria-hidden="true"></i>
-                  <span class="google_span">Get it on<strong>google play</strong></span>
-                </a>         
-              </div>
-              
-              
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mt-5 about__karve__button">
-          <div class="nav__about__krave">
-           <h4 class="nav_h4">About krave</h4>
-            <ul>
-              <li>
-                <a href="#">Read our blog</a>
-                <a href="#">Buy gift card</a>
-                <a href="#">Sing up to deliver</a>
-                <a href="#">Add your resturent</a>
-
-              </li>
-            </ul>
-          </div>
-          <div class="nav__about__krave get__help">
-           <h4 class="nav_h4">get help</h4>
-           <ul>
-              <li>
-                <a href="#">Read FAQS</a>
-                <a href="#">View all cities</a>
-                <a href="#">Careers</a>
-
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="copyright__divider"></div>
-    <div class="container footer__pad_cont">
-    <div class="row">
-        <div class="col-md-6 mt-4">
-           <div class="footer__copyright">
-            <p class="copyright__holder">2019 krave technology inc</p>
-        </div>
-        </div>
-        <div class="col-md-6 mt-4">
-          <div class="term__and_cond">
-            <ul>
-              <li>
-                <a href="">Privacy Policy</a>
-                <a href="">Terms of Use</a>
-                <a href="">Pricing</a>
-
-              </li>
-            </ul>
-          </div>
-        </div>       
-    </div>
-    </div>
-  </footer>
+  {% include 'core/footer.html' %}
   <div id="more__inf__hldr">
     <div class="google__location__open__hrs" id="more__info__detail">
         <div class="popupcontent__holder">
-          <div class="google__map">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3152.827643870256!2d-122.41009648483995!3d37.79407881882193!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808580c11a807e99%3A0x293305d29003ba3!2zQ2xheSBTdCwgU2FuIEZyYW5jaXNjbywgQ0EsIOCkuOCkguCkr-ClgeCkleCljeCkpCDgpLDgpL7gpJzgpY3gpK8g4KSF4KSu4KWH4KSw4KS_4KSV4KS-!5e0!3m2!1sne!2snp!4v1574324799165!5m2!1sne!2snp" width="800" height="600" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
+          <div class="google__map" id="map">
             <span class="map__close__btn"><i class="fa fa-times" aria-hidden="true"></i></span>
           </div>
           <div class="location__hours__opening__days">
                 <div class="map__location">
-                  <h5>Location and hours</h5>
+                  <h5>Location</h5>
                   <span class="location__cordinates">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
                     <a href="#">752 clay st, San Franciso,CA 74623</a>
                   </span>        
                 </div>
 
-                <div class="opening__day__wrapper">
+                <!-- <div class="opening__day__wrapper">
                   <div class="opening__days">
                     <div class="days"><i class="fa fa-clock-o" aria-hidden="true"></i><span>Sunday - Monday</span></div>
                     <div class="opening__hours">
@@ -323,7 +249,7 @@
                       <span>Lunch</span>
                     </div>
                   </div>
-                </div>
+                </div> -->
           </div>
         </div>
     </div>
@@ -422,4 +348,57 @@
       </div>
    </div> 
   </div>
+{% endblock %}
+{% block scripts %}
+<script>
+  $("#more__info").click(function(){
+    $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
+    $("#map").attr("height", "128px");
+    var points = [{{ restaurant.location_point.y }}, {{ restaurant.location_point.x }}];
+    console.log(points);
+    
+    var map = L.map('map').setView(points, 10.32);
+
+    var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    });
+    var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    });
+    var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    });
+    var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+    });
+
+    //for changing the layer(layer switcher)
+    var baseLayers = {
+        "OpenStreetMap": osm,
+        "Google Streets": googleStreets,
+        "Google Hybrid": googleHybrid,
+        "Google Satellite": googleSat,
+        "Google Terrain": googleTerrain,
+    };
+
+    map.addLayer(googleStreets);
+    var layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
+    var icons=L.icon({
+      iconSize: [20, 22],
+      iconAnchor: [10, 22],
+      popupAnchor:  [2, -24],
+
+      iconUrl:"https://unpkg.com/leaflet@1.0.3/dist/images/marker-icon.png"
+    });
+    L.marker(points,{icon:icons}).addTo(map)
+  });
+</script>
 {% endblock %}
