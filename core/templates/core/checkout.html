@@ -9,16 +9,18 @@
           <div class="checkout__detail__info">
             <div class="create__acount_checkout"> 
               <h4>Checkout</h4>
-              <div class="signin__checkout">
-                <span class="signin__title">
-                  <strong> sign in or create account</strong> 
-                  already use krave? sign with your account
-                </span>
-              </div>
-              <div class="create__accoutn__button">
-                <button class="button__new_account">create account</button>
-                <button class="button_sign_in">sign in</button>
-              </div>
+              {% if not request.user.is_authenticated %}
+                <div class="signin__checkout">
+                  <span class="signin__title">
+                    <strong> sign in or create account</strong> 
+                    already use krave? sign with your account
+                  </span>
+                </div>
+                <div class="create__accoutn__button">
+                  <button class="button__new_account" href="{% url 'core:register' %}">create account</button>
+                  <button class="button_sign_in" href="{% url 'core:login' %}">sign in</button>
+                </div>
+              {% endif %}
               <div  class="delivery__detail">
                 <div class="delivery__address">
                    <h5>delivery detail</h5>
@@ -188,8 +190,4 @@
   </section>
        
   {% include 'core/footer.html' %}
-  <script src="js/jquery.min.js"></script>
-	<script src="js/owl.carousel.min.js"></script>
-	<script src="js/main.js"></script>
-  </body>
-</html>
+  {% endblock %}

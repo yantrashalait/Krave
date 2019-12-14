@@ -25,4 +25,7 @@ urlpatterns = [
     path('food/search/', views.search, name='search'),
     path('food/list/', views.FoodListView.as_view(), name='food-list'),
 
+    # food cart of user
+    path('food/cart/<slug:username>', views.FoodCartListView.as_view(), name='food-cart'),
+
 ]

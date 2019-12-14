@@ -110,7 +110,7 @@
                       </p>
                   </div>
                   <div class="add__order__details">
-                      <a class="add_order__btn" href="#">
+                      <a class="add_order__btn" href="{% url 'core:food-cart' request.user.username %}">
                           <span class="order__btn__popup">Add 1 to Order</span>
                           <span>$200</span>
                       </a>

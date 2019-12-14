@@ -142,5 +142,10 @@ class FoodListView(ListView):
     context_object_name = 'foods'
 
 
+class FoodCartListView(TemplateView):
+    template_name = 'core/checkout.html'
+    
+
+
 
 
