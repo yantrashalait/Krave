@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import DetailView, ListView, TemplateView
-from .models import RestaurantRequest, Restaurant, FoodMenu
+from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage
 from django.conf import settings
 from userrole.models import UserRole
 from django.contrib.auth.models import Group
@@ -104,7 +104,9 @@ class RestaurantDetail(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super(RestaurantDetail, self).get_context_data(**kwargs)
         name = self.kwargs.get('rest_name').replace('_', ' ')
-        context['restaurant'] = Restaurant.objects.get(name=name)
+        restaurant = Restaurant.objects.get(name=name)
+        context['restaurant'] = restaurant
+        context['main_image'] = RestaurantImage.objects.filter(restaurant=restaurant, main_image=True)[0:1]
         return context
 
 

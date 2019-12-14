@@ -205,9 +205,16 @@
                   <h5>Location</h5>
                   <span class="location__cordinates">
                     <i class="fa fa-map-marker" aria-hidden="true"></i>
-                    <a href="#">752 clay st, San Franciso,CA 74623</a>
+                    <a href="#">{{ restaurant.location_text }}</a>
                   </span>        
                 </div>
+                <!-- <div class="restaurant__details">
+                    <h5>Other Details</h5>
+                    <span>
+                      <i class="fa fa-phone-square" aria-hidden="true"></i>
+                      <a href="#">{{ restaurant.contact }}</a>
+                    </span>
+                </div> -->
 
                 <!-- <div class="opening__day__wrapper">
                   <div class="opening__days">
@@ -351,13 +358,13 @@
 {% endblock %}
 {% block scripts %}
 <script>
+  $(".top__banner").css("background-image", "linear-gradient(to top,rgba(0,0,0,0.8),rgba(0,0,0,0.6)), url(" + "{{ main_image.0.image.url }}" + ")");
   $("#more__info").click(function(){
     $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
-    $("#map").attr("height", "128px");
     var points = [{{ restaurant.location_point.y }}, {{ restaurant.location_point.x }}];
     console.log(points);
     
-    var map = L.map('map').setView(points, 10.32);
+    var map = L.map('map').setView(points, 19);
 
     var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -392,13 +399,16 @@
     map.addLayer(googleStreets);
     var layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
     var icons=L.icon({
-      iconSize: [20, 22],
+      iconSize: [30, 40],
       iconAnchor: [10, 22],
       popupAnchor:  [2, -24],
+      shadowAnchor: [9, 21],
 
-      iconUrl:"https://unpkg.com/leaflet@1.0.3/dist/images/marker-icon.png"
+      iconUrl:"https://unpkg.com/leaflet@1.0.3/dist/images/marker-icon.png",
+      shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png'
     });
-    L.marker(points,{icon:icons}).addTo(map)
+    var marker = L.marker(points,{icon:icons}).addTo(map);
+    marker.bindPopup("<b> {{restaurant.name}} </b>").openPopup();
   });
 </script>
 {% endblock %}

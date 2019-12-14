@@ -19,6 +19,7 @@ class Restaurant(models.Model):
     owner = models.CharField(max_length=500, null=True, blank=True)
     logo = models.ImageField(upload_to="restaurant/logo/", null=True, blank=True)
     registration_number = models.CharField(max_length=500, null=True, blank=True)   
+    email = models.CharField(max_length=500, default="")
 
     @property
     def longitude(self):
@@ -37,6 +38,7 @@ class Restaurant(models.Model):
 class RestaurantImage(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to="restaurant/")
+    main_image = models.BooleanField(help_text="Make this your main image to be displayed?", default=False)
 
 
 class RestaurantCuisine(models.Model):
