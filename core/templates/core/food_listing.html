@@ -12,7 +12,7 @@
           <div class="categ__info" data-id="{{ item.id }}">
             <div class="categ__head">
               <span class="food_item__name">{{ item.name }}</span>
-              <p class="food__detail__contain">{{ item.description }}</p>
+              <p class="food__detail__contain">{{ item.description|truncatechars:120 }}</p>
               <span class="food__item__price">${{ item.new_price }}</span>
             </div>
 
@@ -85,10 +85,10 @@
                   
               </div>
               <div class="popup__content__wrapper">
-                  <div class="customize__item__popup">
+                  <!-- <div class="customize__item__popup">
                       <a href="#" class="customize__content">Customize this item</a>
                       <a href="#" class="customize__icon"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                  </div>
+                  </div> -->
                   <div class="caution__about__food">
                       <p class="caution__contion">
                           <strong>WARNING:</strong> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.

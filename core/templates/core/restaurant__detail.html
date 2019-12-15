@@ -60,16 +60,16 @@
        <div class="row">
         <div class="category_nav">
           <ul>
-            <li><a href="#">chef's special</a></li>
+            <li><a href="#chef">chef's special</a></li>
               {% for item in restaurant.food_category.all %}
-                <li><a href="#">{{ item.category }}</a></li>
+                <li><a href="#{{ item.category }}">{{ item.category }}</a></li>
               {% endfor %}
           </ul>
         </div>
        </div>
     </div>
   </section>
-  <section class="category__item__details">
+  <section class="category__item__details" id="chef">
     <div class="container">
       <div class="category_main_head">
           <span>chef's special</span>
@@ -131,68 +131,34 @@
       </div>
     </div>
   </section>
-  <section class="sec__category__item">
-    <div class="container">
-      <div class="category_main_head">
-          <span>chef's special</span>
-      </div>
-      <div class="row">
-        
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
-            </div>
-          </div>
+  {% for item in restaurant.food_category.all %}
+   {% if item.food.all %}
+    <section class="sec__category__item" id="{{ item.category }}">
+      <div class="container">
+        <div class="category_main_head">
+            <span>{{ item.category }}</span>
         </div>
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
+        <div class="row">
+          {% for food in item.food.all %}
+          <div class="col-md-6 mb-4">
+            <div class="categ__info" data-id="{{ food.id }}">
+              <div class="categ__head">
+                <span class="food_item__name">{{ food.name }}</span>
+                <p class="food__detail__contain">{{ food.description|truncatechars:120 }}</p>
+                <span class="food__item__price">${{ food.new_price }}</span>
+              </div>
 
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
+              <div class="food__item_image">
+                <img src="{{ food.image.url }}">
+              </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
-            </div>
-          </div>
+          {% endfor %}
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+    {% endif %}
+  {% endfor %}
   {% include 'core/footer.html' %}
   <div id="more__inf__hldr">
     <div class="google__location__open__hrs" id="more__info__detail">
@@ -265,13 +231,13 @@
    <div id="food__descpt__popup" class="popup__food__info">
       <div class="popupcontent__holder">
         <div class="popups__top__banner">
-            <img src="{% static 'images/pop__up_food.jpg' %}">
+            <img src="" id="food_image">
             <span class="popups__close__button"><i class="fa fa-times" aria-hidden="true"></i></span>
         </div>
         <div class="food__detail__description">
-            <h3>Super star with cheese</h3>
-            <span>700cal</span>
-            <p class="food__content__popup">when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            <h3></h3>
+            <span></span>
+            <p class="food__content__popup"></p>
         </div>
         <div class="select__option__food">
             <div class="top__select__intro">
@@ -320,10 +286,10 @@
                 
             </div>
             <div class="popup__content__wrapper">
-                <div class="customize__item__popup">
+                <!-- <div class="customize__item__popup">
                     <a href="#" class="customize__content">Customize this item</a>
                     <a href="#" class="customize__icon"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                </div>
+                </div> -->
                 <div class="caution__about__food">
                     <p class="caution__contion">
                         <strong>WARNING:</strong> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
@@ -399,16 +365,49 @@
     map.addLayer(googleStreets);
     var layerswitcher = L.control.layers(baseLayers, {}, {collapsed: true}).addTo(map);
     var icons=L.icon({
-      iconSize: [30, 40],
+      iconSize: [44, 45],
       iconAnchor: [10, 22],
       popupAnchor:  [2, -24],
-      shadowAnchor: [9, 21],
+      shadowAnchor: [2, 18],
 
-      iconUrl:"https://unpkg.com/leaflet@1.0.3/dist/images/marker-icon.png",
+      iconUrl:"{% static 'images/marker.png' %}",
       shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png'
     });
     var marker = L.marker(points,{icon:icons}).addTo(map);
     marker.bindPopup("<b> {{restaurant.name}} </b>").openPopup();
   });
+</script>
+
+<script>
+    $(document).ready(function(){
+        $(".categ__info").click(function(){
+            var food_id = $(this).attr('data-id');
+            $.ajax({
+                url: "{% url 'core:get-food-detail' %}",
+                data: {
+                    'food_id': food_id,
+                },
+                dataType: 'json',
+                success: function(result){
+                    food_data = jQuery.parseJSON(result);
+                    console.log(food_data[0].fields);
+                    $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
+                    
+                    $(".food__detail__description h3").html(food_data[0].fields.name);
+                    
+                    var cal = food_data[0].fields.calories + 'cal';
+                    $(".food__detail__description span").html(cal);
+
+                    var desc = food_data[0].fields.description;
+                    $(".food__detail__description p").html(desc);
+
+                    var base_url = "http://localhost:8000/";
+                    var src1 = base_url + 'media/' + food_data[0].fields.image;
+                    $("#food_image").attr("src", src1);
+                }
+            });
+            
+        });           
+    });
 </script>
 {% endblock %}
