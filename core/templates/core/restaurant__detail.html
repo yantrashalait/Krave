@@ -409,6 +409,8 @@
                     var src1 = base_url + 'media/' + food_data[0].fields.image;
                     $("#food_image").attr("src", src1);
 
+                    $("#modifiers").html('');
+                    var modifiers = [];
                     modifiers = data.modifiers;
                     modifiers = jQuery.parseJSON(modifiers);
                     modifiers.forEach(function(modifier){
