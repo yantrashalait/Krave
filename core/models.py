@@ -108,6 +108,7 @@ class FoodCustomize(models.Model):
     name_of_ingredient = models.CharField(max_length=500, help_text="Name of ingredient that can be added")
     cost_of_addition = models.FloatField(help_text="Cost of additional ingredient per unit(in dollars)")
     type = models.IntegerField(choices=CUSTOMIZE_TYPE)
+    calories = models.CharField(max_length=100, null=True, blank=True, help_text="calories contained in this ingredient(in cal)")
 
     def __str__(self):
         return self.name_of_ingredient
@@ -162,6 +163,7 @@ class FoodCart(models.Model):
     number_of_food = models.IntegerField(default=1)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='cart')
     added_on = models.DateTimeField(auto_now_add=True)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
     
 
 

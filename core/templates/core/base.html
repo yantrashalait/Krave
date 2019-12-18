@@ -104,6 +104,27 @@
                       </li>
                       </ul>
                     </div>
+                    
+
+                    {% if request.user.is_authenticated %}
+                    <div class="nav__cart">
+                      <div  id="cart_drpdwn" class="popup__top cart nav__cart__list">
+                        <i class="fa fa-cart-arrow-down" aria-hidden="true">
+                         <span>2</span>
+                        </i>
+                      </div> 
+                      <div id="notify_drpdwn" class="popup__top nofify nav__cart__list">
+                        <i class="fa fa-bell" aria-hidden="true">
+                          <span>2</span>
+                        </i>                        
+                      </div>
+                      <div class="popup__top profile nav__cart__list">
+                        <a href="#">
+                          <img src="{% static 'images/edv__photo_smr.jpg' %}" >                      
+                        </a>
+                      </div>    
+                    </div>
+                    {% else %}
                     <div class="nav__sec__user_signin">
                       <div class="header__users__sec">
                         <div class="usrs_not__logedin__links">
@@ -116,12 +137,149 @@
                       </div>
                       </div>
                     </div>
+                    {% endif %}
                   </div>
+
+                  <div id="nav__popup" class="dprdwn fav_drp">
+                    <span class="drpdwn_cls">close</span>
+                    <div class="drpdwn_header">
+                        <span class="drpdwn_hdingtxt">
+                            Notification
+                        </span>
+                    </div>
+                    <div class="drp_added_itms">
+
+                        <p>You need to be logged in to view your notification.</p>
+                        <div class="drp_more_items">
+                            <div class="drp_vew_mritemsbtn">
+                                <a href="{% url 'core:login' %}">Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="profile__popup" class="dprdwn fav_drp">
+                    <span class="drpdwn_cls">close</span>
+                    <div class="drpdwn_header">
+                        <span class="drpdwn_hdingtxt">
+                            Cart
+                        </span>
+                    </div>
+                    <div class="drp_added_itms">
+
+                        <p>You need to be logged in to view your Cart.</p>
+                        <div class="drp_more_items">
+                            <div class="drp_vew_mritemsbtn">
+                                <a href="{% url 'core:login' %}">Login</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
                </div>
           </div>
         </div>
       </div>
     </header>
+    {% if request.user.is_authenticated %}
+      <section class="order__detail">
+        <div class="order__list__wrapper">
+          <div class="order__lists__info">
+            <span class="order__close__btn">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </span>
+            <div class="order__title">
+              <h3>Your order</h3>
+              <span>
+                From <a href="#">Carl's jr. (1 hillidal plaza) </a>
+              </span>
+            </div>
+            <div class="order__body__content">
+              <div class="wrapper__content__divider"></div>
+              <div class="content__head">
+                <div class="list__down">1
+                    <a href="#">
+                      <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="food__det__crt">
+                  <div class="food__det__crt__lvl1">
+                    <div class="food__det__lstss">  
+                      <div class="order__content__list">
+                        <div class="order__content__list_content">
+                          <span class="content__title">Super star with cheese </span>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="order__price__detail">
+                          <span class="content__title">$50 </span>
+                      </div>
+                    </div>
+                    <div class="food__det__lstss">  
+                      <div class="order__content__list">
+                        <div class="order__content__list_content">
+                          <span class="content__title">Super star with cheese </span>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                          <p>
+                            <span class="item_name">Add extra pitty ($3.6)</span>
+                            <span>1/3lb pitty</span>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="order__price__detail">
+                          <span class="content__title">$50 </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>              
+            </div>
+
+          </div>
+        </div>
+
+          <div class="next__checkout">
+            <a href="#">
+              <span>Next: Checkout</span>
+              <span>$20</span>
+            </a>
+          </div>
+    </section>
+    {% endif %}
     {% block content %}
     {% endblock %}
     <script src="{% static 'js/jquery.min.js' %}"></script>

@@ -13,8 +13,8 @@ urlpatterns = [
 
     # for user dashboard
     path('', views.DashboardView.as_view(), name='dashboard'),
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('register/', views.RegisterView.as_view(), name='register'),
+    path('login/', views.signin, name='login'),
+    path('register/', views.register, name='register'),
 
     # restaurant views
     path('restaurant-detail/<slug:rest_name>', views.RestaurantDetail.as_view(), name='restaurant-detail'),
@@ -26,6 +26,7 @@ urlpatterns = [
     path('food/list/', views.FoodListView.as_view(), name='food-list'),
 
     # food cart of user
+    path('food/cart/', views.FoodCartListView.as_view(), name='food-cart'),
     path('food/cart/<slug:username>', views.FoodCartListView.as_view(), name='food-cart'),
 
 ]

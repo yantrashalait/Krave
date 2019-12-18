@@ -1,10 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views.generic import DetailView, ListView, TemplateView
 from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage
 from django.conf import settings
 from userrole.models import UserRole
 from django.contrib.auth.models import Group
-from user.models import User
 from django.db import transaction
 from django.contrib.gis.geos import Point
 from django.http import HttpResponseRedirect
@@ -12,6 +11,14 @@ from django.http import JsonResponse
 import json
 from django.core import serializers
 from django.db.models import Q
+from django.contrib.auth import login, authenticate
+from django.urls import reverse_lazy, reverse
+
+
+from .forms import LoginForm, SignUpForm
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class RequestList(ListView):
@@ -90,14 +97,6 @@ class DashboardView(TemplateView):
     template_name = 'core/home.html'
 
 
-class LoginView(TemplateView):
-    template_name = 'core/login.html'
-
-
-class RegisterView(TemplateView):
-    template_name = 'core/register.html'
-
-
 class RestaurantDetail(TemplateView):
     template_name = 'core/restaurant__detail.html'
     
@@ -127,10 +126,13 @@ def search(request, *args, **kwargs):
 """
 def get_food_detail(request, *args, **kwargs):
     if request.method == 'GET':
-        print(request.GET.get('food_id'))
         food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
+        customization = food.customizes.all()
         food = serializers.serialize('json', [food])
-        return JsonResponse(food, safe=False)
+        customization = serializers.serialize('json', customization)
+        data = {'food': food, 'modifiers': customization}
+        print(data)
+        return JsonResponse(data, safe=False)
 
 
 """
@@ -144,7 +146,138 @@ class FoodListView(ListView):
 
 class FoodCartListView(TemplateView):
     template_name = 'core/checkout.html'
-    
+
+
+def web_authenticate(username=None, password=None):
+    try:
+        if "@" in username:
+            user = User.objects.get(email__iexact=username)
+        else:
+            user = User.objects.get(username__iexact=username)
+        if user.check_password(password):
+            return authenticate(username=user.username, password=password), False
+        else:
+            return None, True  # Email is correct
+    except User.DoesNotExist:
+        return None, False  # false Email incorrect
+
+
+def signin(request):
+    if request.user.is_authenticated:
+        return redirect('core:dashboard')
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            pwd = form.cleaned_data['password']
+            user, valid_email = web_authenticate(username=username, password=pwd)
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse('core:dashboard'))
+                else:
+                    return render(request, 'core/login.html',
+                                  {'form': form,
+                                   'email_error': "Your Account is Deactivated, Please Contact Administrator.",
+                                   'valid_email': valid_email,
+                                   'login_username': username
+                                   })
+            else:
+                if valid_email:
+                    email_error = False
+                    password_error = True
+                else:
+                    password_error = False
+                    email_error = "Invalid Username, please check your username."
+                return render(request, 'core/login.html',
+                              {'form': form,
+                               'valid_email': valid_email,
+                               'email_error': email_error,
+                               'password_error': password_error,
+                               'login_username': username
+                               })
+        else:
+            if request.POST.get('login_username') is not None:
+                login_username = request.POST.get('login_username')
+            else:
+                login_username = ''
+            return render(request, 'core/login.html', {
+                'form': form,
+                'valid_email': False,
+                'email_error': "Your username and password did not match.",
+                'login_username': login_username
+            })
+    else:
+        form = LoginForm()
+
+    return render(request, 'core/login.html', {'form': form, 'valid_email': True, 'email_error': False})
+
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('/')
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password1')
+            user = User.objects.create(username=username, email=email, password=password)
+            user.set_password(user.password)
+            user.is_active = True
+            user.save()
+
+            return redirect('/')
+
+            # mail_subject = 'Activate your account.'
+            # current_site = get_current_site(request)
+            # message = render_to_string('core/acc_active_email.html', {
+            #     'user': user,
+            #     'domain': settings.SITE_URL,
+            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+            #     'token': account_activation_token.make_token(user),
+            # })
+            # to_email = email
+            # email = EmailMessage(
+            #     mail_subject, message, to=[to_email]
+            # )
+            # email.send()
+            # return render(request, 'core/emailnotify.html', {'email': user.email})
+
+        else:
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            return render(request, 'core/register.html', {
+                'form': form,
+                'username': username,
+                'email': email,
+                'valid_email': True,
+                'email_error': False
+            })
+    else:
+        form = SignUpForm()
+        return render(request, 'core/register.html', {
+            'form': form,
+            'valid_email': True,
+            'email_error': False
+        })
+
+
+# def activate(request, uidb64, token):
+#     try:
+#         uid = force_text(urlsafe_base64_decode(uidb64))
+#         user = User.objects.get(pk=uid)
+#     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+#         user = None
+#     if user is not None and account_activation_token.check_token(user, token):
+#         user.is_active = True
+#         user.save()
+#         user.backend = 'django.contrib.auth.backends.ModelBackend'
+#         login(request, user)
+
+#         return redirect(reverse_lazy('sign_in'))
+#     else:
+#         return HttpResponse('Activation link is invalid!')
 
 
 

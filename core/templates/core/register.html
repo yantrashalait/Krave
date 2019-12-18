@@ -1,6 +1,14 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
+<!-- <style>
+	.field-icon {
+		float: right;
+		margin-top: -25px;
+		position: relative;
+		z-index: 2;
+	}
+</style> -->
   	<section class="gery__bg">
   		<div class="container">
   			<div class="row">
@@ -9,32 +17,75 @@
   						Let's get <strong>Started</strong>
   					</div>
   					<div class="uniform">
-  						<form>
-  						<div class="formlist">
-  							<input class="form-input" type="text" placeholder="First Name">
-  						</div>
-  						<div class="formlist">
-  							<input class="form-input" type="text" placeholder="Last Name">
-  						</div>
-  						<div class="formlist">
-  							<input class="form-input" type="text" placeholder="Email">
-  						</div>
-  						<div class="formlist">
-  							<input class="form-input" type="text" placeholder="Zip Code">
-  						</div>
-  						<div class="formlist">
-  							<input class="form-input"  type="text" placeholder="Phone Number">
-  						</div>
-  						<div class="formlist">
-  							<button class="form-submit">Register Now</button>
-  						</div>
+						<form method="post" action="/register/">
+							{% csrf_token %}
+							<div class="formlist">
+								<input class="form-input" type="text" name="first_name" placeholder="First Name">
+							</div>
+							<div class="formlist">
+								<input class="form-input" type="text" name="last_name" placeholder="Last Name">
+							</div>
+							<div class="formlist">
+								<input class="form-input" type="text" name="email" placeholder="Email">
+								{% if form.email.errors %}
+									{% for error in form.email.errors %}
+									<div style="color:red; font-size: 0.875rem;">
+										{{ error|escape }}
+									</div>
+									{% endfor %}
+								{% endif %}
+							</div>
+							<div class="formlist">
+								<input class="form-input" type="text" name="username" placeholder="Username">
+								{% if form.username.errors %}
+									{% for error in form.username.errors %}
+									<div style="color:red; font-size: 0.875rem;">
+										{{ error|escape }}
+									</div>
+									{% endfor %}
+								{% endif %}
+							</div>
+							<div class="formlist">
+								<input class="form-input" type="password" name="password1" placeholder="Password" id="password1">
+								<!-- <div toggle="#password1" class="fa fa-fw fa-eye field-icon toggle-password"></div> -->
+								{% if form.password1.errors %}
+									{% for error in form.password1.errors %}
+									<div style="color:red; font-size: 0.875rem;">
+										{{ error|escape }}
+									</div>
+									{% endfor %}
+								{% endif %}
+							</div>
+							<div class="formlist">
+								<input class="form-input"  type="password" name="password2" placeholder="Re-Enter Password" id="password2">
+								<!-- <div toggle="#password2" class="fa fa-fw fa-eye field-icon toggle-password"></div> -->
+							</div>
+							<div class="formlist">
+								<button type="submit" class="form-submit">Register Now</button>
+							</div>
+
   						</form>
   					</div>
             <div class="login-tit">
-              <span class="login-detail">already have and account? <a class="login-btn" href="#">login now!</a></span>
+              <span class="login-detail">already have and account? <a class="login-btn" href="{% url 'core:login' %}">login now!</a></span>
             </div>
   				</div>
   			</div>
   		</div>
     </section>
   {% endblock %}
+  <!-- {% block scripts %}
+  <script>
+	$(".toggle-password").click(function() {
+		$(this).toggleClass("fa-eye fa-eye-slash");
+		var input = $($(this).attr("toggle"));
+		
+		if (input.attr("type") == "password") {
+			input.attr("type", "text");
+		} 
+		else {
+			input.attr("type", "password");
+		}
+	});
+  </script>
+  {% endblock %} -->
