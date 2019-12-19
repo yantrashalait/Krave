@@ -165,6 +165,7 @@ class FoodCart(models.Model):
     added_on = models.DateTimeField(auto_now_add=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
     
+    
 
 
 
