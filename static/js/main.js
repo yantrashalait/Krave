@@ -22,6 +22,23 @@ $(document).ready(function(){
             }
         });
 
+    $('.category_nav_caro').owlCarousel({
+        autoWidth:true,
+        loop: false,
+        rewind: true,
+        responsiveClass: true,
+        nav: true,
+        margin: 30,
+        smartSpeed: 500,
+        dots: false,
+        nav: false
+})
+
+
+    $("#more__info").click(function(){
+        $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
+    });
+
     $(".map__close__btn").click(function(){
         $("#more__inf__hldr").css({'display': 'none'});
     });
@@ -82,8 +99,39 @@ $('.close__resp__menu').click(function(){
 })
 
 
+
+$('.category_nav_caro .owl-item').click(function(e){
+  e.preventDefault();
+  $(this).addClass('active-second');
+   $(this).siblings().removeClass('active-second');
+  
+})
+
+
 });// document ready
 
 
 })(window.jQuery);  
  
+
+// for category nav scroll
+var foodCategoryDistance = $('.food__category').offset().top;
+
+$(window).scroll(function() {
+    if ( $(this).scrollTop() >= foodCategoryDistance ) {
+        $('.food__category').addClass('sticky-food-cat-nav');
+    } else {
+        $('.food__category').removeClass('sticky-food-cat-nav');
+    }
+});
+
+      $(document).ready(function(){
+        $('.category_nav .item a').on('click', function(e){
+          e.preventDefault();
+          var target = $(this).attr('href');
+          $("html, body").animate({ scrollTop: $(target).offset().top}, 'fast');
+          if( $(target).offset().top = 0){
+            $(target).addClass('e')
+          }
+        });
+      });

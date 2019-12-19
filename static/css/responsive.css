@@ -98,3 +98,10 @@
         padding: 10px;
     }
 }
+
+
+@media screen and (max-width: 340px) {
+    .nav__info .logo img{
+    	width: 50px;
+    }
+}

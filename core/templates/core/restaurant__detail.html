@@ -58,18 +58,17 @@
   <section class="food__category">
     <div class="container">
        <div class="row">
-        <div class="category_nav">
-          <ul>
-            <li><a href="#chef">chef's special</a></li>
-              {% for item in restaurant.food_category.all %}
-                <li><a href="#{{ item.category }}">{{ item.category }}</a></li>
-              {% endfor %}
-          </ul>
+        <div class="category_nav col-md-12">
+          <div class="category_nav_caro owl-carousel owl-theme">
+            <div class="item"><a href="#chef_spec">Free with $15 Purchase</a></div>
+            {% for item in restaurant.food_category.all %}
+              <div class="item"><a href="#{{ item.category }}">{{ item.category }}</a></div>
+            {% endfor %}
         </div>
        </div>
     </div>
   </section>
-  <section class="category__item__details" id="chef">
+  <section class="food-cat-bx category__item__details" id="chef_spec">
     <div class="container">
       <div class="category_main_head">
           <span>chef's special</span>
@@ -133,7 +132,7 @@
   </section>
   {% for item in restaurant.food_category.all %}
    {% if item.food.all %}
-    <section class="sec__category__item" id="{{ item.category }}">
+    <section class="food-cat-bx sec__category__item" id="{{ item.category }}">
       <div class="container">
         <div class="category_main_head">
             <span>{{ item.category }}</span>
