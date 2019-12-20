@@ -17,6 +17,7 @@ urlpatterns = [
     path('register/', views.register, name='register'),
 
     # restaurant views
+    path('restaurant-lists', views.RestaurantListView.as_view(), name="restaurant-list"),
     path('restaurant-detail/<slug:rest_name>', views.RestaurantDetail.as_view(), name='restaurant-detail'),
     path('food-detail/', views.get_food_detail, name='get-food-detail'),
 

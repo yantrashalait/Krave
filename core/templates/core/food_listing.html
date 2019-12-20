@@ -43,45 +43,45 @@
                   <span class="option__head">Select option</span>
                   <span>Required</span>
               </div>
-              <div class="popup__content__wrapper">
-                <div class="checkbox__wrapper space__between">              
-                      <div class="checkbox__content">
-                        <label>
-                        <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
-                          <span>Scrambled it to make a type specimen book</span>
-  
-                        </label>
-              </div>
-              <div class="check__item__price">
-                <span class="radio__price__info">$40</span>
-              </div>
-                  </div>
-                  <div class="radio__box__wrapper space__between">
-                    <div class="radio__box__contain">
-              <label>
-                        <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
-                        <span> Scrambled</span>
-                        <span class="qnty__cals">300 - 500 cal</span>
-  
-                      </label>	               
+              <div class="popup__content__wrapper" id="modifiers">
+                  <!-- <div class="checkbox__wrapper space__between">              
+                        <div class="checkbox__content">
+                          <label>
+                          <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
+                            <span>Scrambled it to make a type specimen book</span>
+    
+                          </label>
+                </div>
+                <div class="check__item__price">
+                  <span class="radio__price__info">$40</span>
+                </div>
                     </div>
-                    <div class="radio__box__price">
-                      <span class="radio__price__info">$50</span>
+                    <div class="radio__box__wrapper space__between">
+                      <div class="radio__box__contain">
+                <label>
+                          <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+                          <span> Scrambled</span>
+                          <span class="qnty__cals">300 - 500 cal</span>
+    
+                        </label>	               
+                      </div>
+                      <div class="radio__box__price">
+                        <span class="radio__price__info">$50</span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="radio__box__wrapper space__between">
-                    <div class="radio__box__contain">
-              <label>
-                        <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
-                        <span> Scrambled</span>
-                        <span class="qnty__cals"> 200 - 300 cals</span>
-  
-                      </label>	               
-                    </div>
-                    <div class="radio__box__price">
-                      <span class="radio__price__info">$50</span>
-                    </div>
-                  </div>              
+                    <div class="radio__box__wrapper space__between">
+                      <div class="radio__box__contain">
+                <label>
+                          <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+                          <span> Scrambled</span>
+                          <span class="qnty__cals"> 200 - 300 cals</span>
+    
+                        </label>	               
+                      </div>
+                      <div class="radio__box__price">
+                        <span class="radio__price__info">$50</span>
+                      </div>
+                    </div>               -->
                   
               </div>
               <div class="popup__content__wrapper">
@@ -140,8 +140,14 @@
                 },
                 dataType: 'json',
                 success: function(result){
-                    food_data = jQuery.parseJSON(result);
-                    console.log(food_data[0].fields);
+                    console.log(result);
+                    var data = result;
+
+                    food_data = data.food;
+                    food_data = jQuery.parseJSON(food_data);
+
+
+                    // console.log(food_data.food[0].fields);
                     $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
                     
                     $(".food__detail__description h3").html(food_data[0].fields.name);
@@ -155,6 +161,24 @@
                     var base_url = "http://localhost:8000/";
                     var src1 = base_url + 'media/' + food_data[0].fields.image;
                     $("#food_image").attr("src", src1);
+
+                    $("#modifiers").html('');
+                    var modifiers = [];
+                    modifiers = data.modifiers;
+                    modifiers = jQuery.parseJSON(modifiers);
+                    modifiers.forEach(function(modifier){
+                      if (modifier.fields.type === 2){
+                        var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
+                      }
+                      $('#modifiers').append(modifier_content);
+                    });
+
+                    modifiers.forEach(function(modifier){
+                      if (modifier.fields.type === 1){
+                        var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" /><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
+                      }
+                      $('#modifiers').append(modifier_content);
+                    });
                 }
             });
             

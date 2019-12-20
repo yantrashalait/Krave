@@ -109,6 +109,12 @@ class RestaurantDetail(TemplateView):
         return context
 
 
+class RestaurantListView(ListView):
+    template_name = 'core/restaurant_listing.html'
+    model = Restaurant
+    context_object_name = 'restaurants'
+
+
 """
     The search view
 """

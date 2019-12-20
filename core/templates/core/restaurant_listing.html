@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load filters %}
+{% block content %}
+<section class="category__item__details">
+    <div class="container">
+      <div class="category_main_head">
+          <span>All Restaurants</span>
+      </div>
+      <div class="row">
+        {% for item in restaurants %}
+        <div class="col-md-6 mb-4">
+            <a href="{% url 'core:restaurant-detail' item.name|space_to_underscore %}">
+                <div class="categ__info" data-id="{{ item.id }}">
+                    <div class="categ__head">
+                    <span class="food_item__name">{{ item.name }}</span>
+                    <p class="food__detail__contain">{{ item.location_text }}</p>
+                    <span class="food__item__price">{{ item.email }}</span>
+                    </div>
+
+                    <div class="food__item_image">
+                    <img src="{{ item.logo.url }}">
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

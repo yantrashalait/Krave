@@ -60,74 +60,13 @@
        <div class="row">
         <div class="category_nav col-md-12">
           <div class="category_nav_caro owl-carousel owl-theme">
-            <div class="item"><a href="#chef_spec">Free with $15 Purchase</a></div>
             {% for item in restaurant.food_category.all %}
-              <div class="item"><a href="#{{ item.category }}">{{ item.category }}</a></div>
+              {% if item.food.all %}
+                <div class="item"><a href="#{{ item.category }}">{{ item.category }}</a></div>
+              {% endif %}
             {% endfor %}
         </div>
        </div>
-    </div>
-  </section>
-  <section class="food-cat-bx category__item__details" id="chef_spec">
-    <div class="container">
-      <div class="category_main_head">
-          <span>chef's special</span>
-      </div>
-      <div class="row">
-        
-        <div class="col-md-6 mb-4">
-          <div id="food__detail" class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/test.jpg' %}">
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 mb-4">
-          <div class="categ__info">
-            <div class="categ__head">
-              <span class="food_item__name">golden pumpkin</span>
-              <p class="food__detail__contain">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout</p>
-              <span class="food__item__price">$10</span>
-            </div>
-
-            <div class="food__item_image">
-              <img src="{% static 'images/food__burger.png' %}">
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
   {% for item in restaurant.food_category.all %}
