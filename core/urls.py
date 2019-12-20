@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from django.contrib.auth import views as auth_views
 
 app_name = 'core'
 
@@ -13,9 +14,10 @@ urlpatterns = [
 
     # for user dashboard
     path('', views.DashboardView.as_view(), name='dashboard'),
-    path('login/', views.signin, name='login'),
-    path('register/', views.register, name='register'),
 
+    # for registration
+    path('register/', views.register, name='register'),
+    
     # restaurant views
     path('restaurant-lists', views.RestaurantListView.as_view(), name="restaurant-list"),
     path('restaurant-detail/<slug:rest_name>', views.RestaurantDetail.as_view(), name='restaurant-detail'),

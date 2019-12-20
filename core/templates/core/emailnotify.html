@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block content %}
+<section class="gery__bg">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 mx-auto">
+			<div class="hding">
+				Activate <strong>Email</strong>
+			</div>
+			<div class="uniform">
+				<span>An email has been sent to {{ email }}. Please activate your account by clicking the link on the email to be able to Login.</span>
+				<span>You cannot login unless project manager assigns you a role. You will receieve another email after your role assignment.
+			</div>
+			<div class="login-tit">
+				<span class="login-detail"> Go to <a class="login-btn" href="{% url 'core:dashboard' %}">Home Page</a></span>
+			</div>
+		</div>
+	  </div>
+	</div>
+</section>
+{% endblock %}

@@ -24,14 +24,14 @@
             </div>
             
             <div class="formlist">
-              <input class="form-input" type="text" name="password" placeholder="password">
+              <input class="form-input" type="password" name="password" placeholder="password">
               {% if password_error %}
                 <div id="passwordHelp" style="color:red; font-size0.875rem;">
                     Incorrect Password ! Please Check Your Password.
                 </div>
               {% endif %}
             </div>
-            <p class="reverse-pass"><strong>forget password?</strong> <a href="#"> request password</a></p>
+            <p class="reverse-pass"><strong>forget password?</strong> <a href="{% url 'password_reset' %}"> request password</a></p>
             <div class="formlist">
               <button type="submit" class="form-submit">Login Now</button>
             </div>
