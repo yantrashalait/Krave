@@ -1,6 +1,18 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+  #map{
+    height: 300px;
+    width: 100%;
+  }
+
+  .map__close__btn{
+    z-index: 9999;
+  }
+
+
+</style>
     <section class="top__banner">
       <div class="container ">
         <div class="row align-items-center">
@@ -105,62 +117,13 @@
             <span class="map__close__btn"><i class="fa fa-times" aria-hidden="true"></i></span>
           </div>
           <div class="location__hours__opening__days">
-                <div class="map__location">
-                  <h5>Location</h5>
-                  <span class="location__cordinates">
-                    <i class="fa fa-map-marker" aria-hidden="true"></i>
-                    <a href="#">{{ restaurant.location_text }}</a>
-                  </span>        
-                </div>
-                <!-- <div class="restaurant__details">
-                    <h5>Other Details</h5>
-                    <span>
-                      <i class="fa fa-phone-square" aria-hidden="true"></i>
-                      <a href="#">{{ restaurant.contact }}</a>
-                    </span>
-                </div> -->
-
-                <!-- <div class="opening__day__wrapper">
-                  <div class="opening__days">
-                    <div class="days"><i class="fa fa-clock-o" aria-hidden="true"></i><span>Sunday - Monday</span></div>
-                    <div class="opening__hours">
-                      <span>11:00 AM - 3:00 PM</span>
-                      <span>Lunch</span>
-                    </div>
-                  </div>
-                  <div class="opening__days">
-                    <div class="days"><span>Tuesday</span></div>
-                    <div class="opening__hours">
-                      <span>11:00 AM - 3:00 PM</span>
-                      <span>Lunch</span>
-
-                    </div>
-                  </div>
-                  <div class="opening__days">
-                    <div class="days"><span>Wednesday - Thursday</span></div>
-                    <div class="opening__hours">
-                      <span>11:00 AM - 3:00 PM</span>
-                      <span>Lunch</span>
-
-                    </div>
-                    <div class="opening__hours">
-                      <span>11:00 AM - 3:00 PM</span>
-                      <span>Lunch</span>
-
-                    </div>
-                  </div>
-                  <div class="opening__days">
-                    <div class="days"><span>Friday - Saturday</span></div>
-                    <div class="opening__hours">
-                      <span>11:00 AM - 3:00 PM</span>
-                      <span>Lunch</span>
-                    </div>
-                    <div class="opening__hours">
-                      <span>11:00 AM - 3:00 PM</span>
-                      <span>Lunch</span>
-                    </div>
-                  </div>
-                </div> -->
+              <div class="map__location">
+                <h5>Location</h5>
+                <span class="location__cordinates">
+                  <i class="fa fa-map-marker" aria-hidden="true"></i>
+                  <a href="#">{{ restaurant.location_text }}</a>
+                </span>        
+              </div>
           </div>
         </div>
     </div>
@@ -183,42 +146,6 @@
                 <span>Required</span>
             </div>
             <div class="popup__content__wrapper" id="modifiers">
-            	<!-- <div class="checkbox__wrapper space__between">              
-                  <div class="checkbox__content">
-                    <label>
-                    <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
-                      <span>Scrambled it to make a type specimen book</span>
-                    </label>
-						      </div>
-						      <div class="check__item__price">
-							      <span class="radio__price__info">$40</span>
-						      </div>
-              </div> -->
-              <!-- <div class="radio__box__wrapper space__between">
-                <div class="radio__box__contain">
-                  <label>
-                    <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
-                    <span> Scrambled</span>
-                    <span class="qnty__cals">300 - 500 cal</span>
-
-                  </label>	               
-                </div>
-                <div class="radio__box__price">
-                  <span class="radio__price__info">$50</span>
-                </div>
-              </div>
-                 <div class="radio__box__wrapper space__between">
-	                <div class="radio__box__contain">
-						        <label>
-		                	<input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
-		                	<span> Scrambled</span>
-		                	<span class="qnty__cals"> 200 - 300 cals</span>
-	                	</label>	               
-	                 </div>
-	                 <div class="radio__box__price">
-	                 	<span class="radio__price__info">$50</span>
-	                 </div>
-                 </div>               -->
                 
             </div>
             <div class="popup__content__wrapper">
@@ -263,7 +190,9 @@
   $(".top__banner").css("background-image", "linear-gradient(to top,rgba(0,0,0,0.8),rgba(0,0,0,0.6)), url(" + "{{ main_image.0.image.url }}" + ")");
   $("#more__info").click(function(){
     $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
-    var points = [{{ restaurant.location_point.y }}, {{ restaurant.location_point.x }}];
+    var y = {{ restaurant.location_point.y }};
+    var x = {{ restaurant.location_point.x }};
+    var points = [y, x];
     console.log(points);
     
     var map = L.map('map').setView(points, 19);
@@ -312,62 +241,82 @@
     var marker = L.marker(points,{icon:icons}).addTo(map);
     marker.bindPopup("<b> {{restaurant.name}} </b>").openPopup();
   });
-</script>
 
-<script>
-    $(document).ready(function(){
-        $(".categ__info").click(function(){
-            var food_id = $(this).attr('data-id');
-            $.ajax({
-                url: "{% url 'core:get-food-detail' %}",
-                data: {
-                    'food_id': food_id,
-                },
-                dataType: 'json',
-                success: function(result){
-                    console.log(result);
-                    var data = result;
+  $(document).ready(function(){
+      $(".categ__info").click(function(){
+          var food_id = $(this).attr('data-id');
+          $.ajax({
+              url: "{% url 'core:get-food-detail' %}",
+              data: {
+                  'food_id': food_id,
+              },
+              dataType: 'json',
+              success: function(result){
+                  console.log(result);
+                  var data = result;
 
-                    food_data = data.food;
-                    food_data = jQuery.parseJSON(food_data);
+                  food_data = data.food;
+                  food_data = jQuery.parseJSON(food_data);
 
 
-                    // console.log(food_data.food[0].fields);
-                    $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
-                    
-                    $(".food__detail__description h3").html(food_data[0].fields.name);
-                    
-                    var cal = food_data[0].fields.calories + 'cal';
-                    $(".food__detail__description span").html(cal);
+                  // console.log(food_data.food[0].fields);
+                  $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
+                  
+                  $(".food__detail__description h3").html(food_data[0].fields.name);
+                  
+                  var cal = food_data[0].fields.calories + 'cal';
+                  $(".food__detail__description span").html(cal);
 
-                    var desc = food_data[0].fields.description;
-                    $(".food__detail__description p").html(desc);
+                  var desc = food_data[0].fields.description;
+                  $(".food__detail__description p").html(desc);
 
-                    var base_url = "http://localhost:8000/";
-                    var src1 = base_url + 'media/' + food_data[0].fields.image;
-                    $("#food_image").attr("src", src1);
+                  var base_url = "http://localhost:8000/";
+                  var src1 = base_url + 'media/' + food_data[0].fields.image;
+                  $("#food_image").attr("src", src1);
 
-                    $("#modifiers").html('');
-                    var modifiers = [];
-                    modifiers = data.modifiers;
-                    modifiers = jQuery.parseJSON(modifiers);
-                    modifiers.forEach(function(modifier){
-                      if (modifier.fields.type === 2){
-                        var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
-                      }
-                      $('#modifiers').append(modifier_content);
-                    });
+                  $("#modifiers").html('');
+                  var modifiers = [];
+                  modifiers = data.modifiers;
+                  modifiers = jQuery.parseJSON(modifiers);
+                  modifiers.forEach(function(modifier){
+                    if (modifier.fields.type === 2){
+                      var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
+                    }
+                    $('#modifiers').append(modifier_content);
+                  });
 
-                    modifiers.forEach(function(modifier){
-                      if (modifier.fields.type === 1){
-                        var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" /><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
-                      }
-                      $('#modifiers').append(modifier_content);
-                    });
-                }
-            });
-            
-        });           
+                  modifiers.forEach(function(modifier){
+                    if (modifier.fields.type === 1){
+                      var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" /><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
+                    }
+                    $('#modifiers').append(modifier_content);
+                  });
+              }
+          });
+          
+      });           
+  });
+
+  // for category nav scroll
+  var foodCategoryDistance = $('.food__category').offset().top;
+
+  $(window).scroll(function() {
+      if ( $(this).scrollTop() >= foodCategoryDistance ) {
+          $('.food__category').addClass('sticky-food-cat-nav');
+      } else {
+          $('.food__category').removeClass('sticky-food-cat-nav');
+      }
+  });
+
+  $(document).ready(function(){
+    $('.category_nav .item a').on('click', function(e){
+      e.preventDefault();
+      var target = $(this).attr('href');
+      $("html, body").animate({ scrollTop: $(target).offset().top}, 'fast');
+      if( $(target).offset().top = 0){
+        $(target).addClass('e')
+      }
     });
+  });
 </script>
 {% endblock %}

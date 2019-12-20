@@ -35,9 +35,9 @@ $(document).ready(function(){
 })
 
 
-    $("#more__info").click(function(){
-        $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
-    });
+    // $("#more__info").click(function(){
+    //     $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
+    // });
 
     $(".map__close__btn").click(function(){
         $("#more__inf__hldr").css({'display': 'none'});
@@ -45,9 +45,9 @@ $(document).ready(function(){
 
 
 
-    $("#food__detail").click(function(){
-        $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
-    });
+    // $("#food__detail").click(function(){
+    //     $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
+    // });
     $(".popups__close__button").click(function(){
         $("#food__decspt__handler").css({'display': 'none'});
     });
@@ -112,26 +112,3 @@ $('.category_nav_caro .owl-item').click(function(e){
 
 
 })(window.jQuery);  
- 
-
-// for category nav scroll
-var foodCategoryDistance = $('.food__category').offset().top;
-
-$(window).scroll(function() {
-    if ( $(this).scrollTop() >= foodCategoryDistance ) {
-        $('.food__category').addClass('sticky-food-cat-nav');
-    } else {
-        $('.food__category').removeClass('sticky-food-cat-nav');
-    }
-});
-
-      $(document).ready(function(){
-        $('.category_nav .item a').on('click', function(e){
-          e.preventDefault();
-          var target = $(this).attr('href');
-          $("html, body").animate({ scrollTop: $(target).offset().top}, 'fast');
-          if( $(target).offset().top = 0){
-            $(target).addClass('e')
-          }
-        });
-      });
