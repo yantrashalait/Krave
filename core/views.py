@@ -6,7 +6,7 @@ from userrole.models import UserRole
 from django.contrib.auth.models import Group
 from django.db import transaction
 from django.contrib.gis.geos import Point
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.http import JsonResponse
 import json
 from django.core import serializers
@@ -19,6 +19,15 @@ from .forms import LoginForm, SignUpForm
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
+
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes, force_text
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .signup_tokens import account_activation_token
+from django.conf import settings
 
 
 class RequestList(ListView):
@@ -232,25 +241,23 @@ def register(request):
             last_name = form.cleaned_data.get('last_name')
             user = User.objects.create(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
             user.set_password(user.password)
-            user.is_active = True
+            user.is_active = False
             user.save()
 
-            return redirect('/')
-
-            # mail_subject = 'Activate your account.'
-            # current_site = get_current_site(request)
-            # message = render_to_string('core/acc_active_email.html', {
-            #     'user': user,
-            #     'domain': settings.SITE_URL,
-            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            #     'token': account_activation_token.make_token(user),
-            # })
-            # to_email = email
-            # email = EmailMessage(
-            #     mail_subject, message, to=[to_email]
-            # )
-            # email.send()
-            # return render(request, 'core/emailnotify.html', {'email': user.email})
+            mail_subject = 'Activate your account.'
+            current_site = get_current_site(request)
+            message = render_to_string('core/acc_active_email.html', {
+                'user': user,
+                'domain': settings.SITE_URL,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user),
+            })
+            to_email = email
+            email = EmailMessage(
+                mail_subject, message, to=[to_email]
+            )
+            email.send()
+            return render(request, 'core/emailnotify.html', {'email': user.email})
 
         else:
             username = request.POST.get('username')
@@ -275,21 +282,21 @@ def register(request):
         })
 
 
-# def activate(request, uidb64, token):
-#     try:
-#         uid = force_text(urlsafe_base64_decode(uidb64))
-#         user = User.objects.get(pk=uid)
-#     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
-#         user = None
-#     if user is not None and account_activation_token.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         user.backend = 'django.contrib.auth.backends.ModelBackend'
-#         login(request, user)
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(request, user)
 
-#         return redirect(reverse_lazy('sign_in'))
-#     else:
-#         return HttpResponse('Activation link is invalid!')
+        return redirect(reverse_lazy('login'))
+    else:
+        return HttpResponse('Activation link is invalid!')
 
 
 

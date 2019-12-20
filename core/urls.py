@@ -17,6 +17,7 @@ urlpatterns = [
 
     # for registration
     path('register/', views.register, name='register'),
+    path('activate/<slug:uidb64>/<slug:token>/', views.activate, name='activate'),
     
     # restaurant views
     path('restaurant-lists', views.RestaurantListView.as_view(), name="restaurant-list"),
