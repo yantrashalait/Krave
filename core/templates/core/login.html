@@ -11,7 +11,7 @@
             <form method="post" action="/login/">
               {% csrf_token %}
             <div class="formlist">
-              <input class="form-input" type="text" name="username" placeholder="Email Address/Username">
+              <input class="form-input" type="text" name="username" id="id_username" placeholder="Email Address/Username">
               {% if email_error %}
                 <div style="color:red; font-size: 0.875rem;">
                     {{ email_error }}
@@ -26,7 +26,7 @@
             <div class="formlist">
               <input class="form-input" type="password" name="password" placeholder="password">
               {% if password_error %}
-                <div id="passwordHelp" style="color:red; font-size0.875rem;">
+                <div id="passwordHelp" style="color:red; font-size: 0.875rem;">
                     Incorrect Password ! Please Check Your Password.
                 </div>
               {% endif %}
@@ -35,6 +35,7 @@
             <div class="formlist">
               <button type="submit" class="form-submit">Login Now</button>
             </div>
+            <input type="hidden" name="next" value="{{ next }}">
             </form>
           </div>
           <div class="login-tit">
@@ -45,3 +46,13 @@
     </div>
   </section>
   {% endblock %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function(){
+    if('{{ login_username }}'){
+      $("#id_username").val('{{ login_username }}');
+    }
+  });
+</script>
+{% endblock %}

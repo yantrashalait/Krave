@@ -228,7 +228,9 @@ def register(request):
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
             password = form.cleaned_data.get('password1')
-            user = User.objects.create(username=username, email=email, password=password)
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            user = User.objects.create(username=username, first_name=first_name, last_name=last_name, email=email, password=password)
             user.set_password(user.password)
             user.is_active = True
             user.save()
@@ -253,10 +255,14 @@ def register(request):
         else:
             username = request.POST.get('username')
             email = request.POST.get('email')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
             return render(request, 'core/register.html', {
                 'form': form,
                 'username': username,
                 'email': email,
+                'first_name': first_name,
+                'last_name': last_name,
                 'valid_email': True,
                 'email_error': False
             })
