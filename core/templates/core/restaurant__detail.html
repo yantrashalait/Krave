@@ -140,6 +140,8 @@
             <span></span>
             <p class="food__content__popup"></p>
         </div>
+        <form method="post">
+            {% csrf_token %}
         <div class="select__option__food">
             <div class="top__select__intro">
                 <span class="option__head">Select option</span>
@@ -174,13 +176,14 @@
                     </p>
                 </div>
                 <div class="add__order__details">
-                    <a class="add_order__btn" href="#">
-                        <span class="order__btn__popup">Add 1 to Order</span>
-                        <span>$200</span>
-                    </a>
+                    <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();">
+                        <span class="order__btn__popup">Add to Order</span>
+                        <!-- <span class="order__btn__price"></span> -->
+                    </button>
                 </div>
             </div>
         </div>
+        </form>
       </div>
    </div> 
   </div>
@@ -270,7 +273,8 @@
                   var desc = food_data[0].fields.description;
                   $(".food__detail__description p").html(desc);
 
-                  var base_url = "http://localhost:8000/";
+                  // var base_url = "http://localhost:8000/";
+                  var base_url = "http://157.245.213.171:8000/";
                   var src1 = base_url + 'media/' + food_data[0].fields.image;
                   $("#food_image").attr("src", src1);
 
@@ -280,7 +284,7 @@
                   modifiers = jQuery.parseJSON(modifiers);
                   modifiers.forEach(function(modifier){
                     if (modifier.fields.type === 2){
-                      var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
+                      var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
                     }
                     $('#modifiers').append(modifier_content);
                   });
@@ -318,5 +322,14 @@
       }
     });
   });
+
+  function requiredChecked(){
+    if ($("input:radio").is(':checked')){
+      console.log('selected')
+    }
+    else{
+      alert('Please select one of the customizations.');
+    }
+  }
 </script>
 {% endblock %}

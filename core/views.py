@@ -159,6 +159,13 @@ class FoodListView(ListView):
     context_object_name = 'foods'
 
 
+"""
+    Add foods to order
+"""
+def food_order_add(request, *args, **kwargs):
+    pass
+
+
 class FoodCartListView(TemplateView):
     template_name = 'core/checkout.html'
 
