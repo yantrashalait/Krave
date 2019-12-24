@@ -1,6 +1,27 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
+<section class="all_home__banner">
+  <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-sm-8 mx-auto text-center">
+          <div class="landing-top-info">
+            <h1>Restaurants you love, deliver to you</h1>
+            <div class="landing__para mb-5">
+              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad possimus error incidunt nostrum...</p>
+            </div>
+          </div>
+          <form class="search-box" action="{% url 'core:search' %}" method="post">
+            {% csrf_token %}
+              <input class="search-input" type="text" name="search" placeholder="Search your food here..">
+              
+              <button class="search-smt" type="submit"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+</section>
 <section class="category__item__details">
     <div class="container">
       <div class="category_main_head">

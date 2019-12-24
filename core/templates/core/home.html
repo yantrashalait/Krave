@@ -1,69 +1,214 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
-  	<section class="landing">
-  		<div class="container">
-  			<div class="row">
-  				<div class="col-lg-5 col-sm-8 mx-auto">
-  					<div class="landing-top-info">
-  					  <h1>Restaurant you love, deliver to you</h1>
-              <div class="landing__para mb-5">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad possimus error incidunt nostrum...</p>
-              </div>
-  					</div>
-					  <form class="search-box" action="{% url 'core:search' %}" method="post">
-						{% csrf_token %}
-  						<input class="search-input" type="text" name="search" placeholder="Search your food here..">
-  						
-  						<button class="search-smt" type="submit"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
-  					</form>
-
-  				</div>
-  			</div>
-  			<div class="row">
-  				<div class="col-md-4 mx-auto food-item-mrg">
-  					<!-- <div class="food-items">
-    					<div class="item one ">
-    						<a href="#">
-    							<img src="images/burger.png" class="img-fluid">
-  	  						<span class="food__title">
-  	  							Dinner
-  	  						</span>
-    						</a>
-    					</div>
-    					<div class="item two">
-    						<a href="#">
-    							<img src="images/burger.png" class="img-fluid">
-  	  						<span class="food__title">
-  	  							Dinner
-  	  						</span>
-    						</a>
-    					</div>
-    					<div class="item three">
-    						<a href="#">
-    							<img src="images/burger.png" class="img-fluid">
-  	  						<span class="food__title">
-  	  							Dinner
-  	  						</span>
-    						</a>
-    					</div>
-    					<div class="item four">
-    						<a href="#">
-    							<img src="images/burger.png" class="img-fluid">
-  	  						<span class="food__title">
-  	  							Dinner
-  	  						</span>
-    						</a>
-    					</div>
-  				  </div> -->
-    				<div class="social__icon">
-    					<span class="icon__detail">Continue with:</span>
-    					<a href="#" class="icon_fab"><i class="fa fa-facebook-official" aria-hidden="true"></i>facebook</a>
-    					<a href="#" class="icon_google"><i class="fa fa-google" aria-hidden="true"></i>google</a>
-    				</div>
-  				</div>
-
-  			</div>
-  		</div>
-    </section>
-    {% endblock %}
+<section class="all_home__banner">
+	<div class="container">
+		<div class="row">
+		  <div class="col-lg-8 col-sm-8 mx-auto text-center">
+			<div class="landing-top-info">
+			  <h1>Restaurants you love, deliver to you</h1>
+			  <div class="landing__para mb-5">
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad possimus error incidunt nostrum...</p>
+			  </div>
+			</div>
+			<form class="search-box" action="{% url 'core:search' %}" method="post">
+				{% csrf_token %}
+				  <input class="search-input" type="text" name="search" placeholder="Search your food here..">
+				  
+				  <button class="search-smt" type="submit"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
+			</form>
+  
+		  </div>
+		</div>
+	  </div>
+  </section>
+  <section class="category__item__details">
+	  <div class="container">
+		<div class="category_main_head">
+			<span>Recently Added Food Items</span>
+		</div>
+		<div class="row">
+		  {% for item in foods %}
+		  <div class="col-md-6 mb-4">
+			<div class="categ__info" data-id="{{ item.id }}">
+			  <div class="categ__head">
+				<span class="food_item__name">{{ item.name }}</span>
+				<p class="food__detail__contain">{{ item.description }}</p>
+				<span class="food__item__price">${{ item.new_price }}</span>
+			  </div>
+  
+			  <div class="food__item_image">
+				<img src="{{ item.image.url }}">
+			  </div>
+			</div>
+		  </div>
+		  {% endfor %}
+		  </div>
+		</div>
+	  </div>
+	</section>
+	<div id="food__decspt__handler">
+	  <div id="food__descpt__popup" class="popup__food__info">
+		  <div class="popupcontent__holder">
+			<div class="popups__top__banner">
+				<img src="" id="food_image">
+				<span class="popups__close__button"><i class="fa fa-times" aria-hidden="true"></i></span>
+			</div>
+			<div class="food__detail__description">
+				<h3></h3>
+				<span></span>
+				<p class="food__content__popup"></p>
+			</div>
+			<form method="post">
+				{% csrf_token %}
+			<div class="select__option__food">
+				<div class="top__select__intro">
+					<span class="option__head">Select option</span>
+					<span>Required</span>
+				</div>
+				<div class="popup__content__wrapper" id="modifiers">
+					<!-- <div class="checkbox__wrapper space__between">              
+						<div class="checkbox__content">
+						  <label>
+						  <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
+							<span>Scrambled it to make a type specimen book</span>
+  
+						  </label>
+						</div>
+						<div class="check__item__price">
+						  <span class="radio__price__info">$40</span>
+						</div>
+					</div> -->
+					<!-- <div class="radio__box__wrapper space__between">
+					  <div class="radio__box__contain">
+						<label>
+						  <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+						  <span> Scrambled</span>
+						  <span class="qnty__cals">300 - 500 cal</span>
+	
+						</label>	               
+					  </div>
+					  <div class="radio__box__price">
+						<span class="radio__price__info">$50</span>
+					  </div>
+					</div>
+					<div class="radio__box__wrapper space__between">
+					  <div class="radio__box__contain">
+						<label>
+						  <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
+						  <span> Scrambled</span>
+						  <span class="qnty__cals"> 200 - 300 cals</span>
+	
+						</label>	               
+					  </div>
+					  <div class="radio__box__price">
+						<span class="radio__price__info">$50</span>
+					  </div>
+					</div>               -->
+				</div>
+				<div class="popup__content__wrapper">
+					<!-- <div class="customize__item__popup">
+						<a href="#" class="customize__content">Customize this item</a>
+						<a href="#" class="customize__icon"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+					</div> -->
+					<div class="caution__about__food">
+						<p class="caution__contion">
+							<strong>WARNING:</strong> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+						</p>
+					</div>
+				</div>
+				<div class="popup__divider__line"></div>
+				<div class="add__order__popup">
+					<div class="pop__up__add__sub">    
+						<p>
+						  <span id="minus1" class="qty__btn food__qty__dec minus">
+							<img src="{% static 'images/food__pop__desc.png' %}" alt="">
+						  </span>
+	
+						  <input id="qty1" type="text" value="1" class="qty" />
+						  <span id="add1" class="qty__btn food__qty__inc add">
+							<img src="{% static 'images/food__pop__inc.png' %}" alt="">
+						  </span>
+						</p>
+					</div>
+					<div class="add__order__details">
+					  <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();">
+						  <span class="order__btn__popup">Add to Order</span>
+						  <!-- <span class="order__btn__price"></span> -->
+					  </button>
+					</div>
+				</div>
+			</div>
+			</form>
+		  </div>
+	  </div> 
+	  </div>
+  {% endblock %}
+  {% block scripts %}
+  <script>
+	  $(document).ready(function(){
+		  $(".categ__info").click(function(){
+			  var food_id = $(this).attr('data-id');
+			  $.ajax({
+				  url: "{% url 'core:get-food-detail' %}",
+				  data: {
+					  'food_id': food_id,
+				  },
+				  dataType: 'json',
+				  success: function(result){
+					  console.log(result);
+					  var data = result;
+  
+					  food_data = data.food;
+					  food_data = jQuery.parseJSON(food_data);
+  
+  
+					  // console.log(food_data.food[0].fields);
+					  $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
+					  
+					  $(".food__detail__description h3").html(food_data[0].fields.name);
+					  
+					  var cal = food_data[0].fields.calories + 'cal';
+					  $(".food__detail__description span").html(cal);
+  
+					  var desc = food_data[0].fields.description;
+					  $(".food__detail__description p").html(desc);
+  
+					  // var base_url = "http://localhost:8000/";
+					  var base_url = "http://157.245.213.171:8000/";
+					  var src1 = base_url + 'media/' + food_data[0].fields.image;
+					  $("#food_image").attr("src", src1);
+  
+					  $("#modifiers").html('');
+					  var modifiers = [];
+					  modifiers = data.modifiers;
+					  modifiers = jQuery.parseJSON(modifiers);
+					  modifiers.forEach(function(modifier){
+						if (modifier.fields.type === 2){
+						  var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
+						}
+						$('#modifiers').append(modifier_content);
+					  });
+  
+					  modifiers.forEach(function(modifier){
+						if (modifier.fields.type === 1){
+						  var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" /><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
+						}
+						$('#modifiers').append(modifier_content);
+					  });
+				  }
+			  });
+			  
+		  });           
+	  });
+  
+	  function requiredChecked(){
+		if ($("input:radio").is(':checked')){
+		  console.log('selected')
+		}
+		else{
+		  alert('Please select one of the customizations.');
+		}
+	  }
+  </script>
+  {% endblock %}

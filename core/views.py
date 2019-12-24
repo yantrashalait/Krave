@@ -105,6 +105,11 @@ def generate_username(name):
 class DashboardView(TemplateView):
     template_name = 'core/home.html'
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(DashboardView, self).get_context_data(**kwargs)
+        context['foods'] = FoodMenu.objects.order_by('-created_date')[:10]
+        return context
+
 
 class RestaurantDetail(TemplateView):
     template_name = 'core/restaurant__detail.html'

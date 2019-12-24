@@ -93,6 +93,8 @@ class FoodMenu(models.Model):
     preparation_time = models.CharField(max_length=100, null=True)
     image = models.ImageField(upload_to='menu/', null=True, blank=True)
     calories = models.FloatField(null=True, blank=True, help_text="calories contained in this food")
+    created_date = models.DateTimeField(auto_now=True)
+    modified_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
