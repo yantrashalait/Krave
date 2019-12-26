@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Restaurant, RestaurantRequest, Restaurant, FoodMenu, FoodCustomize, RestaurantCuisine, \
-    RestaurantFoodCategory, RestaurantImage
+    RestaurantFoodCategory, RestaurantImage, FoodCart, Order
 import django.contrib.gis.admin as gisadmin
 
 class RestaurantRequestAdmin(gisadmin.OSMGeoAdmin):
@@ -30,3 +30,5 @@ class FoodMenuAdmin(admin.ModelAdmin):
 
 admin.site.register(FoodMenu, FoodMenuAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
+admin.site.register(FoodCart)
+admin.site.register(Order)

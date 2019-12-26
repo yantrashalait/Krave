@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views.generic import DetailView, ListView, TemplateView
-from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage
+from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodCustomize
 from django.conf import settings
 from userrole.models import UserRole
 from django.contrib.auth.models import Group
@@ -19,6 +19,8 @@ from .forms import LoginForm, SignUpForm
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
+from django.db import transaction
 
 
 from django.core.mail import EmailMessage
@@ -109,6 +111,15 @@ class DashboardView(TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['foods'] = FoodMenu.objects.order_by('-created_date')[:10]
         return context
+    
+    def get(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            if self.request.user.groups.filter(name='restaurant-owner').exists():
+                return HttpResponseRedirect(reverse('restaurant:dashboard'))
+            else:
+                return render(self.request, self.template_name, context=self.get_context_data())
+        else:
+            return render(self.request, self.template_name, context=self.get_context_data())
 
 
 class RestaurantDetail(TemplateView):
@@ -151,7 +162,6 @@ def get_food_detail(request, *args, **kwargs):
         food = serializers.serialize('json', [food])
         customization = serializers.serialize('json', customization)
         data = {'food': food, 'modifiers': customization}
-        print(data)
         return JsonResponse(data, safe=False)
 
 
@@ -201,7 +211,10 @@ def signin(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect(reverse('core:dashboard'))
+                    if user.groups.filter(name='restaurant-owner'):
+                        return HttpResponseRedirect(reverse('restaurant:dashboard'))
+                    else:
+                        return HttpResponseRedirect(reverse('core:dashboard'))
                 else:
                     return render(request, 'core/login.html',
                                   {'form': form,
@@ -309,6 +322,46 @@ def activate(request, uidb64, token):
         return redirect(reverse_lazy('login'))
     else:
         return HttpResponse('Activation link is invalid!')
+
+
+"""
+    View to add foods to order then proceed to cart
+"""
+@transaction.atomic
+def add_to_order(request, *args, **kwargs):
+    if request.method == 'POST':
+        if 'food_identifier' in request.POST:        
+            if 'qty' in request.POST:
+                if int(request.POST.get('qty', 0)) < 1:
+                    print('Items are less than 1') # here handle exception
+
+                quantity = request.POST.get('qty', 1)
+                food_id = int(request.POST.get('food_identifier'))
+                food = FoodMenu.objects.get(id=food_id)
+
+                restaurant = Restaurant.objects.get(id=food.restaurant.id)
+
+                cart, created = FoodCart.objects.get_or_create(
+                    food=food, 
+                    user=request.user, 
+                    number_of_food=quantity, 
+                    restaurant=restaurant)
+
+                if 'optional_modifiers' in request.POST:
+                    opt_modifiers = request.POST.getlist('optional_modifiers')
+                    for item in opt_modifiers:
+                        modifier = FoodCustomize.objects.get(name_of_ingredient=item, food=food)
+                        cart.modifier.add(modifier)
+                
+                if 'radio3' in request.POST:
+                    modifier = FoodCustomize.objects.get(name_of_ingredient=request.POST.get('radio3', None), food=food)
+                    cart.modifier.add(modifier)
+            
+        return HttpResponseRedirect(reverse('core:food-cart')) 
+            
+
+
+
 
 
 

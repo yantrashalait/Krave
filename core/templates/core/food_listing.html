@@ -83,7 +83,7 @@
                   </div>
                   <div class="add__order__details">
                     <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();">
-                        <span class="order__btn__popup">Add to Order</span>
+                        <span class="order__btn__popup">Add <span class="order_num">1</span> to Order</span>
                         <!-- <span class="order__btn__price"></span> -->
                     </button>
                   </div>
@@ -155,14 +155,17 @@
         });
         
     });
-
     function requiredChecked(){
-      if ($("input:radio").is(':checked')){
+        if ($("input:radio").is(':checked')){
         console.log('selected')
-      }
-      else{
+        }
+        else{
         alert('Please select one of the customizations.');
-      }
+        }
+
+        if ($('#qty1').val() <= 0){
+            alert('Less than 1 item cannot be ordered.');
+        }
     }
 </script>
 {% endblock %}

@@ -82,6 +82,8 @@ $(function() {
     !isNaN(currentVal) && $qty.val(
       isAdd ? ++currentVal : (currentVal > 0 ? --currentVal : currentVal)
     );
+    console.log(currentVal)
+    $(".order_num").text(currentVal);
   });
 });
 

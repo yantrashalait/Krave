@@ -33,4 +33,7 @@ urlpatterns = [
     path('food/cart/', views.FoodCartListView.as_view(), name='food-cart'),
     path('food/cart/<slug:username>', views.FoodCartListView.as_view(), name='food-cart'),
 
+    #add to order
+    path('order/add/', views.add_to_order, name="add-to-order"),
+
 ]

@@ -126,14 +126,14 @@
 						  </span>
 	
 						  <input id="qty1" type="text" value="1" class="qty" />
-						  <span id="add1" class="qty__btn food__qty__inc add">
+						  <span id="add1" class="qty__btn food__qty__inc add" >
 							<img src="{% static 'images/food__pop__inc.png' %}" alt="">
 						  </span>
 						</p>
 					</div>
 					<div class="add__order__details">
-					  <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();">
-						  <span class="order__btn__popup">Add to Order</span>
+					  <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();">
+						  <span class="order__btn__popup">Add<span class="order_num">1</span> to Order</span>
 						  <!-- <span class="order__btn__price"></span> -->
 					  </button>
 					</div>
@@ -201,14 +201,17 @@
 			  
 		  });           
 	  });
-  
 	  function requiredChecked(){
 		if ($("input:radio").is(':checked')){
-		  console.log('selected')
+		console.log('selected')
 		}
 		else{
-		  alert('Please select one of the customizations.');
+		alert('Please select one of the customizations.');
 		}
-	  }
+
+		if ($('#qty1').val() <= 0){
+			alert('Less than 1 item cannot be ordered.');
+		}
+	}
   </script>
   {% endblock %}

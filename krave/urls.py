@@ -26,6 +26,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('api.urls')),
     path('', include('core.urls')),
+    path('restaurant/', include('restaurant.urls')),
 
     path('login/', views.signin, name='login'),
 

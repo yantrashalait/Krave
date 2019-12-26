@@ -164,8 +164,35 @@ class FoodCart(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.DO_NOTHING, related_name='cart')
     number_of_food = models.IntegerField(default=1)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='cart')
-    added_on = models.DateTimeField(auto_now_add=True)
+    added_on = models.DateTimeField(auto_now=True)
+    modified_on = models.DateTimeField(auto_now=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
+    modifier = models.ManyToManyField(FoodCustomize, related_name='orders')
+
+    def __str__(self):
+        return self.food.name + ' ' + self.user.username
+
+
+class Order(models.Model):
+    STATUS_CHOICES = (
+        (0, 'Pending'),
+        (1, 'Approved'),
+        (2, 'Rejected'),
+        (3, 'Prepared'),
+        (4, 'Delivered')
+    )
+
+    PAYMENT_TYPE = (
+        (1, 'On Delivery'),
+    )
+
+    cart = models.ManyToManyField(FoodCart, related_name="order")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='order')
+    last_modified = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now=True)
+    status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)
+    payment_type = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
+
     
     
 

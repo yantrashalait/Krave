@@ -1,0 +1,85 @@
+h1,
+h2, 
+h3, 
+h4, 
+h5, 
+h5,
+.ad-fd-fm .fm-ls label,
+.rs-in-tx .rs-nm{
+    font-family: 'FuturaPTMedium';
+}
+
+
+.ac-bt{
+	border: none;
+    background: #eaeaea;
+    border-radius: 5px;
+    padding: 7px 25px;
+}
+
+.ac-bt:hover{
+	background: #6bca2f;
+}
+
+
+.ac-bt,
+.food_item_name{
+	font-weight: 600;
+}
+
+/* ========= for white color ============ */
+
+.editing__notice,
+.ac-bt:hover{
+	color: #fff;
+}
+
+
+
+
+/* ========= for background color ============ */
+
+
+
+.left__menu__lists ul li a:hover,
+#fd-it-ls-dt a{
+    color: #6bca2f;
+}
+
+.ac-bt-hl-fd-ls a{
+    color: #fff !important;
+}
+
+
+.rb-pd-rl{
+	padding: 0 3rem;
+}
+.pd-tb-md{
+	padding: 2rem 0;
+}
+
+.sm-mb{
+	margin-bottom: 2rem;
+}
+
+.fm-ls-td{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.fm-ls-td.js-sb{
+    justify-content: space-between;
+}
+
+.fm-hf-ls {
+    width: 49%;
+}
+
+.left__menu__lists ul li,
+.tp-m ul li{
+    list-style: none;
+}
+
+.sc-hd h1{
+	font-size: 1.5rem
+}

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api',
     'delivery',
     'django_filters',
+    'restaurant',
 ]
 
 MIDDLEWARE = [
