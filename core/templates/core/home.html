@@ -59,7 +59,7 @@
 				<span></span>
 				<p class="food__content__popup"></p>
 			</div>
-			<form method="post">
+			<form method="post" action="{% url 'core:add-to-order' %}" id="food__detail">
 				{% csrf_token %}
 			<div class="select__option__food">
 				<div class="top__select__intro">
@@ -67,44 +67,6 @@
 					<span>Required</span>
 				</div>
 				<div class="popup__content__wrapper" id="modifiers">
-					<!-- <div class="checkbox__wrapper space__between">              
-						<div class="checkbox__content">
-						  <label>
-						  <input type="checkbox" class="mgc mgc-success mgc-lg" /> 
-							<span>Scrambled it to make a type specimen book</span>
-  
-						  </label>
-						</div>
-						<div class="check__item__price">
-						  <span class="radio__price__info">$40</span>
-						</div>
-					</div> -->
-					<!-- <div class="radio__box__wrapper space__between">
-					  <div class="radio__box__contain">
-						<label>
-						  <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
-						  <span> Scrambled</span>
-						  <span class="qnty__cals">300 - 500 cal</span>
-	
-						</label>	               
-					  </div>
-					  <div class="radio__box__price">
-						<span class="radio__price__info">$50</span>
-					  </div>
-					</div>
-					<div class="radio__box__wrapper space__between">
-					  <div class="radio__box__contain">
-						<label>
-						  <input type="radio" name="radio3" class="mgr mgr-success mgr-lg"/>
-						  <span> Scrambled</span>
-						  <span class="qnty__cals"> 200 - 300 cals</span>
-	
-						</label>	               
-					  </div>
-					  <div class="radio__box__price">
-						<span class="radio__price__info">$50</span>
-					  </div>
-					</div>               -->
 				</div>
 				<div class="popup__content__wrapper">
 					<!-- <div class="customize__item__popup">
@@ -125,15 +87,16 @@
 							<img src="{% static 'images/food__pop__desc.png' %}" alt="">
 						  </span>
 	
-						  <input id="qty1" type="text" value="1" class="qty" />
+						  <input id="qty1" type="text" name="qty" value="1" class="qty" />
 						  <span id="add1" class="qty__btn food__qty__inc add" >
 							<img src="{% static 'images/food__pop__inc.png' %}" alt="">
 						  </span>
 						</p>
 					</div>
+					<input type="text" name="food_identifier" hidden id="food__id" />
 					<div class="add__order__details">
-					  <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();" onkeyup="this.onchange();" onpaste="this.onchange();" oninput="this.onchange();">
-						  <span class="order__btn__popup">Add<span class="order_num">1</span> to Order</span>
+					  <button class="add_order__btn" id="id_add_cart">
+						  <span class="order__btn__popup">Add to Order</span>
 						  <!-- <span class="order__btn__price"></span> -->
 					  </button>
 					</div>
@@ -165,6 +128,9 @@
   
 					  // console.log(food_data.food[0].fields);
 					  $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
+
+					  var id_of_food = food_data[0].pk;
+                  	  $("#food__id").val(id_of_food);
 					  
 					  $(".food__detail__description h3").html(food_data[0].fields.name);
 					  
@@ -201,17 +167,22 @@
 			  
 		  });           
 	  });
-	  function requiredChecked(){
-		if ($("input:radio").is(':checked')){
-		console.log('selected')
-		}
-		else{
-		alert('Please select one of the customizations.');
-		}
-
-		if ($('#qty1').val() <= 0){
-			alert('Less than 1 item cannot be ordered.');
-		}
-	}
+	  	$("#food__detail").on('submit', function(e){
+			if (jQuery('input[type=radio][name=radio3]').length){
+					if ($("input:radio").is(':checked')){
+						if ($('#qty1').val() <= 0){
+							alert('Less than 1 item cannot be ordered.');
+							e.preventDefault();
+						}
+						else{
+							$("#food__detail").submit();
+						}
+					}
+					else{
+						alert('Please select one of the customizations.');
+						e.preventDefault();
+					}
+				}
+		});
   </script>
   {% endblock %}

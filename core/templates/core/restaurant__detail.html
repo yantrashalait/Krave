@@ -140,7 +140,7 @@
             <span></span>
             <p class="food__content__popup"></p>
         </div>
-        <form method="post" action="{% url 'core:add-to-order' %}">
+        <form method="post" action="{% url 'core:add-to-order' %}" id="food__detail">
             {% csrf_token %}
             <div class="select__option__food">
               <div class="top__select__intro">
@@ -177,8 +177,8 @@
                   </div>
                   <input type="text" name="food_identifier" hidden id="food__id" />
                   <div class="add__order__details">
-                      <button type="submit" class="add_order__btn" id="id_add_cart" onclick="requiredChecked();">
-                          <span class="order__btn__popup">Add<span class="order_num">1</span> to Order</span>
+                      <button class="add_order__btn" id="id_add_cart">
+                          <span class="order__btn__popup">Add to Order</span>
                           <!-- <span class="order__btn__price"></span> -->
                       </button>
                   </div>
@@ -327,17 +327,22 @@
     });
   });
 
-  function requiredChecked(){
-        if ($("input:radio").is(':checked')){
-        console.log('selected')
-        }
-        else{
-        alert('Please select one of the customizations.');
-        }
-
-        if ($('#qty1').val() <= 0){
-            alert('Less than 1 item cannot be ordered.');
-        }
-    }
+  $("#food__detail").on('submit', function(e){
+    if (jQuery('input[type=radio][name=radio3]').length){
+			if ($("input:radio").is(':checked')){
+				if ($('#qty1').val() <= 0){
+					alert('Less than 1 item cannot be ordered.');
+          e.preventDefault();
+				}
+				else{
+					$("#food__detail").submit();
+				}
+			}
+			else{
+			  alert('Please select one of the customizations.');
+        e.preventDefault();
+			}
+		}
+  });
 </script>
 {% endblock %}
