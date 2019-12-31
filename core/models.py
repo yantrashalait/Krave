@@ -136,7 +136,8 @@ class FoodRating(models.Model):
 
 class RestaurantRequest(models.Model):
     name = models.CharField(max_length=255)
-    location = PointField(geography=True, srid=4326, blank=True, null=True)
+    location_point = PointField(geography=True, srid=4326, blank=True, null=True)
+    location_text = models.CharField(max_length=500, default="")
     name_of_owner = models.CharField(max_length=255)
     email_of_owner = models.EmailField()
     contact = models.CharField(max_length=20)
@@ -168,6 +169,7 @@ class FoodCart(models.Model):
     modified_on = models.DateTimeField(auto_now=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
     modifier = models.ManyToManyField(FoodCustomize, related_name='orders')
+    checked_out = models.BooleanField(default=False)
 
     def __str__(self):
         return self.food.name + ' ' + self.user.username

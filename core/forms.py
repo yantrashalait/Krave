@@ -7,12 +7,18 @@ from django.forms import widgets
 from django.db.models import Sum
 from django.core.validators import validate_email
 import re
-
+from .models import RestaurantRequest
 
 from django.contrib.gis.geos import Point
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
+
+class RestaurantRequestForm(forms.Form):
+    class Meta:
+        model = RestaurantRequest
+        fields = ('name', 'name_of_owner', 'email_of_owner', 'contact', 'registration_number', 'message', 'location_point', 'location_text')
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Your Email/Username', max_length=100)

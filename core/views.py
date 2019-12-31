@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.views.generic import DetailView, ListView, TemplateView
+from django.views.generic import DetailView, ListView, TemplateView, CreateView
 from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodCustomize
 from django.conf import settings
 from userrole.models import UserRole
@@ -15,7 +15,7 @@ from django.contrib.auth import login, authenticate
 from django.urls import reverse_lazy, reverse
 
 
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm, RestaurantRequestForm
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -30,6 +30,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .signup_tokens import account_activation_token
 from django.conf import settings
+
+
+class RestaurantRegister(TemplateView):
+    template_name = 'core/add_resturent.html'
 
 
 class RequestList(ListView):
@@ -341,6 +345,12 @@ def add_to_order(request, *args, **kwargs):
                 food = FoodMenu.objects.get(id=food_id)
 
                 restaurant = Restaurant.objects.get(id=food.restaurant.id)
+
+                # uncomment the following line to check if the user is placing foods to cart from
+                # different restaurants
+                # if FoodCart.objects.count() > 0:
+                #     if FoodCart.objects.filter(~Q(restaurant=restaurant)).exists():
+                #         pass
 
                 cart, created = FoodCart.objects.get_or_create(
                     food=food, 
