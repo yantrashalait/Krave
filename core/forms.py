@@ -14,10 +14,18 @@ from django.contrib.gis.geos import Point
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-class RestaurantRequestForm(forms.Form):
+class RestaurantRequestForm(forms.ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Restaurant Name'}))
+    name_of_owner = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Name of Owner'}))
+    email_of_owner = forms.CharField(widget=forms.EmailInput(attrs={'class': 'full__width__textform', 'placeholder': 'Email'}))
+    contact = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Contact Number'}))
+    registration_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Restaurant Registration Number'}))
+    location_text = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Restaurant Address'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form__textarea', 'placeholder': 'Leave a message'}))
+
     class Meta:
         model = RestaurantRequest
-        fields = ('name', 'name_of_owner', 'email_of_owner', 'contact', 'registration_number', 'message', 'location_point', 'location_text')
+        fields = ('name', 'name_of_owner', 'email_of_owner', 'contact', 'registration_number', 'message', 'location_text')
 
 
 class LoginForm(forms.Form):

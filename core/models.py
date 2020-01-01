@@ -12,14 +12,15 @@ class Restaurant(models.Model):
     location_point = PointField(geography=True, srid=4326, blank=True, null=True)
     location_text = models.CharField(max_length=500, default="")
     contact = models.CharField(max_length=20)
-    opening_time = models.TimeField()
-    closing_time = models.TimeField()
-    delivery_upto = models.TextField(help_text="Where do you deliver?")
+    opening_time = models.TimeField(null=True, blank=True)
+    closing_time = models.TimeField(null=True, blank=True)
+    delivery_upto = models.TextField(help_text="Where do you deliver?", null=True, blank=True)
     delivery_charge = models.FloatField(help_text="Delivery charges in dollars", null=True, blank=True)
     owner = models.CharField(max_length=500, null=True, blank=True)
     logo = models.ImageField(upload_to="restaurant/logo/", null=True, blank=True)
     registration_number = models.CharField(max_length=500, null=True, blank=True)   
     email = models.CharField(max_length=500, default="")
+    joined_date = models.DateTimeField(default=datetime.now)
 
     @property
     def longitude(self):
@@ -136,7 +137,6 @@ class FoodRating(models.Model):
 
 class RestaurantRequest(models.Model):
     name = models.CharField(max_length=255)
-    location_point = PointField(geography=True, srid=4326, blank=True, null=True)
     location_text = models.CharField(max_length=500, default="")
     name_of_owner = models.CharField(max_length=255)
     email_of_owner = models.EmailField()

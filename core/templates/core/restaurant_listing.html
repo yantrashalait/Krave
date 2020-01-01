@@ -19,7 +19,11 @@
                     </div>
 
                     <div class="food__item_image">
-                    <img src="{{ item.logo.url }}">
+                      {% if item.logo %}
+                        <img src="{{ item.logo.url }}">
+                      {% else %}
+                        <img src="{% static 'images/rest_logo.jpg' %}">
+                      {% endif %}
                     </div>
                 </div>
             </a>

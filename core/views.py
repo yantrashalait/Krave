@@ -30,10 +30,20 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .signup_tokens import account_activation_token
 from django.conf import settings
+from .forms import RestaurantRequestForm
 
 
-class RestaurantRegister(TemplateView):
-    template_name = 'core/add_resturent.html'
+def restaurant_register(request, *args, **kwargs):
+    if request.method == 'GET':
+        form = RestaurantRequestForm()
+        return render(request, 'core/add_resturent.html', {'form': form})
+
+    if request.method == 'POST':
+        form = RestaurantRequestForm(request.POST)
+        form.save()
+        return HttpResponseRedirect('/')
+
+
 
 
 class RequestList(ListView):
@@ -63,19 +73,20 @@ def acceptRequest(request, *args, **kwargs):
     user = User.objects.create(username=username, email=email, is_restaurant=True)
     user.set_password(password)
     user.save()
-    print(username)
-    print(password)
 
     # create restaurant object
     name = req.name
-    longitude = req.location.x
-    latitude = req.location.y
-    location = Point(longitude, latitude)
     contact = req.contact
+    location = req.location_text
+    owner = req.name_of_owner
+    registration_number = req.registration_number
 
-    restaurant, created = Restaurant.objects.get_or_create(name=name, contact=contact)
-    restaurant.location = location
-    restaurant.save()
+    restaurant, created = Restaurant.objects.get_or_create(
+        name=name, 
+        contact=contact,
+        owner=owner,
+        registration_number=registration_number,
+        location_text=location)
     
 
     group = Group.objects.get(name='restaurant-owner')

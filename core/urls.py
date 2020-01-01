@@ -6,7 +6,7 @@ app_name = 'core'
 
 urlpatterns = [
 
-    path('restaurant/register', views.RestaurantRegister.as_view(), name="restaurant-register"),
+    path('restaurant/register', views.restaurant_register, name="restaurant-register"),
 
     # for restaurant requests
     path('requests/', views.RequestList.as_view(), name='request-list'),

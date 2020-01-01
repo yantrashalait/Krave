@@ -19,7 +19,11 @@
           <div class="col-lg-8">
             <div class="resturent_details">
                   <div class="resturent__logo"> 
-                    <img src="{{ restaurant.logo.url }}">
+                    {% if restaurant.logo %}
+                        <img src="{{ restaurant.logo.url }}">
+                      {% else %}
+                        <img src="{% static 'images/rest_logo.jpg' %}">
+                      {% endif %}
                   </div>
                   <div class="rest_info_wrapper">
                   <div class="restaurants_name__item">

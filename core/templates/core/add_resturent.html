@@ -1,6 +1,15 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
+<style>
+.form__textarea{
+    color: #757575;
+    padding: 10px;
+    width: 99%;
+    height: 71px;
+    border: 1px solid #eeeeee;
+}
+</style>
   <section class="add__resturent">
     <div class="container">
      <div class="row">
@@ -17,46 +26,30 @@
         <div class="row">
           <div class="partnership__form">
             <h4>Partner with us</h4>
-            <form>
+            <form method="post">
+              {% csrf_token %}
                 <div class="restaurant__form__detail">
-                <input class="full__width__textform" type="text" name="name" placeholder="Restaurant Name">
-                <input class="full__width__textform" type="text" name="registration_number" placeholder="Restaurant Registration Number">
-                <input class="full__width__textform" type="text" name="location_text" placeholder="Restaurant Address">
+                  {{ form.name }}
+                  {{ form.registration_number }}
+                  {{ form.location_text }}
                 <!-- <input class="half__width__textform min__size" type="text" name="" placeholder="Apt/suite"> -->
                 </div>
 
                 <div class="restaurant__holder__name">
-                <input class="full__width__textform" type="text" name="name_of_owner" placeholder="Name of Owner">
-                <input class="full__width__textform" type="text" name="contact" placeholder="Contact Number">
-                <input class="full__width__textform" type="email" name="email_of_owner" placeholder="Email">
+                  {{ form.name_of_owner }}
+                  {{ form.contact }}
+                  {{ form.email_of_owner }}
                 </div>
                 
                 <div class="restaurant__location__detail">
-                <select class="full__width__textform">
-                  <option value="saab">Chitwan</option>
-                  <option value="opel">Butwal</option>
-                  <option value="audi">Bhaktapur</option>
-                </select>
-                
-                <select class="full__width__textform">
-                   <option value="volvo">Mo:Mo</option>
-                   <option value="saab">Thakali</option>
-                   <option value="opel">Chicken curry</option>
-                   <option value="audi">Fried egg</option>
-                </select>
-
-                <select class="full__width__textform">
-                  <option value="opel">Yes</option>
-                  <option value="audi">No</option>
-                </select>
-
+                  {{ form.message }}
                 </div>
                 <div class="submit__term__conditons">
                   <p>
                     By clicking "submit", you agree to <a href="#">Krave general term and conditions</a> and acknowledge that you have read the <a href="#">privacy policy</a>.
                   </p>
                 </div>
-                <button class="partners__button">Submit</button>
+                <button type="submit" class="partners__button">Submit</button>
            </form>
           </div>
           <div class="col-md-6">
