@@ -40,7 +40,10 @@ def restaurant_register(request, *args, **kwargs):
 
     if request.method == 'POST':
         form = RestaurantRequestForm(request.POST)
-        form.save()
+        if form.is_valid():
+            form.save()
+        else:
+            return render(request, 'core/add_resturent.html', {'form': form})
         return HttpResponseRedirect('/')
 
 
@@ -87,11 +90,27 @@ def acceptRequest(request, *args, **kwargs):
         owner=owner,
         registration_number=registration_number,
         location_text=location)
-    
 
     group = Group.objects.get(name='restaurant-owner')
     userrole = UserRole.objects.create(user=user, group=group, restaurant=restaurant)
+    user.groups.add(group)
     print('Successfully created')
+
+    mail_subject = 'Restaurant Registered.'
+    current_site = get_current_site(request)
+    message = render_to_string('core/restaurant_registration_success_email.html', {
+        'name': name,
+        'domain': settings.SITE_URL,
+        'username': username,
+        'owner': owner,
+        'password': password,
+    })
+
+    to_email = email
+    email = EmailMessage(
+        mail_subject, message, to=[to_email]
+    )
+    email.send()    
 
     return HttpResponseRedirect('/requests/')
 
@@ -226,10 +245,7 @@ def signin(request):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    if user.groups.filter(name='restaurant-owner'):
-                        return HttpResponseRedirect(reverse('restaurant:dashboard'))
-                    else:
-                        return HttpResponseRedirect(reverse('core:dashboard'))
+                    return HttpResponseRedirect(reverse('core:dashboard'))
                 else:
                     return render(request, 'core/login.html',
                                   {'form': form,

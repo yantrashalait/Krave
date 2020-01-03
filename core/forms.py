@@ -27,6 +27,16 @@ class RestaurantRequestForm(forms.ModelForm):
         model = RestaurantRequest
         fields = ('name', 'name_of_owner', 'email_of_owner', 'contact', 'registration_number', 'message', 'location_text')
 
+    def clean_email_of_owner(self):
+        email_of_owner = self.cleaned_data.get('email_of_owner')
+        print(email_of_owner)
+        if validate_email(email_of_owner) == False:
+            raise ValidationError({'email_of_owner': ['Enter a valid Email address']})
+
+        if User.objects.filter(email=email_of_owner, is_restaurant=True).exists():
+            raise ValidationError({'email_of_owner': ['Restaurant with this email already exists']})
+        else:
+            return email_of_owner
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Your Email/Username', max_length=100)

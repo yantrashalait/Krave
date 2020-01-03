@@ -39,6 +39,10 @@
                   {{ form.name_of_owner }}
                   {{ form.contact }}
                   {{ form.email_of_owner }}
+                  {% if form.email_of_owner.errors %}
+                    <span>{{ form.email_of_owner.errors }}</span>
+                  {% endif %}
+                  <!-- <span>This email will be used in logging into the system.</span> -->
                 </div>
                 
                 <div class="restaurant__location__detail">

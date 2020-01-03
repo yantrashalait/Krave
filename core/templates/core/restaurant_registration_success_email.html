@@ -1,0 +1,11 @@
+{% autoescape off %}
+Hi {{ owner }},
+Your request for registering your restaurant has been successful.
+
+These are the login credentials:
+username: {{username}}
+password: {{password}}
+
+Kindly login to the system by clicking the following link:
+{{domain}}{% url 'login' %}
+{% endautoescape %}
