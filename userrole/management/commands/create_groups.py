@@ -9,6 +9,7 @@ class Command(BaseCommand):
         group_list = ['restaurant-owner',
                       'customer',
                       'delivery',
+                      'super-admin',
                       ]
         for group in group_list:
             new_group, created = Group.objects.get_or_create(name=group)

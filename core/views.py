@@ -298,6 +298,8 @@ def register(request):
             user.set_password(user.password)
             user.is_active = False
             user.save()
+            group = Group.objects.get(name='customer')
+            UserRole.objects.get_or_create(user=user, group=group)
 
             mail_subject = 'Activate your account.'
             current_site = get_current_site(request)

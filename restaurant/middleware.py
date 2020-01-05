@@ -40,7 +40,7 @@ class RoleMiddleware(MiddlewareMixin):
                 try:
                     role = Role.objects.select_related('group', 'restaurant').get(pk=request.session.get('role'), user=request.user)
                 except Role.DoesNotExist:
-                    pass
+                    role = Role.objects.select_related('group').get(pk=request.session.get('role'), user=request.user)
             if not role:
                 roles = Role.objects.filter(user=request.user).select_related('group', 'restaurant')
                 if roles:
@@ -50,10 +50,17 @@ class RoleMiddleware(MiddlewareMixin):
             if role:
                 request.__class__.role = role
                 request.__class__.restaurant = role.restaurant
+
+                if "super-admin" in request.user.user_roles.all().distinct('group__name').values_list("group__name", flat=True):
+                    request.__class__.group = Group.objects.get(name='super-admin')
+                    request.__class__is_super_admin = True
+                else:
+                    request.__class__.group = role.group
+                    request.__class__.is_super_admin = False
             
             else:
                 request = clear_roles(request)
                 logout(request)
-                return render(request, '403.html')
+                return render(request, 'core/403.html')
         else:
             request = clear_roles(request)
