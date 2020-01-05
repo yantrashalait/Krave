@@ -3,7 +3,7 @@
                     <div class="rh-bd-tp-m-hl">
                         <div class="rb-pd-rl">
                             <div class="tp-m">
-                                <div class="fr-u">
+                                <!-- <div class="fr-u">
                                     <ul>
                                         <li>
                                             <a href="#">Overview</a>
@@ -21,7 +21,7 @@
                                             <a href="#">Modifier Groups</a>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> -->
                                 <div class="fr-pr">
                                     <ul>
                                         <li>

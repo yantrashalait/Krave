@@ -30,19 +30,22 @@
                 <div class="left__menu__lists">
                     <ul>
                         <li>
-                            <a href="{% url 'restaurant:restaurant-detail' %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant Detail</a>
+                            <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant Detail</a>
                         </li>
                         <li>
-                            <a href="{% url 'restaurant:menu-list' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
+                            <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
                         </li>
                         <li>
-                            <a href="{% url 'restaurant:dashboard' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Add Food Item</a>
+                            <a href="{% url 'restaurant:dashboard' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Add Food Item</a>
                         </li>
                         <li>
-                            <a href="{% url 'restaurant:order' %}"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Orders</a>
+                            <a href="{% url 'restaurant:order' request.restaurant.id %}"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Orders</a>
                         </li>
                         <li>
-                            <a href="{% url 'restaurant:accepted-order' %}"><i class="fa fa-file" aria-hidden="true"></i> Accepted Orders</a>
+                            <a href="{% url 'restaurant:accepted-order' request.restaurant.id %}"><i class="fa fa-file" aria-hidden="true"></i> Accepted Orders</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
                         </li>
                     </ul>
                 </div>
@@ -55,19 +58,23 @@
                         <div class="rb-pd-rl rs-in-hl">
                             <div class="rs-in">
                                 <div class="rs-lg"> 
+                                    {% if request.restaurant.logo %}
+                                    <img src="{{ request.restaurant.logo.url }}" alt="">
+                                    {% else %}
                                     <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="">
+                                    {% endif %}
                                 </div>
                                 <div class="rs-in-tx">
                                     <div class="rs-nm">
-                                        Name of the Restaurant
+                                        {{ request.restaurant.name }}
                                     </div>
                                     <div class="rs-ad">
-                                        Address Of the Restaurant
+                                        {{ request.restaurant.location_text }}
                                     </div>
                                 </div>
                             </div>
                             <div class="ac-bt-hl">
-                                <a class="ac-bt" href="{% url 'restaurant:restaurant-edit' %}">Edit</a>
+                                <a class="ac-bt" href="{% url 'restaurant:restaurant-edit' request.restaurant.id %}">Edit</a>
                                 <a class="ac-bt" href="{% url 'logout' %}">Logout</a>
                             </div>
                         </div>

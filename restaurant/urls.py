@@ -4,11 +4,14 @@ from . import views
 app_name = 'restaurant'
 
 urlpatterns = [
-    path('', views.DashboardView.as_view(), name='dashboard'),
-    path('detail/', views.RestaurantDetailView.as_view(), name='restaurant-detail'),
-    path('edit', views.RestaurantEditView.as_view(), name='restaurant-edit'),
-    path('orders', views.OrderView.as_view(), name='order'),
-    path('menu', views.MenuListView.as_view(), name='menu-list'),
-    path('orders/accepted', views.AcceptedOrderView.as_view(), name="accepted-order"),
+    path('<int:rest_id>/', views.DashboardView.as_view(), name='dashboard'),
+    path('<int:rest_id>/detail/', views.RestaurantDetailView.as_view(), name='restaurant-detail'),
+    path('<int:rest_id>/edit', views.RestaurantEditView.as_view(), name='restaurant-edit'),
+    path('<int:rest_id>/orders', views.OrderView.as_view(), name='order'),
+    path('<int:rest_id>/menu', views.MenuListView.as_view(), name='menu-list'),
+    path('<int:rest_id>/orders/accepted', views.AcceptedOrderView.as_view(), name="accepted-order"),
+
+    # password change
+    path('password/change', views.change_password, name='change-password'),
 
 ]

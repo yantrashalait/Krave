@@ -47,8 +47,6 @@ def restaurant_register(request, *args, **kwargs):
         return HttpResponseRedirect('/')
 
 
-
-
 class RequestList(ListView):
     template_name = 'core/restaurantrequests.html'
     model = RestaurantRequest
@@ -62,6 +60,7 @@ class RequestDetail(DetailView):
     template_name = 'core/restaurantrequest_detail.html'
     model = RestaurantRequest
     context_object_name = 'req'
+
 
 @transaction.atomic
 def acceptRequest(request, *args, **kwargs):
@@ -149,7 +148,7 @@ class DashboardView(TemplateView):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             if self.request.user.groups.filter(name='restaurant-owner').exists():
-                return HttpResponseRedirect(reverse('restaurant:dashboard'))
+                return HttpResponseRedirect(reverse('restaurant:dashboard', kwargs={'rest_id': self.request.restaurant.id}))
             else:
                 return render(self.request, self.template_name, context=self.get_context_data())
         else:
@@ -361,7 +360,6 @@ def activate(request, uidb64, token):
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
-        print(request.POST)
         if 'food_identifier' in request.POST:        
             if 'qty' in request.POST:
                 if int(request.POST.get('qty', 0)) < 1:
