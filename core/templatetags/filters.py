@@ -11,3 +11,11 @@ def space_to_underscore(obj):
 @register.filter
 def get_food_items(obj, rest):
     return FoodMenu.objects.filter(category=obj, restaurant=rest)
+
+
+@register.filter
+def get_total_price(obj):
+    total = 0
+    for item in obj:
+        total += item.get_total
+    return total

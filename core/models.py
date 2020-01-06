@@ -22,6 +22,7 @@ class Restaurant(models.Model):
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
     delivery_time = models.CharField(default='', max_length=200)
+    delivery_cost = models.FloatField(default=0)
 
     @property
     def longitude(self):
@@ -174,6 +175,14 @@ class FoodCart(models.Model):
 
     def __str__(self):
         return self.food.name + ' ' + self.user.username
+
+    @property
+    def get_total(self):
+        total = 0
+        for item in self.modifier.all():
+            total += item.cost_of_addition
+        total += self.food.new_price
+        return total
 
 
 class Order(models.Model):

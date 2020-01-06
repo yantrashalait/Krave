@@ -23,6 +23,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from django.db import transaction
+from django.db.models import Sum
 
 
 from django.core.mail import EmailMessage
@@ -221,17 +222,10 @@ class FoodListView(ListView):
     context_object_name = 'foods'
 
 
-"""
-    Add foods to order
-"""
-def food_order_add(request, *args, **kwargs):
-    pass
-
-
 class FoodCartListView(LoginRequiredMixin, ListView):
     template_name = 'core/checkout.html'
     model = FoodCart
-    context_object_name = 'cart'
+    context_object_name = 'lists'
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user, checked_out=False)
