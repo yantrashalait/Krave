@@ -51,7 +51,7 @@ class RoleMiddleware(MiddlewareMixin):
                 request.__class__.role = role
                 request.__class__.restaurant = role.restaurant
 
-                if "super-admin" in request.user.user_roles.all().distinct('group__name').values_list("group__name", flat=True):
+                if request.user.user_roles.group.name == "super-admin":
                     request.__class__.group = Group.objects.get(name='super-admin')
                     request.__class__is_super_admin = True
                 else:

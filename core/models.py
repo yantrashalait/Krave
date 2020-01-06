@@ -21,6 +21,7 @@ class Restaurant(models.Model):
     registration_number = models.CharField(max_length=500, null=True, blank=True)   
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
+    delivery_time = models.CharField(default='', max_length=200)
 
     @property
     def longitude(self):

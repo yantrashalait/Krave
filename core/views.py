@@ -13,6 +13,8 @@ from django.core import serializers
 from django.db.models import Q
 from django.contrib.auth import login, authenticate
 from django.urls import reverse_lazy, reverse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 from .forms import LoginForm, SignUpForm, RestaurantRequestForm
@@ -168,9 +170,21 @@ class RestaurantDetail(TemplateView):
 
 
 class RestaurantListView(ListView):
-    template_name = 'core/restaurant_listing.html'
+    template_name = 'core/restaurant__list.html'
     model = Restaurant
     context_object_name = 'restaurants'
+
+    def get_queryset(self):
+        try:
+            name = self.request.GET['name']
+        except:
+            name = ''
+        if name != '':
+            object_list = self.model.objects.filter(name__icontains=name)
+        else:
+            object_list = self.model.objects.all()
+        
+        return object_list
 
 
 """
@@ -214,8 +228,13 @@ def food_order_add(request, *args, **kwargs):
     pass
 
 
-class FoodCartListView(TemplateView):
+class FoodCartListView(LoginRequiredMixin, ListView):
     template_name = 'core/checkout.html'
+    model = FoodCart
+    context_object_name = 'cart'
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user, checked_out=False)
 
 
 def web_authenticate(username=None, password=None):
@@ -359,6 +378,7 @@ def activate(request, uidb64, token):
 """
     View to add foods to order then proceed to cart
 """
+@login_required(login_url='/login/')
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
@@ -375,9 +395,9 @@ def add_to_order(request, *args, **kwargs):
 
                 # uncomment the following line to check if the user is placing foods to cart from
                 # different restaurants
-                # if FoodCart.objects.count() > 0:
-                #     if FoodCart.objects.filter(~Q(restaurant=restaurant)).exists():
-                #         pass
+                if FoodCart.objects.filter(user=request.user).count() > 0:
+                    if FoodCart.objects.filter(~Q(restaurant=restaurant), checked_out=False).exists():
+                        return render(request, 'core/message.html', {'message': 'You have already ordered food from another restaurant. To place order from another restaurant, you need to checkout the first order.'})
 
                 cart, created = FoodCart.objects.get_or_create(
                     food=food, 

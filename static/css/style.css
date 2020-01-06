@@ -1644,3 +1644,48 @@ text-decoration: none;
     color: #6aca20;
 }
 
+.restaut__listing__section{
+    padding-top: 4rem;
+}
+.restaurant__head__section {
+    padding: 5rem 0 1rem 0;
+}
+.content__available__restaurant{
+    background: #fff;
+    display: flex;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+.restaurant__thumb__img{
+    width: 52%;
+    display: flex;
+}
+.restaurant__thumb__img img{
+    max-width: 100%;
+}
+.detail__descpt__restaurant {
+    padding: 1rem 1rem;
+}
+.detail__descpt__restaurant a {
+    text-decoration: none;
+    color: #000;
+}
+.restaurent__location {
+    display: flex;
+    align-items: center;
+}
+.restaut__serve__food{
+    display: flex;
+    align-items: center;
+}
+.detail__descpt__restaurant i{
+    font-size: 1.4rem;
+    margin-right: 1rem;
+}
+.icon__restaurant__locat {
+    width: 19%;
+    font-size: 1.4rem;
+}
+.food__serve__icon__restaut {
+    width: 19%;
+    font-size: 1.4rem;
+}

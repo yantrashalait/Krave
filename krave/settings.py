@@ -38,13 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.gis',
     'rest_framework',
     'rest_framework.authtoken',
-    'core',
-    'user',
-    'userrole',
-    'api',
-    'delivery',
+    'core.apps.CoreConfig',
+    'user.apps.UserConfig',
+    'userrole.apps.UserroleConfig',
+    'api.apps.ApiConfig',
+    'delivery.apps.DeliveryConfig',
     'django_filters',
-    'restaurant',
+    'restaurant.apps.RestaurantConfig',
 ]
 
 MIDDLEWARE = [
@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.get_header_notifs',
             ],
         },
     },

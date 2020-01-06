@@ -110,7 +110,7 @@
                     <div class="nav__cart">
                       <div  id="cart_drpdwn" class="popup__top cart nav__cart__list">
                         <i class="fa fa-cart-arrow-down" aria-hidden="true">
-                         <span>2</span>
+                         <span>{{ cart_count }}</span>
                         </i>
                       </div> 
                       <div id="notify_drpdwn" class="popup__top nofify nav__cart__list">
@@ -191,7 +191,7 @@
             <div class="order__title">
               <h3>Your order</h3>
               <span>
-                From <a href="#">Carl's jr. (1 hillidal plaza) </a>
+                From <a href="#">{{ cart.0.restaurant.name }} </a>
               </span>
             </div>
             <div class="order__body__content">
@@ -204,66 +204,24 @@
                 </div>
                 <div class="food__det__crt">
                   <div class="food__det__crt__lvl1">
+                    {% for item in cart %}
                     <div class="food__det__lstss">  
                       <div class="order__content__list">
                         <div class="order__content__list_content">
-                          <span class="content__title">Super star with cheese </span>
+                          <span class="content__title">{{ item.food.name }}</span>
+                          {% for modifier in item.modifier.all %}
                           <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
+                            <span class="item_name">{{ modifier.name_of_ingredient }} (${{ modifier.cost_of_addition }})</span>
+                            <span>{{ modifier.calories }}</span>
                           </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
+                          {% endfor %}
                         </div>
                       </div>
                       <div class="order__price__detail">
-                          <span class="content__title">$50 </span>
+                          <span class="content__title">${{ item.food.new_price }} </span>
                       </div>
                     </div>
-                    <div class="food__det__lstss">  
-                      <div class="order__content__list">
-                        <div class="order__content__list_content">
-                          <span class="content__title">Super star with cheese </span>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                          <p>
-                            <span class="item_name">Add extra pitty ($3.6)</span>
-                            <span>1/3lb pitty</span>
-                          </p>
-                        </div>
-                      </div>
-                      <div class="order__price__detail">
-                          <span class="content__title">$50 </span>
-                      </div>
-                    </div>
+                    {% endfor %}
                   </div>
                 </div>
               </div>              
