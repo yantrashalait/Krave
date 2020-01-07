@@ -22,7 +22,6 @@ class Restaurant(models.Model):
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
     delivery_time = models.CharField(default='', max_length=200)
-    delivery_cost = models.FloatField(default=0)
 
     @property
     def longitude(self):
@@ -204,6 +203,10 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)
     payment_type = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
+    note = models.TextField(default='')
+
+    def __unicode__(self):
+        return self.user.username
 
     
     

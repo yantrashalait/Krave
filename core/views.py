@@ -410,6 +410,15 @@ def add_to_order(request, *args, **kwargs):
                     cart.modifier.add(modifier)
             
         return HttpResponseRedirect(reverse('core:food-cart')) 
+
+
+"""
+place order
+"""
+@login_required(login_url='/login/')
+@transaction.atomic
+def place_order(request, *args, **kwargs):
+    pass
             
 
 
