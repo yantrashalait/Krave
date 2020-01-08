@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views.generic import DetailView, ListView, TemplateView, CreateView
-from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodCustomize
+from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodCustomize, Order
 from django.conf import settings
 from userrole.models import UserRole
 from django.contrib.auth.models import Group
@@ -418,12 +418,29 @@ place order
 @login_required(login_url='/login/')
 @transaction.atomic
 def place_order(request, *args, **kwargs):
-    pass
-            
+    if request.method == "POST":
+        
+        
+        order = Order()
+        order.user = request.user
+        order.status = 0
+        order.payment_type = 1
+        order.location_text = ''
+        if 'comment' in request.POST:
+            message = request.POST.get('comment', '')
+            order.note = message
+        order.save()
+
+        for item in FoodCart.objects.filter(user=request.user, checked_out=False):
+            order.cart.add(item)
+            item.checked_out = True
+            item.save()
+        order.save()
+
+        
+
+    return HttpResponseRedirect('/')        
 
 
-
-
-
-
-
+class UserProfileView(TemplateView):
+    template_name = 'core/user-profile.html'

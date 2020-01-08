@@ -37,5 +37,8 @@ urlpatterns = [
 
     #add to order
     path('order/add/', views.add_to_order, name="add-to-order"),
+    path('order/place/', views.place_order, name="place-order"),
+
+    path('user/profile', views.UserProfileView.as_view(), name="profile"),
 
 ]
