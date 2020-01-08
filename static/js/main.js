@@ -107,6 +107,12 @@ $('.category_nav_caro .owl-item').click(function(e){
   
 })
 
+$("#user__pofl_drpdown").click(function(){
+  $("#user__detail__drp").css({'display' : 'block'})
+});
+$(".drpdwn_cls").click(function(){
+$("#user__detail__drp").css({'display' : 'none'})
+})
 
 });// document ready
 
