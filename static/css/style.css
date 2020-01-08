@@ -376,9 +376,9 @@ span.food__title:before{
     top: 2px;
 }
 .social__icon {
-    padding-top: 20px;
     text-align: center;
     font-size: 15px;
+    padding-bottom: 1rem;
 }
 .icon_fab {
     color: #000000;
@@ -1688,4 +1688,184 @@ text-decoration: none;
 .food__serve__icon__restaut {
     width: 19%;
     font-size: 1.4rem;
+}
+
+/*user--profile--css*/
+.user__detail__page {
+    padding: 4rem 0;
+}
+.account__setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.account__logout button {
+    border: none;
+    background: #6aca20 ;
+    padding: 0.4rem 1.5rem;
+    color: #fff;
+}
+
+.account__logout button:hover{ 
+    transition:1s;
+    background-color: black;
+}
+.profile__info__list ul{
+    list-style: none;
+}
+.profile__info__list ul li{
+    padding: 0.4rem 0;
+}
+.profile__info__list a{
+    text-decoration: none;
+    color: #000;
+}
+.profile__info__list i{
+    width: 30px;
+}
+.user__form__wrapper form{
+    display: flex;
+    flex-wrap: wrap;
+}
+.user__profile__nav .nav-tabs{
+    display: inline-block;
+    border: none !important;
+    width: 100%;
+} 
+.user__profile__nav a i{
+    width: 15%;
+}
+.user__profile__nav a{
+   color: #000;  
+}
+.user__profile__nav a:hover{
+   color: #000;  
+}
+.user__profile__nav .nav-tabs .nav-link {
+    border:none !important;
+}
+.user__profile__nav .nav-link.active {
+    color: #6aca20 !important;
+    background: none;
+}
+.profile__pic p{
+    text-transform: uppercase;
+    margin: 0;
+    padding-left: 0.9rem;
+}
+.profile__pic img {
+    width: 15%;
+}
+.profile__pic{
+    padding-bottom: 1rem;
+}
+.user__profile__content form{
+    display: flex;
+    flex-wrap: wrap;
+}
+.user__profile__content label{
+    margin:0;
+}
+ form .btn {
+    border: none;
+    width: 13%;
+    padding: 0.3rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    color: #fff;
+    border-radius: 0;    
+}
+.tab-pane form .pass__btn{
+    border: none;
+    width: 27%;
+    padding: 0.3rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    color: #fff;
+    border-radius: 0;    
+}
+form .form__save{
+    background: #6aca20;    
+}
+form .form__save:hover{
+    color: #fff;    
+}
+form .form__cancle{
+    background: #9e9e9ea6;    
+}
+form .form__cancle:hover{
+    color: #fff;    
+}
+.user__form__wrapper form label{
+    margin: 0;
+}
+.user__profile__content:before{
+    content: '';
+    display: block;
+    background: #dcdcdc;
+    width: 1px;
+    height: 100%;
+    position: absolute;
+}
+.history__detail p{
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 0;
+}
+.history__detail ul{
+    list-style: none;
+    padding: 1rem 0;
+}
+.history__detail ul span{
+    padding-left: 1rem; 
+}
+.current__order__hist:before{
+    content: '';
+    display: block;
+    background: #dcdcdc;
+    width: 100%;
+    height: 1px;
+    position: absolute;
+}
+.current__order__hist:after{
+    content: '';
+    display: block;
+    background: #dcdcdc;
+    width: 100%;
+    height: 1px;
+    position: absolute; 
+}
+.past__order__hist:after{
+    content: '';
+    display: block;
+    background: #dcdcdc;
+    width: 100%;
+    height: 1px;
+    position: absolute; 
+}
+.order__detail___tlt__prc {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+}
+.user__profile__nav:after{
+    content: '';
+    display: block;
+    width: 1px;
+    height: 100%;
+    background: #dcdcdc;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.user__prof__upd {
+    padding-bottom: 1rem;
+}
+.user__prof__upd label{
+    cursor: pointer;
+    color: #6aca20;
+}
+.user__prof__upd img{
+    width: 15%;
 }

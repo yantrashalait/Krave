@@ -22,7 +22,6 @@ class Restaurant(models.Model):
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
     delivery_time = models.CharField(default='', max_length=200)
-    delivery_cost = models.FloatField(default=0)
 
     @property
     def longitude(self):
@@ -181,7 +180,7 @@ class FoodCart(models.Model):
         total = 0
         for item in self.modifier.all():
             total += item.cost_of_addition
-        total += self.food.new_price
+        total += self.food.new_price * self.number_of_food
         return total
 
 
@@ -204,6 +203,12 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)
     payment_type = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
+    location_text = models.CharField(max_length=255, default='')
+    location_point = PointField(geography=True, srid=4326, blank=True, null=True)
+    note = models.TextField(default='')
+
+    def __unicode__(self):
+        return self.user.username
 
     
     

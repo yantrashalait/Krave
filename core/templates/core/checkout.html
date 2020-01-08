@@ -52,14 +52,14 @@
                 <div class="item__title">{{ item.food.name }}</div>
                 <div class="checkout__order__list">
                   <p>
-                      <span id="minus1" class="qty__btn food__qty__dec minus">
+                      <!-- <span id="minus1" class="qty__btn food__qty__dec minus">
                         <img src="{% static 'images/food__pop__desc.png' %}" alt="">
-                      </span>
+                      </span> -->
 
-                      <input id="qty1" type="text" value="{{ item.number_of_food }}" class="qty" />
-                      <span id="add1" class="qty__btn food__qty__inc add">
+                      <input disabled id="qty1" type="text" value="{{ item.number_of_food }}" class="qty" />
+                      <!-- <span id="add1" class="qty__btn food__qty__inc add">
                         <img src="{% static 'images/food__pop__inc.png' %}" alt="">
-                      </span>
+                      </span> -->
                   </p>
                 </div>
                 <div class="added__item_price">${{ item.get_total }}</div>
@@ -70,14 +70,15 @@
                   {% for modifier in item.modifier.all %}
                     <span>{{ modifier.name_of_ingredient }} - ${{ modifier.cost_of_addition }}</span>
                   {% endfor %}
-                  <div class="edit__selected__items">
+                  <!-- <div class="edit__selected__items">
                     <a href="#">Edit</a>
-                  </div>
+                  </div> -->
                 </div>
             </div>
             {% endfor %}
-            <form class="comment__box">
-              <textarea rows="3" cols="80" name="comment" form="" placeholder="Leave a note for the resturent..."></textarea>
+            <form class="comment__box" id="order_form" method="post" action="{% url 'core:place-order' %}">
+              {% csrf_token %}
+              <textarea rows="3" cols="80" name="comment" form="" placeholder="Leave a note for the restaurant..."></textarea>
             </form>
           </div>
         </div>
@@ -101,22 +102,18 @@
             <div class="grand__total">
               <div class="subtotal">
                 <span>Subtotal</span>
-                <span>${{ lists|get_total_price }}</span>
-              </div>
-              <div class="subtotal">
-                <span>Tax</span>
-                <span>$23</span>
+                <span id="total_price" data-id="{{ lists|get_total_price }}">${{ lists|get_total_price }}</span>
               </div>
               <div class="subtotal">
                 <span>Delivery Fee</span>
-                <span>${{ lists.0.restaurant.delivery_cost }}</span>
+                <span id="delivery_cost" data-id="{{ lists.0.restaurant.delivery_charge }}">${{ lists.0.restaurant.delivery_charge }}</span>
               </div>
               <div class="total__grand__sum">
                 <span>Total</span>
-                <span>$100</span>
+                <span id="total"></span>
               </div>
               <div class="grand__total__button">
-                <button>Place Order</button>
+                <button id="place_order">Place Order</button>
               </div>
             </div>
           </div>
@@ -126,5 +123,18 @@
       </div>
     </div>
   </section>
-  {% include 'core/footer.html' %}
+  {% endblock %}
+  {% block scripts %}
+  <script>
+    $(document).ready(function(){
+      var food_total = $("#total_price").attr("data-id");
+      var delivery_cost = $("#delivery_cost").attr("data-id");
+      var total = parseInt(food_total) + parseInt(delivery_cost);
+      $("#total").html("$" + total);
+    });
+
+    $("#place_order").on('click', function(){
+      $("#order_form").submit();
+    });
+  </script>
   {% endblock %}
