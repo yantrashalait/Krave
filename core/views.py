@@ -218,8 +218,20 @@ def get_food_detail(request, *args, **kwargs):
 """
 class FoodListView(ListView):
     template_name = 'core/food_listing.html'
-    queryset = FoodMenu.objects.all()
+    model = FoodMenu
     context_object_name = 'foods'
+
+    def get_queryset(self):
+        try:
+            name = self.request.GET['name']
+        except:
+            name = ""
+        if name != "":
+            object_list = self.model.objects.filter(name__icontains=name)
+        else:
+            object_list = self.model.objects.all()
+        
+        return object_list
 
 
 class FoodCartListView(LoginRequiredMixin, ListView):
