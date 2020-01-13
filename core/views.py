@@ -440,8 +440,6 @@ place order
 @transaction.atomic
 def place_order(request, *args, **kwargs):
     if request.method == "POST":
-        
-        
         order = Order()
         order.user = request.user
         order.status = 0
@@ -461,28 +459,3 @@ def place_order(request, *args, **kwargs):
         
 
     return HttpResponseRedirect('/')        
-
-
-@login_required
-def userprofile(request, *args, **kwargs):
-    try:
-        user_profile = UserProfile.objects.get(user_id=kwargs.get('pk', ''))
-    except:
-        user_profile = None
-    return render(request, 'core/user-profile.html', {'profile': user_profile})
-
-
-@login_required
-def change_password(request, *args, **kwargs):
-    if request.method == "POST":
-        form = ValidatingPasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect(reverse_lazy('core:profile', kwargs={'pk': request.user.id}))
-        else:
-            messages.error(request, 'Please correct the error below.')
-    else:
-        form = ValidatingPasswordChangeForm(request.user)
-    return render(request, 'core/user-profile.html',{'form': form, 'password-change': True})

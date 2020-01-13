@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block content %}
 	<style>
 		.account__logout a{
@@ -41,10 +42,15 @@
 	        	<div class="tab-content">
 	                <div id="home" class="container tab-pane active">
   		                    <div class="user__form__wrapper">
-			                    <form action="" class="pt-4" name="profile">
+			                    <form action="{% url 'user:edit-profile' %}" class="pt-4" name="profile" method="POST" enctype="multipart/form-data">
+									{% csrf_token %}
                                     <div class="col-md-12 user__prof__upd">
                                          <div class="uploded__image">
-                                            <img src="{% static 'images/user.png' %}" id="output"/>
+											{% if profile.image %}
+												<img src="{{ profile.image.url }}" id="output"/>
+											{% else %}
+												<img src="{% static 'images/user.png' %}" id="output"/>
+											{% endif %}
                                          </div>
                                         <label for="file">Edit</label>
                                         <input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;">
@@ -52,68 +58,80 @@
 			                        <div class="col-md-6">
 			                            <div class="form-group">
 			                                <label for="username">FIRST NAME</label>
-			                                <input type="text" class="form-control" id="first_name" value="{{ request.user.first_name }}">
+			                                <input type="text" class="form-control" name="first_name" id="first_name" value="{{ request.user.first_name }}">
 			                            </div>
 			                        </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
 			                                <label for="lastname">LAST NAME</label>
-			                                <input type="text" class="form-control" id="lastname" value="{{ request.user.last_name }}">
+			                                <input type="text" class="form-control" name="last_name" id="lastname" value="{{ request.user.last_name }}">
 			                            </div>
 			                        </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
 			                                <label for="number">CONTACT NUMBER</label>
-			                                <input type="text" class="form-control" id="number" value="{{ profile.contact }}">
+			                                <input type="text" class="form-control" name="contact" id="number" value="{{ profile.contact }}">
 			                            </div>
 			                        </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
 			                                <label for="email">EMAIL</label>
-			                                <input type="email" class="form-control" id="email" value="{{ request.user.email }}">
+			                                <input type="email" disabled class="form-control" name="email" id="email" value="{{ request.user.email }}">
 			                            </div>
 									</div>
 									<div class="col-md-6">
 			                            <div class="form-group">
-			                                <label for="email">ADDRESS</label>
-			                                <input type="email" class="form-control" id="email" value="{{ profile.address }}">
+			                                <label for="address">ADDRESS</label>
+			                                <input type="text" class="form-control" name="address" id="address" value="{{ profile.address }}">
 			                            </div>
 									</div>
 									<div class="col-md-6">
 			                            <div class="form-group">
-			                                <label for="email">ZIP CODE</label>
-			                                <input type="email" class="form-control" id="email" value="{{ profile.zip_code }}">
+			                                <label for="zip">ZIP CODE</label>
+			                                <input type="number" class="form-control" name="zip" id="zip" value="{{ profile.zip_code }}">
 			                            </div>
 									</div>
 
 			                        <button type="submit" class="btn form__save">Save</button>
-			                        <button type="submit" class="btn form__cancle">Cancel</button>
 			                    </form>
 		                    </div>
 	                </div>
 	                <div id="menu1" class="container tab-pane fade">
 	                    <div class="col-md-6">
-	                        <form action="" name="change">
+	                        <form name="password-change" method="POST">
+								{% csrf_token %}
 	                            <div class="col-md-12">
 	                                <div class="form-group">
-	                                    <label for="oldpass">Old Password</label>
-	                                    <input type="text" class="form-control" id="oldpass">
+										<label for="id_old_password">Old Password</label>
+										{{ password_form.old_password|add_class:"form-control" }}
+										{% if password_form.old_password.errors %}
+											<span style="color:red;">Your old password is incorrect.</span>
+										{% endif %}
 	                                </div>
 	                            </div>
 	                            <div class="col-md-12">
 	                                <div class="form-group">
-	                                    <label for="newpass">New Password</label>
-	                                    <input type="text" class="form-control" id="newpass">
+	                                    <label for="id_new_password1">New Password</label>
+										{{ password_form.new_password1|add_class:"form-control" }}
+										{% if password_form.new_password1.errors %}
+											{% for error in password_form.new_password1.errors %}
+												<span style="color:red;">{{ error }}</span>
+											{% endfor %}
+										{% endif %}
 	                                </div>
 	                            </div>
 	                            <div class="col-md-12">
 	                                <div class="form-group">
-	                                    <label for="conpass">Confirm New Password</label>
-	                                    <input type="text" class="form-control" id="conpass">
+	                                    <label for="id_new_password2">Confirm New Password</label>
+	                                    {{ password_form.new_password2|add_class:"form-control" }}
+										{% if password_form.new_password2.errors %}
+											{% for error in password_form.new_password2.errors %}
+												<span style="color:red;">{{ error }}</span>
+											{% endfor %}
+										{% endif %}
 	                                </div>
 	                            </div>
-	                            <button type="submit" class="pass__btn form__save">Save</button>
-	                            <button type="submit" class="pass__btn form__cancle">Cancle</button>
+	                            <button type="submit" name="password-change" class="pass__btn form__save">Save</button>
 	                        </form>
 	                    </div>
 	                </div>
@@ -127,22 +145,24 @@
             		                    <span><strong>$59.0</strong></span>
 	                            	</div>
 	                                <ul>
-	                                    <li>Pizza with extra cheese <span>($45)</span></li>
-	                                    <li>Pizza with extra cheese<span>($45)</span></li>
-	                                    <li>Pizza with extra cheese<span>($45)</span></li>
-	                                    <li>Pizza with extra cheese<span>($45)</span></li>
+										{% for item in current_orders %}
+											{% for obj in item.cart.all %}
+												<li>{{ obj.food.name }} <span>(${{obj.get_total}})</span></li>
+											{% endfor %}
+										{% endfor %}
+	                                    
 	                                </ul>
 	                            </div>
 	                            <div class="past__order__hist">
 	                                <div class="order__detail___tlt__prc">
             		                    <span>PAST ORDERS</span>
-            		                    <span><strong>$200.0</strong></span>
 	                            	</div>
 	                                <ul>
-	                                    <li>cake with extra cheese<span>($45)</span></li>
-	                                    <li>Pizza with extra cheese<span>($45)</span></li>
-	                                    <li>Pizza with extra cheese<span>($45)</span></li>
-	                                    <li>Pizza with extra cheese<span>($45)</span></li>
+										{% for item in past_orders %}
+											{% for obj in item.cart.all %}
+												<li>{{ obj.food.name }}<span>(${{obj.get_total}})</span></li>
+											{% endfor %}
+										{% endfor %}
 	                                </ul>
 	                            </div>
 	                        </div>
@@ -161,87 +181,5 @@
             var image = document.getElementById('output');
             image.src = URL.createObjectURL(event.target.files[0]);
         };
-        </script>
+    </script>
     {% endblock %}
-    
-    <!-- <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 mt-5">
-                    <div class="krave__details">
-                        <div class="krave__footer__logo">
-                            <img src="images/logo.png">
-                        </div>
-                        <div class="app__stores">
-                            <div class="store">
-                                <a href="#"><i class="fa fa-apple" aria-hidden="true"></i>
-                  <span>Availbale on the <strong>app store</strong></span>
-                </a>
-                            </div>
-                            <div class="store">
-                                <a href="#"><i class="fa fa-google" aria-hidden="true"></i>
-                  <span class="google_span">Get it on<strong>google play</strong></span>
-                </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mt-5 about__karve__button">
-                    <div class="nav__about__krave">
-                        <h4 class="nav_h4">About krave</h4>
-                        <ul>
-                            <li>
-                                <a href="#">Read our blog</a>
-                                <a href="#">Buy gift card</a>
-                                <a href="#">Sing up to deliver</a>
-                                <a href="#">Add your resturent</a>
-
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="nav__about__krave get__help">
-                        <h4 class="nav_h4">get help</h4>
-                        <ul>
-                            <li>
-                                <a href="#">Read FAQS</a>
-                                <a href="#">View all cities</a>
-                                <a href="#">Careers</a>
-
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="copyright__divider"></div>
-        <div class="container footer__pad_cont">
-            <div class="row">
-                <div class="col-md-6 mt-4">
-                    <div class="footer__copyright">
-                        <p class="copyright__holder">2019 krave technology inc</p>
-                    </div>
-                </div>
-                <div class="col-md-6 mt-4">
-                    <div class="term__and_cond">
-                        <ul>
-                            <li>
-                                <a href="">Privacy Policy</a>
-                                <a href="">Terms of Use</a>
-                                <a href="">Pricing</a>
-
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <script src="js/jquery__.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/bootstrap.js"></script>
-
-</body>
-
-</html> -->
