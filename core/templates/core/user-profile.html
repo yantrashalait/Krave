@@ -141,8 +141,8 @@
 	                            <p>order history</p>
 	                            <div class="current__order__hist">
 	                            	<div class="order__detail___tlt__prc">
-            		                    <span>CURRENT ORDERS</span>
-            		                    <span><strong>$59.0</strong></span>
+            		                    <span>CURRENT ORDERS (Pending)</span>
+            		                    <!-- <span><strong>$59.0</strong></span> -->
 	                            	</div>
 	                                <ul>
 										{% for item in current_orders %}
@@ -155,7 +155,7 @@
 	                            </div>
 	                            <div class="past__order__hist">
 	                                <div class="order__detail___tlt__prc">
-            		                    <span>PAST ORDERS</span>
+            		                    <span>PAST ORDERS (Delivered)</span>
 	                            	</div>
 	                                <ul>
 										{% for item in past_orders %}

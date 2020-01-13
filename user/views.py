@@ -19,7 +19,7 @@ def userprofile(request, *args, **kwargs):
     except:
         user_profile = None
     past_orders = Order.objects.filter(user=request.user, status=4)
-    current_orders = Order.objects.filter(~Q(status=4), user=request.user)
+    current_orders = Order.objects.filter(status=0, user=request.user)
     if request.method == "POST":
         if 'password-change' in request.POST:
             password_form = ValidatingPasswordChangeForm(request.user, request.POST)
