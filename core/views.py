@@ -11,11 +11,10 @@ from django.http import JsonResponse
 import json
 from django.core import serializers
 from django.db.models import Q
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-
+from .mixin import LoginRequiredMixin, SuperAdminMixin, is_super_admin
 
 from .forms import LoginForm, SignUpForm, RestaurantRequestForm
 
@@ -34,6 +33,10 @@ from django.template.loader import render_to_string
 from .signup_tokens import account_activation_token
 from django.conf import settings
 from .forms import RestaurantRequestForm
+from user.models import UserProfile
+
+from user.forms import ValidatingPasswordChangeForm
+from django.contrib import messages
 
 
 def restaurant_register(request, *args, **kwargs):
@@ -50,7 +53,7 @@ def restaurant_register(request, *args, **kwargs):
         return HttpResponseRedirect('/')
 
 
-class RequestList(ListView):
+class RequestList(SuperAdminMixin, ListView):
     template_name = 'core/restaurantrequests.html'
     model = RestaurantRequest
     context_object_name = 'req'
@@ -59,12 +62,13 @@ class RequestList(ListView):
         return RestaurantRequest.objects.filter(accepted=False, rejected=False)
 
 
-class RequestDetail(DetailView):
+class RequestDetail(SuperAdminMixin, DetailView):
     template_name = 'core/restaurantrequest_detail.html'
     model = RestaurantRequest
     context_object_name = 'req'
 
 
+@is_super_admin
 @transaction.atomic
 def acceptRequest(request, *args, **kwargs):
     req = RestaurantRequest.objects.get(id=kwargs.get('pk'))
@@ -117,7 +121,7 @@ def acceptRequest(request, *args, **kwargs):
     return HttpResponseRedirect('/requests/')
 
 
-
+@is_super_admin
 def rejectRequest(request, *args, **kwargs):
     req = RestaurantRequest.objects.get(id=kwargs.get('pk'))
     req.rejected = True
@@ -323,8 +327,13 @@ def register(request):
             user.set_password(user.password)
             user.is_active = False
             user.save()
+
+            # save user role
             group = Group.objects.get(name='customer')
             UserRole.objects.get_or_create(user=user, group=group)
+
+            # save user profile
+            UserProfile.objects.get_or_create(user=user)
 
             mail_subject = 'Activate your account.'
             current_site = get_current_site(request)
@@ -454,5 +463,26 @@ def place_order(request, *args, **kwargs):
     return HttpResponseRedirect('/')        
 
 
-class UserProfileView(TemplateView):
-    template_name = 'core/user-profile.html'
+@login_required
+def userprofile(request, *args, **kwargs):
+    try:
+        user_profile = UserProfile.objects.get(user_id=kwargs.get('pk', ''))
+    except:
+        user_profile = None
+    return render(request, 'core/user-profile.html', {'profile': user_profile})
+
+
+@login_required
+def change_password(request, *args, **kwargs):
+    if request.method == "POST":
+        form = ValidatingPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect(reverse_lazy('core:profile', kwargs={'pk': request.user.id}))
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = ValidatingPasswordChangeForm(request.user)
+    return render(request, 'core/user-profile.html',{'form': form, 'password-change': True})

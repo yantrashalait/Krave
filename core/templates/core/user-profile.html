@@ -1,6 +1,11 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content %}
+	<style>
+		.account__logout a{
+			color: #fff;
+		}
+	</style>
     <section class="user__detail__page">           
     <div class="container">
     	<div class="row pt-4">
@@ -8,7 +13,7 @@
     			<div class="account__setting">
     				<h3>Account Settings</h3>
     				<div class="account__logout">
-    					<button>Logout</button>
+    					<button><a href="{% url 'logout' %}">Logout</a></button>
     				</div>
     			</div>
     		</div>
@@ -27,7 +32,7 @@
 		                </li>
 		                <li class="nav-item">
 		                    <a class="nav-link" data-toggle="tab" href="#menu2">
-		                        <i class="fa fa-shopping-basket" aria-hidden="true"></i>Older Hisory</a>
+		                        <i class="fa fa-shopping-basket" aria-hidden="true"></i>Order History</a>
 		                </li>
 		             </ul>
 	             </div>
@@ -36,46 +41,59 @@
 	        	<div class="tab-content">
 	                <div id="home" class="container tab-pane active">
   		                    <div class="user__form__wrapper">
-			                    <form action="" class="pt-4">
+			                    <form action="" class="pt-4" name="profile">
                                     <div class="col-md-12 user__prof__upd">
                                          <div class="uploded__image">
-                                            <img src="{% static 'images/rest_logo.jpg' %}" id="output"/>
+                                            <img src="{% static 'images/user.png' %}" id="output"/>
                                          </div>
                                         <label for="file">Edit</label>
                                         <input type="file"  accept="image/*" name="image" id="file"  onchange="loadFile(event)" style="display: none;">
                                     </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
-			                                <label for="username">FIRSTNAME</label>
-			                                <input type="text" class="form-control" id="username">
+			                                <label for="username">FIRST NAME</label>
+			                                <input type="text" class="form-control" id="first_name" value="{{ request.user.first_name }}">
 			                            </div>
 			                        </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
-			                                <label for="lastname">LASTNAME</label>
-			                                <input type="text" class="form-control" id="lastname">
+			                                <label for="lastname">LAST NAME</label>
+			                                <input type="text" class="form-control" id="lastname" value="{{ request.user.last_name }}">
 			                            </div>
 			                        </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
-			                                <label for="number">PHONE NUMBER</label>
-			                                <input type="text" class="form-control" id="number">
+			                                <label for="number">CONTACT NUMBER</label>
+			                                <input type="text" class="form-control" id="number" value="{{ profile.contact }}">
 			                            </div>
 			                        </div>
 			                        <div class="col-md-6">
 			                            <div class="form-group">
 			                                <label for="email">EMAIL</label>
-			                                <input type="email" class="form-control" id="email">
+			                                <input type="email" class="form-control" id="email" value="{{ request.user.email }}">
 			                            </div>
-			                        </div>
+									</div>
+									<div class="col-md-6">
+			                            <div class="form-group">
+			                                <label for="email">ADDRESS</label>
+			                                <input type="email" class="form-control" id="email" value="{{ profile.address }}">
+			                            </div>
+									</div>
+									<div class="col-md-6">
+			                            <div class="form-group">
+			                                <label for="email">ZIP CODE</label>
+			                                <input type="email" class="form-control" id="email" value="{{ profile.zip_code }}">
+			                            </div>
+									</div>
+
 			                        <button type="submit" class="btn form__save">Save</button>
-			                        <button type="submit" class="btn form__cancle">Cancle</button>
+			                        <button type="submit" class="btn form__cancle">Cancel</button>
 			                    </form>
 		                    </div>
 	                </div>
 	                <div id="menu1" class="container tab-pane fade">
 	                    <div class="col-md-6">
-	                        <form action="">
+	                        <form action="" name="change">
 	                            <div class="col-md-12">
 	                                <div class="form-group">
 	                                    <label for="oldpass">Old Password</label>

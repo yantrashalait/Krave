@@ -120,7 +120,7 @@
                       </div>
                       <div id="user__pofl_drpdown" class="popup__top profile nav__cart__list">
                         <a href="#">
-                          <img src="{% static 'images/edv__photo_smr.jpg' %}" >                      
+                          <img src="{% static 'images/user.png' %}" >                      
                         </a>
                       </div>    
                     </div>
@@ -157,6 +157,7 @@
                         </div>
                     </div>
                 </div>
+                {% if request.user.is_authenticated %}
                 <div id="user__detail__drp" class="dprdwn fav_drp">
                   <span class="drpdwn_cls">close</span>
                   <div class="drpdwn_header">
@@ -165,13 +166,13 @@
                       </span>
                   </div>
                   <div class="user__prof__avatar">
-                      <img src="{% static 'images/rest_logo.jpg' %}" alt="">
+                      <img src="{% static 'images/user.png' %}" alt="">
                       <div class="user__name__edit">
                            <div class="avatar__name">
                             <span>{{ request.user.username }}</span>
                           </div>
                         <div>
-                          <a href="{% url 'core:profile' %}">Edit Profile</a>
+                          <a href="{% url 'core:profile' request.user.pk %}">Edit Profile</a>
                         </div>
                      </div>
                   </div>
@@ -181,7 +182,8 @@
                         <a href="{% url 'logout' %}">Logout</a>
                        </div>
                   </div>
-              </div>
+                </div>
+              {% endif %}
                 
 
                </div>
