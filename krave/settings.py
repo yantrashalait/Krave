@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'delivery.apps.DeliveryConfig',
     'django_filters',
     'restaurant.apps.RestaurantConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

@@ -3,6 +3,7 @@
 {% load static %}
 {% load filters %}
 {% block content %}
+{% if lists %}
   <section class="checkout">
     <div class="container">
       <div class="row">
@@ -123,6 +124,21 @@
       </div>
     </div>
   </section>
+  {% else %}
+  <section class="checkout">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="checkout__detail__info">
+            <div class="create__acount_checkout"> 
+              <h4>Please add items to your cart to place orders.</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% endif %}
   {% include 'core/footer.html' %}
   {% endblock %}
   {% block scripts %}

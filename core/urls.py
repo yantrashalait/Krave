@@ -39,6 +39,4 @@ urlpatterns = [
     path('order/add/', views.add_to_order, name="add-to-order"),
     path('order/place/', views.place_order, name="place-order"),
 
-    path('user/profile/<int:pk>/', views.userprofile, name="profile"),
-
 ]
