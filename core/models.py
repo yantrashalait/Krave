@@ -10,7 +10,10 @@ from django.conf import settings
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     location_point = PointField(geography=True, srid=4326, blank=True, null=True)
-    location_text = models.CharField(max_length=500, default="")
+    street = models.CharField(max_length=500, default='')
+    town = models.CharField(max_length=500, default='')
+    state = models.CharField(max_length=500, default='')
+    zip_code = models.CharField(max_length=255, default='')
     contact = models.CharField(max_length=20)
     opening_time = models.TimeField(null=True, blank=True)
     closing_time = models.TimeField(null=True, blank=True)
@@ -138,7 +141,10 @@ class FoodRating(models.Model):
 
 class RestaurantRequest(models.Model):
     name = models.CharField(max_length=255)
-    location_text = models.CharField(max_length=500, default="")
+    street = models.CharField(max_length=500, default='')
+    town = models.CharField(max_length=500, default='')
+    state = models.CharField(max_length=500, default='')
+    zip_code = models.CharField(max_length=255, default='')
     name_of_owner = models.CharField(max_length=255)
     email_of_owner = models.EmailField()
     contact = models.CharField(max_length=20)
@@ -147,6 +153,7 @@ class RestaurantRequest(models.Model):
     requested_date = models.DateTimeField(auto_now_add=True)
     accepted = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
+    does_your_restaurant_staff_deliver_order = models.BooleanField(blank=True, null=True)
 
     @property
     def longitude(self):
