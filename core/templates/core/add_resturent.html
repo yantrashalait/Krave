@@ -60,69 +60,77 @@
         </div>
         <div class="col-md-6">
           <div class="partnership__form">
-            <form>
+            <form method="post">
+              {% csrf_token %}
                   <div class="header__fr__partn">
                     <h4>Partner with us</h4>
                   </div>
                   <div class="restaurant__form__detail">
                       <div class="full__width__textform">
-                        <input class="text__field__f" type="text" name="" placeholder="Restaurant Name">
+                        {{ form.name }}
+                      </div>
+                      <div class="full__width__textform">
+                        {{ form.registration_number }}
                       </div>
                       <div class="name__conter__field">
                         <div class="quater__h__detail">
-                          <input class="half__width__textform" type="text" name="" placeholder="Restaurant Address">
+                          {{ form.street }}
                         </div>
                         <div class="half__field__detail">
-                            <input class="half__width__textform min__size" type="text" name="" placeholder="Apt/suite">
+                            {{ form.town }}
+                        </div>
+                      </div>
+                      <div class="name__conter__field">
+                        <div class="quater__h__detail">
+                          {{ form.state }}
+                        </div>
+                        <div class="half__field__detail">
+                            {{ form.zip_code }}
                         </div>
                       </div>
                   </div>
                   <div class="restaurant__holder__name">
                       <div class="name__conter__field">
                         <div class="input__field__half">
-                              <input class="half_ _width__textform min__input__divider__first" type="text" name="" placeholder="First Name">
+                              <!-- <input class="half_ _width__textform min__input__divider__first" type="text" name="" placeholder="First Name"> -->
+                              {{ form.name_of_owner }}
                           </div>
                           <div class="input__field__half">
-                            <input class="half_ _width__textform min__input__divider__sec" type="text" name="" placeholder="Last Name">
+                            <!-- <input class="half_ _width__textform min__input__divider__sec" type="text" name="" placeholder="Last Name"> -->
+                            {{ form.email_of_owner }}
+                            {% if form.email_of_owner.errors %}
+                              <span>{{ form.email_of_owner.errors }}</span>
+                            {% endif %}
                           </div>
                       </div>
                       <div class="full__width__textform">
-                         <input class="text__field__f" type="text" placeholder="Mobile Number">
+                         <!-- <input class="text__field__f" type="text" placeholder="Mobile Number"> -->
+                         {{ form.contact }}
                       </div>
-                      <div class="full__width__textform">
+                      <!-- <div class="full__width__textform">
                         <input class="text__field__f" type="email" name="" placeholder="Email">
-                      </div>
+                      </div> -->
                   </div>
                   <div class="restaurant__deliver__detail">
                       <div class="full__width__textform">
-                        <select class="text__field__f">
-                          <option value="saab">Location</option>
-                          <option value="opel">Butwal</option>
-                          <option value="audi">Bhaktapur</option>
-                        </select>
+                        {{ form.does_your_restaurant_staff_deliver_order }}
+                        {% if form.does_your_restaurant_staff_deliver_order.errors %}
+                          {{ form.does_your_restaurant_staff_deliver_order.errors }}
+                        {% endif %}
                       </div>
-                      <div class="full__width__textform">
-                        <select class="text__field__f">
-                           <option value="volvo">Type of cuisine</option>
-                           <option value="saab">Thakali</option>
-                           <option value="opel">Chicken curry</option>
-                           <option value="audi">Fried egg</option>
-                        </select>
-                      </div>
-                      <div class="full__width__textform">
-                        <select class="text__field__f">
-                          <option value="opel">Does your restaurant staff deliver orders?</option>
-                          <option value="opel">Yes</option>
-                          <option value="audi">No</option>
-                        </select>
-                      </div>
+                  </div>
+                  <div>
+                    {{ form.message }}
+                    {% if form.message.errors %}
+                      {{ form.message.errors }}
+                    {% endif %}
                   </div>
                   <div class="submit__term__conditons">
                   <p>
                     By clicking "submit", you agree to <a href="#">Krave general term and conditions</a> and acknowledge that you have read the <a href="#">privacy policy</a>.
                   </p>
                   </div>
-                <button class="partners__button">Submit</button>
+                <button type=submit class="partners__button">Submit</button>
            </form>
           </div>
         </div>
@@ -130,90 +138,7 @@
     </div>
   </div>
 </section>
-  <!-- <section class="add__resturent">
-    <div class="container">
-     <div class="row">
-       <div class="col-md-12 my-5">
-         <div class="resturent__solog">
-           <h3><strong>The fast way to </strong>  get food to your customers </h3>
-         </div>
-       </div>
-     </div>
-
-    </div>
-    <div class="business__detail">
-      <div class="container">
-        <div class="row">
-          <div class="partnership__form">
-            <h4>Partner with us</h4>
-            <form method="post">
-              {% csrf_token %}
-                <div class="restaurant__form__detail">
-                  {{ form.name }}
-                  {{ form.registration_number }}
-                  {{ form.location_text }}
-                </div>
-
-                <div class="restaurant__holder__name">
-                  {{ form.name_of_owner }}
-                  {{ form.contact }}
-                  {{ form.email_of_owner }}
-                  {% if form.email_of_owner.errors %}
-                    <span>{{ form.email_of_owner.errors }}</span>
-                  {% endif %}
-                </div>
-                
-                <div class="restaurant__location__detail">
-                  {{ form.message }}
-                </div>
-                <div class="submit__term__conditons">
-                  <p>
-                    By clicking "submit", you agree to <a href="#">Krave general term and conditions</a> and acknowledge that you have read the <a href="#">privacy policy</a>.
-                  </p>
-                </div>
-                <button type="submit" class="partners__button">Submit</button>
-           </form>
-          </div>
-          <div class="col-md-6">
-            <div class="business_type">
-              <div class="business__story">
-                <div class="detail__business__info">
-                  <div class="business__story__icon">
-                  <i class="fa fa-cc-mastercard" aria-hidden="true"></i>
-                  </div>
-                  <div class="business__story__contain">
-                  <h5>Do more business</h5>
-                  <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form,
-                  </p>
-                  </div>
-                </div>
-                <div class="detail__business__info">
-                  <div class="business__story__icon">
-                    <i class="fa fa-car" aria-hidden="true"></i>
-                  </div>
-                  <div class="business__story__contain">
-                  <h5>Deliver Faster</h5>
-                  <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form,
-                  </p>
-                  </div>
-                </div>
-                <div class="detail__business__info">
-                  <div class="business__story__icon">
-                    <i class="fa fa-life-ring" aria-hidden="true"></i>
-                  </div>
-                  <div class="business__story__contain">
-                  <h5>Partner with professional</h5>
-                  <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour,</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section> -->
-  <section class="bussiness__success_stories">
+<section class="bussiness__success_stories">
     <div class="container">
       <div class="row">
         <div class="col-md-12">

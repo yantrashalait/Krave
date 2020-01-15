@@ -15,28 +15,30 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class RestaurantRequestForm(forms.ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Restaurant Name'}))
-    name_of_owner = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Name of Owner'}))
-    email_of_owner = forms.CharField(widget=forms.EmailInput(attrs={'class': 'full__width__textform', 'placeholder': 'Email'}))
-    contact = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Contact Number'}))
-    registration_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Restaurant Registration Number'}))
-    location_text = forms.CharField(widget=forms.TextInput(attrs={'class': 'full__width__textform', 'placeholder': 'Restaurant Address'}))
+    name = forms.CharField(widget=forms.TextInput(attrs={'class': 'text__field__f', 'placeholder': 'Restaurant Name'}))
+    name_of_owner = forms.CharField(widget=forms.TextInput(attrs={'class': 'half_ _width__textform min__input__divider__first', 'placeholder': 'Name of Owner'}))
+    email_of_owner = forms.CharField(widget=forms.EmailInput(attrs={'class': 'half_ _width__textform min__input__divider__sec', 'placeholder': 'Email'}))
+    contact = forms.CharField(widget=forms.TextInput(attrs={'class': 'text__field__f', 'placeholder': 'Contact Number'}))
+    registration_number = forms.CharField(widget=forms.TextInput(attrs={'class': 'text__field__f', 'placeholder': 'Restaurant Registration Number'}))
     message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form__textarea', 'placeholder': 'Leave a message'}))
+    street = forms.CharField(widget=forms.TextInput(attrs={'class': 'half__width__textform', 'placeholder': 'Street Name'}))
+    town = forms.CharField(widget=forms.TextInput(attrs={'class': 'half__width__textform min__size', 'placeholder': 'Town Name'}))
+    state = forms.CharField(widget=forms.TextInput(attrs={'class': 'half__width__textform', 'placeholder': 'State'}))
+    zip_code = forms.CharField(widget=forms.TextInput(attrs={'class': 'half__width__textform min__size', 'placeholder': 'Zip Code'}))
+    does_your_restaurant_staff_deliver_order = forms.ChoiceField(widget=forms.Select(attrs={'class': 'text__field__f', 'placeholder': 'Does your restaurant staff deliver orders?'}), choices=((None, 'Does your restaurant staff deliver orders?'),(0, 'No'), (1, 'Yes')))
 
     class Meta:
         model = RestaurantRequest
-        fields = ('name', 'name_of_owner', 'email_of_owner', 'contact', 'registration_number', 'message', 'location_text')
+        fields = ('name', 'name_of_owner', 'email_of_owner', 'contact', 'registration_number', 'message', 'street', 'town', 'state', 'zip_code', 'does_your_restaurant_staff_deliver_order')
 
     def clean_email_of_owner(self):
         email_of_owner = self.cleaned_data.get('email_of_owner')
-        print(email_of_owner)
         if validate_email(email_of_owner) == False:
-            raise ValidationError({'email_of_owner': ['Enter a valid Email address']})
+            raise ValidationError('Enter a valid Email address')
 
         if User.objects.filter(email=email_of_owner, is_restaurant=True).exists():
-            raise ValidationError({'email_of_owner': ['Restaurant with this email already exists']})
-        else:
-            return email_of_owner
+            raise ValidationError('Restaurant with this email already exists')
+        return email_of_owner
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Your Email/Username', max_length=100)

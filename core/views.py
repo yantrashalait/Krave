@@ -47,8 +47,10 @@ def restaurant_register(request, *args, **kwargs):
     if request.method == 'POST':
         form = RestaurantRequestForm(request.POST)
         if form.is_valid():
+            print('valid chaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             form.save()
         else:
+            print('not valid')
             return render(request, 'core/add_resturent.html', {'form': form})
         return HttpResponseRedirect('/')
 
@@ -86,7 +88,10 @@ def acceptRequest(request, *args, **kwargs):
     # create restaurant object
     name = req.name
     contact = req.contact
-    location = req.location_text
+    street = req.street
+    town = req.town
+    state = req.state
+    zip_code = req.zip_code
     owner = req.name_of_owner
     registration_number = req.registration_number
 
@@ -95,7 +100,10 @@ def acceptRequest(request, *args, **kwargs):
         contact=contact,
         owner=owner,
         registration_number=registration_number,
-        location_text=location)
+        street=street,
+        town=town,
+        state=state,
+        zip_code=zip_code)
 
     group = Group.objects.get(name='restaurant-owner')
     userrole = UserRole.objects.create(user=user, group=group, restaurant=restaurant)
