@@ -209,13 +209,16 @@ class Order(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)
-    payment_type = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
+    payment = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
     location_text = models.CharField(max_length=255, default='')
     location_point = PointField(geography=True, srid=4326, blank=True, null=True)
     note = models.TextField(default='')
+    id_string = models.CharField(unique=True, default='', max_length=255)
+    added_date = models.DateTimeField(auto_now=True)
+    total_price = models.FloatField(default=0)
 
     def __unicode__(self):
-        return self.user.username
+        return self.user.username    
 
     
     

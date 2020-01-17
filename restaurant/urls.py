@@ -14,4 +14,6 @@ urlpatterns = [
     # password change
     path('password/change', views.change_password, name='change-password'),
 
+    path('<int:rest_id>/order/<int:order_id>', views.OrderDetailView.as_view(), name="order-detail"),
+
 ]

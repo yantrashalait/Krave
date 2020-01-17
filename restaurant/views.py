@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
+from core.models import Order
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -27,6 +28,11 @@ class RestaurantEditView(LoginRequiredMixin, TemplateView):
 class OrderView(LoginRequiredMixin, TemplateView):
     login_url = 'login'
     template_name = 'restaurant/orders.php'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(OrderView, self).get_context_data(**kwargs)
+        context['orders'] = Order.objects.filter(cart__restaurant=self.request.restaurant, status=0)
+        return context
 
 
 class AcceptedOrderView(LoginRequiredMixin, TemplateView):
@@ -53,3 +59,13 @@ def change_password(request, *args, **kwargs):
     else:
         form = ValidatingPasswordChangeForm(request.user)
     return render(request, 'restaurant/change_password.html',{'form': form})
+
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    login_required = 'login'
+    template_name = 'restaurant/orders_detail.php'
+    model = Order
+    context_object_name = 'order'
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(Order, id=self.kwargs.get('order_id'))

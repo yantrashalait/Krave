@@ -1,4 +1,4 @@
-<?php include 'header.php';?>
+{% include 'restaurant/header.php' %}
                     <div class="it-ad-hl pd-tb-md">
                         <div class="rb-pd-rl">
                             <div class="it-ac-hd">
@@ -13,7 +13,7 @@
                                     </div>
                                     <div class="customer-info-pop">
                                         <div class="customer-name-prnt">
-                                        <h2>John Doe</h2>
+                                        <h2>{{ order.user.first_name }} {{ order.user.last_name }}</h2>
                                         <a href="#">Print</a>
                                         </div>
                                         <div class="customer-inftxt">
@@ -23,15 +23,19 @@
                                         </div>
 
                                         <div class="customer-inftxt">
-                                            <span class="cus-inf-attributes"><i class="fa fa-hashtag"></i>CCW 123456</span>
-                                            <span class="cus-inf-attributes"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>Placed at 11 September - 11:00AM</span>
-                                            <span class="cus-inf-attributes"><i class="fa fa-credit-card"></i>110 Cash on Delivery</span>
+                                            <span class="cus-inf-attributes"><i class="fa fa-hashtag"></i>{{ order.id_string }}</span>
+                                            <span class="cus-inf-attributes"><i class="fa fa-calendar-check-o" aria-hidden="true"></i>Placed at {{ order.added_date }}</span>
+                                            <span class="cus-inf-attributes"><i class="fa fa-credit-card"></i>${{ order.total_price }} - {{ order.get_payment_display }}</span>
                                         </div>
                                     </div>
 
                                     <div class="customer-instructions-pop">
                                         <h2>Customer Instructions</h2>
-                                        <p>No Instructions Available</p>
+                                        {% if order.note %}
+                                            <p>{{ order.note }}</p>
+                                        {% else %}
+                                            <p>No Instructions Available</p>
+                                        {% endif %}
                                     </div>
                                     
                             <div class="order-pop-table">
@@ -141,4 +145,4 @@
         </div>
 
     </section>
-    <?php include 'footer.php';?>
+    {% include 'restaurant/footer.php' %}
