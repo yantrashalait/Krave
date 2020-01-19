@@ -7,7 +7,7 @@ from django.forms import widgets
 from django.db.models import Sum
 from django.core.validators import validate_email
 import re
-from .models import RestaurantRequest
+from .models import RestaurantRequest, FoodMenu
 
 from django.contrib.gis.geos import Point
 
@@ -90,3 +90,18 @@ class SignUpForm(UserCreationForm):
             raise ValidationError('User with this username already exists')
         else:
             return username
+
+
+class FoodMenuForm(forms.ModelForm):
+    category = forms.ChoiceField(widget=forms.Select(attrs={'class': 'fd-ct'}))
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Item Name'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keep it more descriptive in less words'}))
+    ingredients = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Separate with comma(,)'}))
+    old_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Old Price'}))
+    new_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
+    preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
+    calories = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Calories'}))
+
+    class Meta:
+        model = FoodMenu
+        fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'calories')

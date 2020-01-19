@@ -8,11 +8,17 @@ from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
 from core.models import Order
+from core.forms import FoodMenuForm
 
 
-class DashboardView(LoginRequiredMixin, TemplateView):
-    login_url = 'login'
-    template_name = 'restaurant/index.php'
+@login_required(login_url='/login')
+def dashboard(request, *args, **kwargs):
+    if request.method == "GET":
+        food_form = FoodMenuForm()
+        return render(request, 'restaurant/index.php', {'food_form': food_form})
+    
+    if request.method == "POST":
+        print(request.POST)
 
 
 class RestaurantDetailView(LoginRequiredMixin, TemplateView):

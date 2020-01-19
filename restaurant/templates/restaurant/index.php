@@ -45,16 +45,17 @@
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
-                                <form>
+                                <form method="post" action=".">
+                                    {% csrf_token %}
                                     <div class="fm-ls sm-mb">
                                         <label>Food Item Name</label>
-                                        <input type="text" placeholder="Item Name">
+                                        {{ food_form.name }}
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">
                                             <div class="up-im">
-                                                <input type='file' id="imgInp" />
+                                                <input type='file' id="imgInp" name="image" />
                                                 <div class="up-im-bt">
                                                     <div class="up-im-cn">
                                                         <div class="up-im-bt-tl">
@@ -77,42 +78,27 @@
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Description</label>
-                                        <textarea placeholder="Keep it more descriptive in less words"></textarea>
+                                        {{ food_form.description }}
+                                    </div>
+                                    <div class="fm-ls sm-mb">
+                                        <label>Ingredients</label>
+                                        {{ food_form.ingredients }}
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
-                                                <label>Price</label>
-                                                <input type="text" placeholder="Price">
+                                                <label>Old Price</label>
+                                                {{ food_form.old_price }}
+                                            </div>
+                                            <div class="fm-hf-ls">
+                                                <label>New Price</label>
+                                                {{ food_form.new_price }}
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Calories</label>
-                                                <input type="text" placeholder="Calories">
+                                                {{ food_form.calories }}
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!-- form list -->
-                                    <div class="fm-ls sm-mb">
-                                        <label>Modifier Group (Required) Note: Some notes for Restaurant Owner</label>
-                                        <div class="md-gp">
-                                            <div class="md-gp-ls" id="md-gp-ls-id">
-                                                <div class="md-gp-in">
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Modifier Name</label>
-                                                        <input type="text">
-                                                    </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Modifier Price</label>
-                                                        <input type="text">
-                                                    </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Modifier Calories</label>
-                                                        <input type="text">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button class="md-gp-bt" id="cl-bt">Add More Modifier</button>
                                         </div>
                                     </div>
                                     <!-- form list -->
@@ -133,6 +119,13 @@
                                                         <label>Modifier Calories</label>
                                                         <input type="text">
                                                     </div>
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Select</label>
+                                                        <select class="fd-ct">
+                                                            <option>Required</option>
+                                                            <option>Optional</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <button class="md-gp-bt" id="cl-bt-rd">Add More Modifier</button>
@@ -144,25 +137,11 @@
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Choose Category</label>
-                                                <select class="fd-ct" multiple="multiple">
-                                                    <option></option>
-                                                    <option>Chef's Special</option>
-                                                    <option>Shakes & desert</option>
-                                                    <option>Snakers</option>
-                                                    <option>Drinks</option>
-                                                    <option>Chef's Special</option>
-                                                    <option>Shakes & desert</option>
-                                                    <option>Snakers</option>
-                                                    <option>Drinks</option>
-                                                    <option>Chef's Special</option>
-                                                    <option>Shakes & desert</option>
-                                                    <option>Snakers</option>
-                                                    <option>Drinks</option>
-                                                </select>
+                                                {{ food_form.category }}
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Preparation Time</label>
-                                                <input type="text" placeholder="Eg (10-20)">
+                                                {{ food_form.preparation_time }}
                                             </div>
                                         </div>
                                     </div>
