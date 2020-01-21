@@ -7,7 +7,7 @@ from django.forms import widgets
 from django.db.models import Sum
 from django.core.validators import validate_email
 import re
-from .models import RestaurantRequest, FoodMenu
+from .models import RestaurantRequest, FoodMenu, FoodCustomize, RestaurantFoodCategory
 
 from django.contrib.gis.geos import Point
 
@@ -93,7 +93,7 @@ class SignUpForm(UserCreationForm):
 
 
 class FoodMenuForm(forms.ModelForm):
-    category = forms.ChoiceField(widget=forms.Select(attrs={'class': 'fd-ct'}))
+    # category = forms.ChoiceField(widget=forms.Select(attrs={'class': 'fd-ct'}))
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Item Name'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keep it more descriptive in less words'}))
     ingredients = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Separate with comma(,)'}))
@@ -102,6 +102,24 @@ class FoodMenuForm(forms.ModelForm):
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
     calories = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Calories'}))
 
+    def __init__(self, *args, **kwargs):
+        super(FoodMenuForm, self).__init__(*args, **kwargs)
+        self.fields['category'].widget.attrs.update({'class': 'fd-ct'})
+
     class Meta:
         model = FoodMenu
-        fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'calories')
+        fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'calories', 'image')
+
+
+class  FoodMenuModifierForm(forms.ModelForm):
+    type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'fd-ct'}), choices=((1, "Optional"), (2, "Required")))
+
+    def __init__(self, *args, **kwargs):
+        super(FoodMenuModifierForm, self).__init__(*args, **kwargs)
+        self.fields['name_of_ingredient'].required = False
+        self.fields['cost_of_addition'].required = False
+
+    class Meta:
+        model = FoodCustomize
+        fields = ('name_of_ingredient', 'cost_of_addition', 'calories', 'type')
+

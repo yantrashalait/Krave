@@ -45,17 +45,17 @@
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
-                                <form method="post" action=".">
+                                <form method="post" enctype="multipart/form-data" action="{% if form.instance.name %}{% url 'restaurant:menu-edit' request.restaurant.id foodmenu.id %}{% else %}{% url 'restaurant:dashboard' request.restaurant.id %}{% endif %}">
                                     {% csrf_token %}
                                     <div class="fm-ls sm-mb">
                                         <label>Food Item Name</label>
-                                        {{ food_form.name }}
+                                        {{ form.name }}
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">
                                             <div class="up-im">
-                                                <input type='file' id="imgInp" name="image" />
+                                                <input type='file' id="id_img" name="image" />
                                                 <div class="up-im-bt">
                                                     <div class="up-im-cn">
                                                         <div class="up-im-bt-tl">
@@ -71,81 +71,136 @@
                                                 </div>
                                             </div>
                                             <div class="pv-im-hl">
-                                                <img id="blah" src="{% static 'restaurant/images/upload__prv.jpg' %}" alt="your image" />
+                                                {% if form.instance.image %}
+                                                    <img id="blah" src="{{ form.instance.image.url }}" alt="your image" />
+                                                {% else %}
+                                                    <img id="blah" src="{% static 'restaurant/images/upload__prv.jpg' %}" alt="your image" />
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Description</label>
-                                        {{ food_form.description }}
+                                        {{ form.description }}
                                     </div>
                                     <div class="fm-ls sm-mb">
                                         <label>Ingredients</label>
-                                        {{ food_form.ingredients }}
+                                        {{ form.ingredients }}
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Old Price</label>
-                                                {{ food_form.old_price }}
+                                                {{ form.old_price }}
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>New Price</label>
-                                                {{ food_form.new_price }}
+                                                {{ form.new_price }}
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Calories</label>
-                                                {{ food_form.calories }}
+                                                {{ form.calories }}
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- form list -->
-                                    <div class="fm-ls sm-mb">
-                                        <label>Modifier Group (Required) Note: Some notes for Restaurant Owner</label>
-                                        <div class="md-gp">
-                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
-                                                <div class="md-gp-in">
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Modifier Name</label>
-                                                        <input type="text">
-                                                    </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Modifier Price</label>
-                                                        <input type="text">
-                                                    </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Modifier Calories</label>
-                                                        <input type="text">
-                                                    </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Select</label>
-                                                        <select class="fd-ct">
-                                                            <option>Required</option>
-                                                            <option>Optional</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button class="md-gp-bt" id="cl-bt-rd">Add More Modifier</button>
-                                        </div>
-                                    </div>
-                                    <!-- form list -->
-
+                                    
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Choose Category</label>
-                                                {{ food_form.category }}
+                                                {{ form.category }}
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Preparation Time</label>
-                                                {{ food_form.preparation_time }}
+                                                {{ form.preparation_time }}
                                             </div>
                                         </div>
                                     </div>
+                                    {% for error in form.errors %}
+                                    <p>{{ error }}</p>
+                                    {% endfor %}
                                     <!-- form list -->
+
+                                    <!-- form list -->
+                                    {{ modifierform.management_form }}
+                                    {% for modifier_single in modifierform.forms %}
+                                    <div class="fm-ls sm-mb">
+                                        <label>Modifier Group (Required) Note: Some notes for Restaurant Owner</label>
+                                        <div class="md-gp">
+                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                                <div style="display: none;">
+                                                    {{ modifier_single.id }}
+                                                </div>
+                                                <div class="md-gp-in">
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Modifier Name</label>
+                                                        {{ modifier_single.name_of_ingredient }}
+                                                        {% if modifier_single.name_of_ingredient.errors %}
+                                                        {{ modifier_single.name_of_ingredient.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Modifier Price</label>
+                                                        {{ modifier_single.cost_of_addition }}
+                                                        {% if modifier_single.cost_of_addition.errors %}
+                                                        {{ modifier_single.cost_of_addition.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Modifier Calories</label>
+                                                        {{ modifier_single.calories }}
+                                                        {% if modifier_single.calories.errors %}
+                                                        {{ modifier_single.calories.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Type Of Modifier</label>
+                                                        {{ modifier_single.type }}
+                                                        {% if modifier_single.type.errors %}
+                                                        {{ modifier_single.type.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% for error in modifier_single.errors %}
+                                            <p>{{ error }}</p>
+                                            {% endfor %}
+                                            {% with modifierform.empty_form as form %}
+                                            <div id="modifierempty_form" style="display:none">
+                                                <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                                    <div class="md-gp-in">
+                                                        <div style="display: none;">
+                                                            {{ form.id }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Modifier Name</label>
+                                                            {{ form.name_of_ingredient }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Modifier Price</label>
+                                                            {{ form.cost_of_addition }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Modifier Calories</label>
+                                                            {{ form.calories }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Type Of Modifier</label>
+                                                            {{ form.type }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endwith %}
+                                            <button class="md-gp-bt" id="cl-bt-rd">Add More Modifier</button>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    
+                                    <!-- form list -->
+
                                     <div class="fm-ls sm-mb">
                                       <button class="sb-bt mx-auto d-flex">Add Food Item</button>
                                     </div>
@@ -159,4 +214,15 @@
         </div>
 
     </section>
+    
     {% include 'restaurant/footer.php' %} 
+    <script>
+        $("#cl-bt-rd").click(function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            var form_idx = $('#id_modifierform-TOTAL_FORMS').val();
+            var cloneIndexrd = $(".md-gp-ls-rd").length;
+            $self.before($('#modifierempty_form').html().replace(/__prefix__/g, form_idx));
+            $('#id_modifierform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        });
+    </script>
