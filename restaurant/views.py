@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -119,6 +119,18 @@ class MenuEditView(LoginRequiredMixin, UpdateView):
                     else:
                         return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
+
+
+class MenuDeleteView(LoginRequiredMixin, DeleteView):
+    model = FoodMenu
+    template_name = 'restaurant/food_confirm_delete.php'
+
+    def get_object(self):
+        id_ = self.kwargs.get('food_id')
+        return get_object_or_404(FoodMenu, pk=id_)
 
     def get_success_url(self):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})

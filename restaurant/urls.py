@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('<int:rest_id>/menu', views.MenuListView.as_view(), name='menu-list'),
     path('<int:rest_id>/menu/<int:food_id>/edit', views.MenuEditView.as_view(), name="menu-edit"),
+    path('<int:rest_id>/menu/<int:food_id>/delete', views.MenuDeleteView.as_view(), name="menu-delete"),
 
     # password change
     path('password/change', views.change_password, name='change-password'),
