@@ -22,15 +22,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for item in foods %}
                                         <tr>
-                                            <td>Chicken Sandwich</td>
-                                            <td>$5.00</td>
-                                            <td><a href="categories-detail.php">Sandwiches</a></td>
+                                            <td>{{ item.name }}</td>
+                                            <td>${{ item.new_price }}</td>
+                                            <td><a href="categories-detail.php">{{ item.category }}</a></td>
                                             <td class="ac-bt-hl-fd-ls">
-                                                <a class="btn btn-primary" href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                                <a class="btn btn-danger" href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                <a class="btn btn-primary" href="{% url 'restaurant:menu-edit' request.restaurant.id item.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                <a class="btn btn-danger" href="{% url 'restaurant:menu-delete' request.restaurant.id item.id %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>

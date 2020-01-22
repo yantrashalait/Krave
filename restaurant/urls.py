@@ -8,13 +8,17 @@ urlpatterns = [
     path('<int:rest_id>/detail/', views.RestaurantDetailView.as_view(), name='restaurant-detail'),
     path('edit_restaurant', views.edit_restaurant, name='edit-restaurant'),
     path('<int:rest_id>/edit', views.RestaurantEditView.as_view(), name='restaurant-edit'),
+    
     path('<int:rest_id>/orders', views.OrderView.as_view(), name='order'),
-    path('<int:rest_id>/menu', views.MenuListView.as_view(), name='menu-list'),
+    path('<int:rest_id>/order/<int:order_id>', views.OrderDetailView.as_view(), name="order-detail"),
     path('<int:rest_id>/orders/accepted', views.AcceptedOrderView.as_view(), name="accepted-order"),
+
+    path('<int:rest_id>/menu', views.MenuListView.as_view(), name='menu-list'),
+    path('<int:rest_id>/menu/<int:food_id>/edit', views.MenuEditView.as_view(), name="menu-edit"),
+    path('<int:rest_id>/menu/<int:food_id>/delete', views.MenuDeleteView.as_view(), name="menu-delete"),
 
     # password change
     path('password/change', views.change_password, name='change-password'),
 
-    path('<int:rest_id>/order/<int:order_id>', views.OrderDetailView.as_view(), name="order-detail"),
-
+    
 ]
