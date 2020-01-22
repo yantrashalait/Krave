@@ -12,16 +12,17 @@
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
-                                <form>
+                                <form method="POST" action="{% url 'restaurant:edit-restaurant' %}" enctype="multipart/form-data">
+                                    {% csrf_token %}
                                     <div class="fm-ls sm-mb">
                                         <label>Restaurant Name</label>
-                                        <input type="text" placeholder="Item Name" value="Restaurant Name">
+                                        <input type="text" name="name" placeholder="Item Name" value="{{ detail.name }}" >
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">
                                             <div class="up-im">
-                                                <input type='file' id="imgInp" />
+                                                <input type='file' name="logo" id="imgInp" />
                                                 <div class="up-im-bt">
                                                     <div class="up-im-cn">
                                                         <div class="up-im-bt-tl">
@@ -37,40 +38,46 @@
                                                 </div>
                                             </div>
                                             <div class="pv-im-hl">
+                                            {% if request.restaurant.logo %}
+                                                <img id="blah" src="{{ detail.logo.url }}" alt="your image" />
+                                            
+                                            {% else %}
                                                 <img id="blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
+                                            {% endif  %}
+
                                             </div>
                                         </div>
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Restaurant Location</label>
-                                        <input type="text" placeholder="Item Name" value="Restaurant Location">
+                                        <input type="text" name="town" placeholder="Item Name" value="{{ detail.town }}">
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Restaurant Contact Number</label>
-                                        <input type="text" placeholder="Item Name" value="12352625">
+                                        <input type="text" name="contact" placeholder="Item Name" value="{{ detail.contact }}">
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Email Address</label>
-                                        <input type="text" placeholder="Item Name" value="test@gmail.com">
+                                        <input type="text" name="email" placeholder="Item Name" value="{{ detail.email }}">
                                     </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Restaurant Registration Number</label>
-                                        <input type="text" placeholder="Item Name" value="NB 125362">
+                                        <input type="text" name="registration_number" placeholder="Item Name" value="{{ detail.registration_number }}">
                                     </div>
                                     <!-- form list -->                                    
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Opening Time</label>
-                                                <input type="text" value="6:00 am">
+                                                <input type="time" name="opening_time" value="{{ detail.opening_time|time }}">
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Closing TIme</label>
-                                                <input type="text" value="9:00 pm">
+                                                <input type="time" name="closing_time" value="{{ detail.closing_time|time }}">
                                             </div>
                                         </div>
                                     </div>
@@ -79,16 +86,16 @@
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Delivery Time</label>
-                                                <input type="text" value="10 - 40 min">
+                                                <input type="time" name="delivery_time" value="{{ detail.delivery_time|time }}">
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Delivery Charge</label>
-                                                <input type="text" value="$2">
+                                                <input type="text" name="delivery_charge" value= "{{ detail.delivery_charge }}">
                                             </div>
                                         </div>
                                     </div>    
                                     <!-- form list -->                               
-                                    <div class="fm-ls sm-mb">
+                                    <!-- <div class="fm-ls sm-mb">
                                         <label>Types of Cuisines</label>
                                                 <select class="fd-ct" multiple="multiple">
                                                     <option></option>
@@ -105,10 +112,10 @@
                                                     <option>Snakers</option>
                                                     <option>Drinks</option>
                                                 </select>
-                                    </div>
+                                    </div> -->
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
-                                      <button class="sb-bt mx-auto d-flex">Update Restaurant Details</button>
+                                      <button type="submit" class="sb-bt mx-auto d-flex">Update Restaurant Details</button>
                                     </div>
                             </form>
                         </div>
