@@ -22,7 +22,3 @@ class ValidatingPasswordChangeForm(PasswordChangeForm):
 
         return password1
 
-# class RestaurantForm(forms.ModelForm):
-#     class Meta:
-#         model = models.Restaurant
-#         fields = ('', '', '', '', '', '', '', '', )
