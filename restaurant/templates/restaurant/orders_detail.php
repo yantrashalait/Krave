@@ -1,4 +1,5 @@
 {% include 'restaurant/header.php' %}
+{% load filters %}
                     <div class="it-ad-hl pd-tb-md">
                         <div class="rb-pd-rl">
                             <div class="it-ac-hd">
@@ -48,85 +49,39 @@
                                       </tr>
                                     </thead>
                                     <tbody>
+                                        {% for item in order.cart.all %}
                                       <tr>
                                         <td>
-                                            <span class="food_item_name order_det_ls">Super star with cheese</span>
+                                            <span class="food_item_name order_det_ls">{{ item.food.name }} (${{ item.food.new_price }})</span>
                                             <div class="food_modified-gp">
+                                                {% for modifier in item.modifier.all %}
                                                 <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
+                                                    <span class="fd-md-ttl d-flex">{{ modifier.name_of_ingredient }} (${{ modifier.cost_of_addition }})</span>
+                                                    <span class="fd-md-sp d-flex">{{ modifier.calories }}</span>
                                                 </div>
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
+                                                {% endfor %}
                                             </div>
                                         </td>
-                                        <td>1</td>
-                                        <td>$300</td>
+                                        <td>{{ item.number_of_food }}</td>
+                                        <td>${{ item.get_total }}</td>
                                       </tr>
-                                      <tr>
-                                        <td>
-                                            <span class="food_item_name order_det_ls">Super star with cheese</span>
-                                            <div class="food_modified-gp">
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>1</td>
-                                        <td>$200</td>
-                                      </tr>
-                                      <tr>
-                                        <td>
-                                            <span class="food_item_name order_det_ls">Super star with cheese</span>
-                                            <div class="food_modified-gp">
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                                <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">Add extra pitty ($3.6)</span>
-                                                    <span class="fd-md-sp d-flex">1/3lb pitty</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>3</td>
-                                        <td>$400</td>
-                                      </tr>
+                                      {% endfor %}
                                     </tbody>
                                 </table>
                                 <div class="carttotal-prcbx-hl">
                                     <div class="carttotal-prcbx">
                                         <div class="rws-inf">
                                             <span class="inftxt flt-lft">Subtotal</span>
-                                            <span class="inftxt-charge flt-rgt">$1700</span>
+                                            <span class="inftxt-charge flt-rgt" id="total_price" data-id="{{ order.cart.all|get_total_price }}">${{ order.cart.all|get_total_price }}</span>
                                         </div>
                                         <div class="rws-inf">
                                             <span class="inftxt flt-lft">Delivery Charge</span>
-                                            <span class="inftxt-charge flt-rgt">$100</span>
+                                            <span class="inftxt-charge flt-rgt" id="delivery_cost" data-id="{{ request.restaurant.delivery_charge }}">${{ request.restaurant.delivery_charge }}</span>
                                         </div>
 
                                         <div class="total-cartfrst-acor">
                                             <span class="totltxt flt-lft">Total</span>
-                                            <span class="inftxt-charge flt-rgt">$1800</span>
+                                            <span class="inftxt-charge flt-rgt" id="total"></span>
                                         </div>
                                         <div class="acpt-ord-btn-hl">
                                             <button class="acpt-ord-btn">Accept Order</button>
@@ -146,3 +101,11 @@
 
     </section>
     {% include 'restaurant/footer.php' %}
+    <script>
+        $(document).ready(function(){
+            var food_total = $("#total_price").attr("data-id");
+            var delivery_cost = $("#delivery_cost").attr("data-id");
+            var total = parseInt(food_total) + parseInt(delivery_cost);
+            $("#total").html("$" + total);
+        });
+    </script>
