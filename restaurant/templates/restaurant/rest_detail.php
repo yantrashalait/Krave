@@ -73,11 +73,11 @@
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Opening Time</label>
-                                                <input type="time" name="opening_time" value="{{ detail.opening_time|time }}">
+                                                <input type="time" name="opening_time" value="{{ detail.opening_time|time:'H:i' }}">
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Closing TIme</label>
-                                                <input type="time" name="closing_time" value="{{ detail.closing_time|time }}">
+                                                <input type="time" name="closing_time" value="{{ detail.closing_time|time:'H:i' }}">
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +86,7 @@
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Delivery Time</label>
-                                                <input type="time" name="delivery_time" value="{{ detail.delivery_time|time }}">
+                                                <input type="text" name="delivery_time" value="{{ detail.delivery_time }}" placeholder="20-30">
                                             </div>
                                             <div class="fm-hf-ls">
                                                 <label>Delivery Charge</label>
@@ -95,12 +95,19 @@
                                         </div>
                                     </div>    
                                     <!-- form list -->                               
-                                    <!-- <div class="fm-ls sm-mb">
+                                    <div class="fm-ls sm-mb">
                                         <label>Types of Cuisines</label>
-                                                <select class="fd-ct" multiple="multiple">
+                                        
+                                                <select name="cuisines" class="fd-ct" multiple="multiple">
                                                     <option></option>
-                                                    <option>Chef's Special</option>
-                                                    <option>Shakes & desert</option>
+                                                    {% for item in cuisine %}
+                                                    {% for selected_cuisine in rest_cuisine.cuisine.all %}
+                                                    {% if item == selected_cuisine %}
+                                                        <option selected>{{ item.name }}</option>
+                                                    {% else %}
+                                                        <option>{{ item.name }}</option>
+                                                    {% endif %}
+                                                    <!-- <option>Shakes & desert</option>
                                                     <option>Snakers</option>
                                                     <option>Drinks</option>
                                                     <option>Chef's Special</option>
@@ -110,9 +117,12 @@
                                                     <option>Chef's Special</option>
                                                     <option>Shakes & desert</option>
                                                     <option>Snakers</option>
-                                                    <option>Drinks</option>
+                                                    <option>Drinks</option> -->
+                                                    {% endfor %}
+                                                    {% endfor %}
                                                 </select>
-                                    </div> -->
+                                              
+                                    </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                       <button type="submit" class="sb-bt mx-auto d-flex">Update Restaurant Details</button>

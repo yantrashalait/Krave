@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
-from core.models import Order, FoodMenu, FoodCustomize, Restaurant
+from core.models import Order, FoodMenu, FoodCustomize, Restaurant, RestaurantCuisine, Cuisine
 from core.forms import FoodMenuForm, FoodMenuModifierForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
@@ -57,7 +57,10 @@ class RestaurantDetailView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['detail'] = Restaurant.objects.get(id=self.kwargs.get("rest_id"))
+        context['cuisine'] = Cuisine.objects.all()
+        context['rest_cuisine'] = RestaurantCuisine.objects.filter(restaurant_id=self.kwargs.get("rest_id"))
         return context
+        
 
 def edit_restaurant(request, *args, **kwargs):
     if request.method == 'POST':

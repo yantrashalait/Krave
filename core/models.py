@@ -45,13 +45,18 @@ class RestaurantImage(models.Model):
     image = models.ImageField(upload_to="restaurant/")
     main_image = models.BooleanField(help_text="Make this your main image to be displayed?", default=False)
 
-
-class RestaurantCuisine(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="cuisines")
+class Cuisine(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.restaurant.name + ' ' + self.name
+        return self.name
+
+class RestaurantCuisine(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="cuisines")
+    cuisine = models.ManyToManyField(Cuisine)
+
+    def __str__(self):
+        return self.restaurant.name + ' ' 
 
 
 """
