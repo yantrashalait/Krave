@@ -52,7 +52,7 @@ class Cuisine(models.Model):
         return self.name
 
 class RestaurantCuisine(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="cuisines")
+    restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name="cuisines")
     cuisine = models.ManyToManyField(Cuisine)
 
     def __str__(self):
