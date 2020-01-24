@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
-from core.models import Order, FoodMenu, FoodCustomize
+from core.models import Order, FoodMenu, FoodCustomize, Restaurant
 from core.forms import FoodMenuForm, FoodMenuModifierForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
@@ -53,6 +53,40 @@ class DashboardView(LoginRequiredMixin, CreateView):
 class RestaurantDetailView(LoginRequiredMixin, TemplateView):
     login_url = 'login'
     template_name = 'restaurant/rest_detail.php'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['detail'] = Restaurant.objects.get(id=self.kwargs.get("rest_id"))
+        return context
+
+def edit_restaurant(request, *args, **kwargs):
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        town = request.POST.get('town')
+        contact = request.POST.get('contact')
+        opening_time = request.POST.get('opening_time')
+        closing_time = request.POST.get('closing_time')
+        delivery_charge = request.POST.get('delivery_charge')
+        registration_number = request.POST.get('registration_number')
+        email = request.POST.get('email')
+        logo = request.FILES.get('logo')
+        delivery_time = request.POST.get('delivery_time')
+        rest_qs = request.restaurant
+        rest_qs.name = name
+        rest_qs.town = town
+        rest_qs.contact = contact
+        rest_qs.opening_time = opening_time
+        rest_qs.closing_time = closing_time
+        rest_qs.delivery_charge = delivery_charge
+        rest_qs.registration_number = registration_number
+        rest_qs.email = email
+        if logo != None:
+            rest_qs.logo = logo
+        rest_qs.delivery_time = delivery_time
+        rest_qs.save()
+        
+    return HttpResponseRedirect(reverse('restaurant:restaurant-detail', kwargs={'rest_id':request.restaurant.id}))
+
 
 
 class RestaurantEditView(LoginRequiredMixin, TemplateView):
