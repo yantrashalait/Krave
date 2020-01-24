@@ -58,12 +58,16 @@ class RestaurantDetailView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['detail'] = Restaurant.objects.get(id=self.kwargs.get("rest_id"))
         context['cuisine'] = Cuisine.objects.all()
-        context['rest_cuisine'] = RestaurantCuisine.objects.filter(restaurant_id=self.kwargs.get("rest_id"))
+        try:
+            context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
+        except:
+            pass
         return context
         
 
 def edit_restaurant(request, *args, **kwargs):
     if request.method == 'POST':
+        print(request.POST.get('cuisines'))
         name = request.POST.get('name')
         town = request.POST.get('town')
         contact = request.POST.get('contact')

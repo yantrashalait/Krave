@@ -94,33 +94,25 @@
                                             </div>
                                         </div>
                                     </div>    
+                                    {% if rest_cuisine %}
+                                    <div class="fm-ls sm-mb">
+                                        <label>Types of Cuisines Selected</label>
+                                        <p>
+                                            {% for item in rest_cuisine.cuisine.all %}
+                                            <span>{{ item.name }}</span>
+                                            {% endfor %}
+                                        </p>
+                                        
+                                    </div>
+                                    {% endif %}
                                     <!-- form list -->                               
                                     <div class="fm-ls sm-mb">
                                         <label>Types of Cuisines</label>
-                                        
-                                                <select name="cuisines" class="fd-ct" multiple="multiple">
-                                                    <option></option>
-                                                    {% for item in cuisine %}
-                                                    {% for selected_cuisine in rest_cuisine.cuisine.all %}
-                                                    {% if item == selected_cuisine %}
-                                                        <option selected>{{ item.name }}</option>
-                                                    {% else %}
-                                                        <option>{{ item.name }}</option>
-                                                    {% endif %}
-                                                    <!-- <option>Shakes & desert</option>
-                                                    <option>Snakers</option>
-                                                    <option>Drinks</option>
-                                                    <option>Chef's Special</option>
-                                                    <option>Shakes & desert</option>
-                                                    <option>Snakers</option>
-                                                    <option>Drinks</option>
-                                                    <option>Chef's Special</option>
-                                                    <option>Shakes & desert</option>
-                                                    <option>Snakers</option>
-                                                    <option>Drinks</option> -->
-                                                    {% endfor %}
-                                                    {% endfor %}
-                                                </select>
+                                        <select name="cuisines" class="fd-ct" multiple="multiple">
+                                            {% for item in cuisine %}
+                                                <option value="{{item.id}}">{{ item.name }}</option>
+                                            {% endfor %}
+                                        </select>
                                               
                                     </div>
                                     <!-- form list -->
