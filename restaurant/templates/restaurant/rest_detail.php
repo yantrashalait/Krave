@@ -97,12 +97,11 @@
                                     {% if rest_cuisine %} 
                                     <div class="fm-ls sm-mb">
                                         <label>Selected Cuisines</label>
-                                        
-                                        {% for item in rest_cuisine.cuisine.all %}
                                         <p>
-                                            <span>{{ item.name }}</span>
-                                        </p>
+                                        {% for item in rest_cuisine.cuisine.all %}
+                                            {{ item.name }}
                                         {% endfor %}
+                                        </p>
                                         
                                     </div>
                                     {% endif %}
@@ -110,10 +109,10 @@
                                     <div class="fm-ls sm-mb">
                                         <label>Types of Cuisines</label>
                                         
-                                            <select name="cuisines" class="fd-ct" multiple="multiple">
+                                            <select name="cuisines[]" class="fd-ct" multiple="multiple">
                                                 <option></option>
                                                 {% for item in cuisine %}
-                                                <option>{{ item.name }}</option>
+                                                <option value="{{ item.id }}">{{ item.name }}</option>
                                                 {% endfor %}
                                             </select>
                                               
