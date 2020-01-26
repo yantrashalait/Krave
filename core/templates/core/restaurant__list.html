@@ -42,8 +42,10 @@
 	  						<div class="restaut__serve__food">
 	  							<div class="food__serve__icon__restaut">
 	  								<i class="fa fa-stumbleupon-circle" aria-hidden="true"></i>
-	  							</div>
-	  							<span> Mullti-Cuisine</span>
+								</div>
+								{% for cuisine in item.cuisines.cuisine.all %}
+										<span>{{ cuisine.name }}, </span>
+								{% endfor %}
 	  						</div>
 	  						<div class="restaut__serve__food">
 	  							<div class="food__serve__icon__restaut">
