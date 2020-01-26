@@ -56,9 +56,11 @@ class RestaurantDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['detail'] = Restaurant.objects.get(id=self.kwargs.get("rest_id"))
         context['cuisine'] = Cuisine.objects.all()
-        context['rest_cuisine'] = RestaurantCuisine.objects.filter(restaurant_id=self.kwargs.get("rest_id"))
+        try:
+            context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
+        except:
+            pass
         return context
         
 
