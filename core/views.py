@@ -471,6 +471,7 @@ def place_order(request, *args, **kwargs):
 
         total += restaurant.delivery_charge
         order.total_price = total
+        order.paid = False
 
         if 'comment' in request.POST:
             message = request.POST.get('comment', '')
