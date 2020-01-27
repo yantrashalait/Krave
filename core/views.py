@@ -41,6 +41,8 @@ from django.contrib import messages
 import random
 import string
 
+from paypal.standard.forms import PayPalPaymentsForm
+
 
 def randomString(stringLength=6):
     """Generate a random string of fixed length """
@@ -469,6 +471,7 @@ def place_order(request, *args, **kwargs):
 
         total += restaurant.delivery_charge
         order.total_price = total
+        order.paid = False
 
         if 'comment' in request.POST:
             message = request.POST.get('comment', '')
@@ -492,6 +495,46 @@ def place_order(request, *args, **kwargs):
             item.save()
         order.save()
 
+        request.session['order_id'] = order.id
+        return redirect('core:process_payment')
         
 
     return HttpResponseRedirect('/')        
+
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.conf import settings
+from decimal import Decimal
+
+
+def process_payment(request):
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    host = request.get_host()
+ 
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': '%.2f' % order.total_price,
+        'item_name': 'Order {}'.format(order.id),
+        'invoice': str(order.id),
+        'currency_code': 'USD',
+        'notify_url': 'http://{}{}'.format(host,
+                                           reverse('paypal-ipn')),
+        'return_url': 'http://{}{}'.format(host,
+                                           reverse('core:payment_done')),
+        'cancel_return': 'http://{}{}'.format(host,
+                                              reverse('core:payment_cancelled')),
+    }
+ 
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    return render(request, 'core/process_payment.html', {'order': order, 'form': form})
+
+@csrf_exempt
+def payment_done(request):
+    del request.session['order_id']
+    return render(request, 'core/payment_done.html')
+ 
+ 
+@csrf_exempt
+def payment_canceled(request):
+    return render(request, 'core/payment_cancelled.html')

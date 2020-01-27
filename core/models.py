@@ -222,6 +222,7 @@ class Order(models.Model):
     added_date = models.DateTimeField(auto_now=True)
     total_price = models.FloatField(default=0)
     delivery_person = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="deliveries", null=True, blank=True, on_delete=models.DO_NOTHING)
+    paid = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.user.username    

@@ -66,6 +66,7 @@ class RestaurantDetailView(LoginRequiredMixin, TemplateView):
 
 def edit_restaurant(request, *args, **kwargs):
     if request.method == 'POST':
+        print(request.POST.get('cuisines'))
         name = request.POST.get('name')
         town = request.POST.get('town')
         contact = request.POST.get('contact')
