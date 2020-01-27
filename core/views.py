@@ -38,6 +38,17 @@ from user.models import UserProfile
 from user.forms import ValidatingPasswordChangeForm
 from django.contrib import messages
 
+import random
+import string
+
+
+def randomString(stringLength=6):
+    """Generate a random string of fixed length """
+    letters = string.ascii_uppercase
+    character = ''.join(random.choice(letters) for i in range(stringLength))
+    character = 'O' + character
+    return character
+
 
 def restaurant_register(request, *args, **kwargs):
     if request.method == 'GET':
@@ -252,6 +263,7 @@ class FoodCartListView(LoginRequiredMixin, ListView):
     context_object_name = 'lists'
 
     def get_queryset(self):
+        print(self.model.objects.filter(user=self.request.user, checked_out=False))
         return self.model.objects.filter(user=self.request.user, checked_out=False)
 
 
@@ -422,11 +434,7 @@ def add_to_order(request, *args, **kwargs):
                     if FoodCart.objects.filter(~Q(restaurant=restaurant), checked_out=False).exists():
                         return render(request, 'core/message.html', {'message': 'You have already ordered food from another restaurant. To place order from another restaurant, you need to checkout the first order.'})
 
-                cart, created = FoodCart.objects.get_or_create(
-                    food=food, 
-                    user=request.user, 
-                    number_of_food=quantity, 
-                    restaurant=restaurant)
+                cart = FoodCart.objects.create(food=food, user=request.user, number_of_food=quantity, restaurant=restaurant)
 
                 if 'optional_modifiers' in request.POST:
                     opt_modifiers = request.POST.getlist('optional_modifiers')
@@ -437,6 +445,7 @@ def add_to_order(request, *args, **kwargs):
                 if 'radio3' in request.POST:
                     modifier = FoodCustomize.objects.get(name_of_ingredient=request.POST.get('radio3', None), food=food)
                     cart.modifier.add(modifier)
+                cart.save()
             
         return HttpResponseRedirect(reverse('core:food-cart')) 
 
@@ -451,13 +460,32 @@ def place_order(request, *args, **kwargs):
         order = Order()
         order.user = request.user
         order.status = 0
-        order.payment_type = 1
+        order.payment = 1
         order.location_text = ''
+        total = 0
+        for item in FoodCart.objects.filter(user=request.user, checked_out=False):
+            total += item.get_total
+            restaurant = item.restaurant
+
+        total += restaurant.delivery_charge
+        order.total_price = total
+
         if 'comment' in request.POST:
             message = request.POST.get('comment', '')
             order.note = message
+        last_order = Order.objects.last()
+        if last_order:
+            order_id = Order.objects.last().id
+            order_id = order_id + 1
+        else:
+            order_id = 1
+        id_string = randomString() + str(order_id)
+        if Order.objects.filter(id_string=id_string).exists():
+            id_string = randomString + str(order_id)
+            order.id_string = id_string
+        else:
+            order.id_string = id_string
         order.save()
-
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             order.cart.add(item)
             item.checked_out = True

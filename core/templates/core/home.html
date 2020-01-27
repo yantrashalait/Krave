@@ -38,7 +38,9 @@
 			  </div>
   
 			  <div class="food__item_image">
-				<img src="{{ item.image.url }}">
+				{% if item.image %}
+					<img src="{{ item.image.url }}">
+				{% endif %}
 			  </div>
 			</div>
 		  </div>
@@ -47,6 +49,8 @@
 		</div>
 	  </div>
 	</section>
+	{% endblock %}
+	{% block popup %}
 	<div id="food__decspt__handler">
 	  <div id="food__descpt__popup" class="popup__food__info">
 		  <div class="popupcontent__holder">
@@ -106,7 +110,6 @@
 		  </div>
 	  </div> 
 	  </div>
-	  {% include 'core/footer.html' %}
   {% endblock %}
   {% block scripts %}
   <script>
@@ -141,8 +144,8 @@
 					  var desc = food_data[0].fields.description;
 					  $(".food__detail__description p").html(desc);
   
-					  // var base_url = "http://localhost:8000/";
-					  var base_url = "http://157.245.213.171:8000/";
+					//   var base_url = "http://localhost:8000/";
+					  var base_url = "http://krave.yantrashala.com/";
 					  var src1 = base_url + 'media/' + food_data[0].fields.image;
 					  $("#food_image").attr("src", src1);
   

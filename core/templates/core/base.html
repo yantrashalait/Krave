@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/owl.theme.default.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/simplemenu.css' %}">
-    <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
@@ -249,6 +249,9 @@
     </section>
     {% endif %}
     {% block content %}
+    {% endblock %}
+    {% include 'core/footer.html' %}
+    {% block popup %}
     {% endblock %}
     <script src="{% static 'js/jquery.min.js' %}"></script>
 	  <script src="{% static 'js/owl.carousel.min.js' %}"></script>

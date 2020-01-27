@@ -14,7 +14,7 @@ function readURL(input) {
   }
 }
 
-$("#imgInp").change(function() {
+$("#id_img").change(function() {
   readURL(this);
 });
 
@@ -32,12 +32,12 @@ $("#cl-bt").click(function (e) {
 });
 
 
-$("#cl-bt-rd").click(function (e) {
-    e.preventDefault();
-    var $self = $(this);
-    var cloneIndexrd = $(".md-gp-ls-rd").length;
-    $self.before($self.prev('.md-gp-ls-rd').clone().attr("id", "md-gp-ls-rd-id" +  cloneIndexrd));
-});
+// $("#cl-bt-rd").click(function (e) {
+//     e.preventDefault();
+//     var $self = $(this);
+//     var cloneIndexrd = $(".md-gp-ls-rd").length;
+//     $self.before($self.prev('.md-gp-ls-rd').clone().attr("id", "md-gp-ls-rd-id" +  cloneIndexrd));
+// });
 
 
 $('#fd-it-ls-dt').DataTable();

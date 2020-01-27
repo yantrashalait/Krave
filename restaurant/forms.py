@@ -2,6 +2,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 import re
 from django.core.exceptions import ValidationError
 from django import forms
+from core.models import Restaurant
 
 
 class ValidatingPasswordChangeForm(PasswordChangeForm):
@@ -20,3 +21,4 @@ class ValidatingPasswordChangeForm(PasswordChangeForm):
             raise ValidationError('Password must contain alphabet characters, special characters and numbers')
 
         return password1
+

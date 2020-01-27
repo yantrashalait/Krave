@@ -58,7 +58,9 @@
                     <div class="delivery__info__fees">
                      <span class="food_delivery_fee btns__fees">${{ restaurant.delivery_charge }} delivery fee</span>
                       <span class="food_delivery_time btns__fees">{{ restaurant.delivery_time }} min</span>
+                      {% if restaurant.location_point %}
                       <button id="more__info" class="resturent_more_info btns__fees">more info</button> 
+                      {% endif %}
                     </div>
                   </div>
                   </div>
@@ -116,7 +118,8 @@
     </section>
     {% endif %}
   {% endfor %}
-  {% include 'core/footer.html' %}
+  {% endblock %}
+  {% block popup %}
   <div id="more__inf__hldr">
     <div class="google__location__open__hrs" id="more__info__detail">
         <div class="popupcontent__holder">
@@ -199,10 +202,17 @@
 {% block scripts %}
 <script>
   $(".top__banner").css("background-image", "linear-gradient(to top,rgba(0,0,0,0.8),rgba(0,0,0,0.6)), url(" + "{{ main_image.0.image.url }}" + ")");
-  $("#more__info").click(function(){
+  var clicked = function(){
     $("#more__inf__hldr").css({'display': 'flex', 'position' : 'fixed'});
-    var y = {{ restaurant.location_point.y }};
-    var x = {{ restaurant.location_point.x }};
+    if ('{{ restaurant.location_point }}' === 'None'){
+      var y = 0;
+      var x = 0;
+      console.log('asdasdas');
+    }
+    else{
+      var y = {{ restaurant.location_point.y }};
+      var x = {{ restaurant.location_point.x }};
+    }
     var points = [y, x];
     console.log(points);
     
@@ -251,6 +261,9 @@
     });
     var marker = L.marker(points,{icon:icons}).addTo(map);
     marker.bindPopup("<b> {{restaurant.name}} </b>").openPopup();
+  }
+  $("#more__info").click(function(){
+    clicked();
   });
 
   $(document).ready(function(){

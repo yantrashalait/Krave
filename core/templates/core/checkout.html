@@ -113,6 +113,7 @@
                 <span>Total</span>
                 <span id="total"></span>
               </div>
+              <input id="total_price_order" type="text" value="" name="total_price_order" hidden />
               <div class="grand__total__button">
                 <button id="place_order">Place Order</button>
               </div>
@@ -139,7 +140,6 @@
     </div>
   </section>
   {% endif %}
-  {% include 'core/footer.html' %}
   {% endblock %}
   {% block scripts %}
   <script>
@@ -148,6 +148,7 @@
       var delivery_cost = $("#delivery_cost").attr("data-id");
       var total = parseInt(food_total) + parseInt(delivery_cost);
       $("#total").html("$" + total);
+      $("#total_price_order").val(total);
     });
 
     $("#place_order").on('click', function(){
