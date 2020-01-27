@@ -13,6 +13,6 @@ class RestaurantAdminMixin(object):
                 if request.role.group.name == 'restaurant-owner':
                     if UserRole.objects.filter(user=request.user, restaurant=restaurant).exists():
                         return super(RestaurantAdminMixin, self).dispatch(request, *args, **kwargs)
-        except:
-            raise PermissionDenied()
+        except Restaurant.DoesNotExist:
+            pass
         raise PermissionDenied()
