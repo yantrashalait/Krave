@@ -27,6 +27,7 @@
                 <div class="site_logo__holder">
                     <img src="{% static 'restaurant/images/logo.png' %}" alt="">
                 </div>
+                {% if request.restaurant.id %}
                 <div class="left__menu__lists">
                     <ul>
                         <li>
@@ -49,12 +50,14 @@
                         </li>
                     </ul>
                 </div>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-9 ml-auto">
             <div class="row">
                 <div class="right__body__sec">
                     <div class="pd-tb-md">
+                        {% if request.restaurant %}
                         <div class="rb-pd-rl rs-in-hl">
                             <div class="rs-in">
                                 <div class="rs-lg"> 
@@ -78,4 +81,5 @@
                                 <a class="ac-bt" href="{% url 'logout' %}">Logout</a>
                             </div>
                         </div>
+                        {% endif %}
                     </div>

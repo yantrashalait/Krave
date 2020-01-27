@@ -13,11 +13,11 @@ from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
 from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
-
+from .permissions import RestaurantAdminMixin
 
 ModifierImageFormset = inlineformset_factory(FoodMenu, FoodCustomize, form=FoodMenuModifierForm, fields=['name_of_ingredient', 'calories', 'cost_of_addition', 'type'], extra=1, max_num=10)
 
-class DashboardView(LoginRequiredMixin, CreateView):
+class DashboardView(RestaurantAdminMixin, CreateView):
     model = FoodMenu
     template_name = 'restaurant/index.php'
     form_class = FoodMenuForm
@@ -50,7 +50,7 @@ class DashboardView(LoginRequiredMixin, CreateView):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
 
 
-class RestaurantDetailView(LoginRequiredMixin, TemplateView):
+class RestaurantDetailView(RestaurantAdminMixin, TemplateView):
     login_url = 'login'
     template_name = 'restaurant/rest_detail.php'
 
@@ -102,12 +102,12 @@ def edit_restaurant(request, *args, **kwargs):
 
 
 
-class RestaurantEditView(LoginRequiredMixin, TemplateView):
+class RestaurantEditView(RestaurantAdminMixin, TemplateView):
     login_url = 'login'
     template_name = 'restaurant/rest_detail.php'
 
 
-class OrderView(LoginRequiredMixin, TemplateView):
+class OrderView(RestaurantAdminMixin, TemplateView):
     login_url = 'login'
     template_name = 'restaurant/orders.php'
 
@@ -117,12 +117,12 @@ class OrderView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class AcceptedOrderView(LoginRequiredMixin, TemplateView):
+class AcceptedOrderView(RestaurantAdminMixin, TemplateView):
     login_url = 'login'
     template_name = 'restaurant/accepted-orders.php'
 
 
-class MenuListView(LoginRequiredMixin, ListView):
+class MenuListView(RestaurantAdminMixin, ListView):
     login_url = 'login'
     model = FoodMenu
     template_name = 'restaurant/food-items.php'
@@ -132,7 +132,7 @@ class MenuListView(LoginRequiredMixin, ListView):
         return self.model.objects.filter(restaurant_id=self.kwargs.get('rest_id'))
 
 
-class MenuEditView(LoginRequiredMixin, UpdateView):
+class MenuEditView(RestaurantAdminMixin, UpdateView):
     model = FoodMenu
     template_name = 'restaurant/index.php'
     form_class = FoodMenuForm
@@ -171,7 +171,7 @@ class MenuEditView(LoginRequiredMixin, UpdateView):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
 
 
-class MenuDeleteView(LoginRequiredMixin, DeleteView):
+class MenuDeleteView(RestaurantAdminMixin, DeleteView):
     model = FoodMenu
     template_name = 'restaurant/food_confirm_delete.php'
 
@@ -199,7 +199,7 @@ def change_password(request, *args, **kwargs):
     return render(request, 'restaurant/change_password.html',{'form': form})
 
 
-class OrderDetailView(LoginRequiredMixin, DetailView):
+class OrderDetailView(RestaurantAdminMixin, DetailView):
     login_required = 'login'
     template_name = 'restaurant/orders_detail.php'
     model = Order
