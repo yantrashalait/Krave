@@ -25,6 +25,7 @@ class RoleMiddleware(MiddlewareMixin):
             try:
                 if request.user.is_anonymous():
                     request.user = Token.objects.get(key=token_key).user
+                    
             except:
                 pass
 
