@@ -56,7 +56,6 @@ class RestaurantDetailView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['detail'] = Restaurant.objects.get(id=self.kwargs.get("rest_id"))
         context['cuisine'] = Cuisine.objects.all()
         try:
             context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
@@ -91,7 +90,14 @@ def edit_restaurant(request, *args, **kwargs):
             rest_qs.logo = logo
         rest_qs.delivery_time = delivery_time
         rest_qs.save()
-        
+
+        rest_cuisine = RestaurantCuisine.objects.get(restaurant=rest_qs)
+        for item in request.POST.getlist('cuisines[]'):
+            id_ = int(item)
+            cuisine =  Cuisine.objects.get(id=id_)
+            if not cuisine in rest_cuisine.cuisine.all():
+                rest_cuisine.cuisine.add(cuisine)
+        rest_cuisine.save()        
     return HttpResponseRedirect(reverse('restaurant:restaurant-detail', kwargs={'rest_id':request.restaurant.id}))
 
 
