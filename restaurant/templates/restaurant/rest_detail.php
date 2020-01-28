@@ -154,7 +154,6 @@
     </section>
     
     {% include 'restaurant/footer.php' %}
-    <script src="http://maps.google.com/maps/api/js?v=3&key=AIzaSyC8uXN1u5FYIaGOUnVK90Rh3wR2Gmyw1uU"></script>
     <script>
         if ('{{ request.restaurant.location_point }}' != ''){
             var points = [{{ request.restaurant.latitude }}, {{ request.restaurant.longitude }}];
