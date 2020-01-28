@@ -226,3 +226,5 @@
             $('#id_modifierform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
         });
     </script>
+  </body>
+</html>

@@ -116,5 +116,12 @@ $("#user__detail__drp").css({'display' : 'none'})
 
 });// document ready
 
+$("#place_order").click(function(){
+  $("#order__place").css({'display' : 'block'})
+});
+
+$(".pop__up__order__placed___close").click(function(){
+ $("#order__place").css({'display' : 'none'})
+})
 
 })(window.jQuery);  

@@ -476,6 +476,13 @@ def place_order(request, *args, **kwargs):
         if 'comment' in request.POST:
             message = request.POST.get('comment', '')
             order.note = message
+
+        order.address1 = request.POST.get('address1', '')
+        order.address2 = request.POST.get('address2', '')
+        order.city = request.POST.get('city', '')
+        order.state = request.POST.get('state', '')
+        order.zip_code = request.POST.get('zip', '')
+
         last_order = Order.objects.last()
         if last_order:
             order_id = Order.objects.last().id

@@ -77,10 +77,6 @@
                 </div>
             </div>
             {% endfor %}
-            <form class="comment__box" id="order_form" method="post" action="{% url 'core:place-order' %}">
-              {% csrf_token %}
-              <textarea rows="3" cols="80" name="comment" form="" placeholder="Leave a note for the restaurant..."></textarea>
-            </form>
           </div>
         </div>
         <div class="col-md-6">
@@ -118,6 +114,8 @@
                 <button id="place_order">Place Order</button>
               </div>
             </div>
+            
+  
           </div>
           
         </div>
@@ -125,6 +123,7 @@
       </div>
     </div>
   </section>
+  
   {% else %}
   <section class="checkout">
     <div class="container">
@@ -140,6 +139,50 @@
     </div>
   </section>
   {% endif %}
+  <div class="place__order" id="order__place">
+    <div class="delivery__details">
+      <div class="pop__up__order__placed___close">
+        <span><i class="fa fa-times" aria-hidden="true"></i></span>
+      </div>
+      <hr>
+        <form action="{% url 'core:place-order' %}" method="POST">
+          {% csrf_token %}
+          <h5>DELIVERY ADDRESS</h5>
+          <div class="form-row">
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="address1" placeholder="Address 1" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="address2" placeholder="Address 2" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="city" placeholder="City" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="state" placeholder="State" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <input type="text" class="form-control" name="zip" placeholder="Zip Code" required>
+              </div>
+              <div class="col-md-12 mb-3">
+                <textarea class="form-control" name="comment" placeholder="Leave a note..." rows="3"></textarea>
+              </div>
+          </div>
+           <h5 class="head__payment">PAYMENT OPTIONS</h5>
+          <div class="payment__methods">
+            <div class="card paypal__mtd">
+              <img src="{% static 'images/Paypal.png' %}" alt="Paypal" title="Paypal">
+            </div>
+            <div class="card master__mtd">
+              <img src="{% static 'images/Master_Card.png' %}" alt="Master Card" title="Master Card">
+            </div>
+          </div>
+            <div class="col-md-6 mx-auto mb-3">
+              <button type="submit" id="order_submit" class="delivery__btn">Submit</button>
+          </div>
+        </form>
+    </div>
+</div>
   {% endblock %}
   {% block scripts %}
   <script>
@@ -151,8 +194,8 @@
       $("#total_price_order").val(total);
     });
 
-    $("#place_order").on('click', function(){
-      $("#order_form").submit();
-    });
+    // $("#place_order").on('click', function(){
+    //   $("#order_form").submit();
+    // });
   </script>
   {% endblock %}

@@ -3,7 +3,7 @@ import re
 from django.core.exceptions import ValidationError
 from django import forms
 from core.models import Restaurant
-
+from django.contrib.gis import forms as gisforms
 
 class ValidatingPasswordChangeForm(PasswordChangeForm):
     MIN_LENGTH = 8
@@ -21,4 +21,5 @@ class ValidatingPasswordChangeForm(PasswordChangeForm):
             raise ValidationError('Password must contain alphabet characters, special characters and numbers')
 
         return password1
+
 

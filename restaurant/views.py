@@ -8,12 +8,16 @@ from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
 from core.models import Order, FoodMenu, FoodCustomize, Restaurant, RestaurantCuisine, Cuisine
-from core.forms import FoodMenuForm, FoodMenuModifierForm
+from core.forms import FoodMenuForm, FoodMenuModifierForm, RestaurantForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
 from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from .permissions import RestaurantAdminMixin
+from django.contrib.gis.geos import Point
+import json
+from django.contrib.gis.geos import GEOSGeometry
+
 
 ModifierImageFormset = inlineformset_factory(FoodMenu, FoodCustomize, form=FoodMenuModifierForm, fields=['name_of_ingredient', 'calories', 'cost_of_addition', 'type'], extra=1, max_num=10)
 
@@ -50,25 +54,70 @@ class DashboardView(RestaurantAdminMixin, CreateView):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
 
 
-class RestaurantDetailView(RestaurantAdminMixin, TemplateView):
-    login_url = 'login'
+class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
     template_name = 'restaurant/rest_detail.php'
+    form_class = RestaurantForm
+    model = Restaurant
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_object(self):
+        id_ = self.kwargs.get('rest_id')
+        return get_object_or_404(Restaurant, pk=id_)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RestaurantDetailView, self).get_context_data(*args, **kwargs)
         context['cuisine'] = Cuisine.objects.all()
         try:
             context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
-        except:
+        except RestaurantCuisine.DoesNotExist:
             pass
         return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        longitude = float(self.request.POST.get('lon'))
+        latitude = float(self.request.POST.get('lat'))
+
+        location = Point(longitude, latitude)
+        self.object.location_point = location
+        self.object.save()
+        if 'cuisines[]' in self.request.POST:
+            rest_cuisine = RestaurantCuisine.objects.get(restaurant=self.object)
+            for item in request.POST.getlist('cuisines[]'):
+                id_ = int(item)
+                cuisine =  Cuisine.objects.get(id=id_)
+                if not cuisine in rest_cuisine.cuisine.all():
+                    rest_cuisine.cuisine.add(cuisine)
+            rest_cuisine.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id})
+
+
+
+# class RestaurantDetailView(RestaurantAdminMixin, TemplateView):
+#     login_url = 'login'
+#     template_name = 'restaurant/rest_detail.php'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['cuisine'] = Cuisine.objects.all()
+#         context['form'] = RestaurantForm(restaurant=self.request.restaurant)
+#         try:
+#             context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
+#         except:
+#             pass
+#         return context
         
 
 def edit_restaurant(request, *args, **kwargs):
     if request.method == 'POST':
-        print(request.POST.get('cuisines'))
+        form = RestaurantForm(request.POST)
         name = request.POST.get('name')
+        street = request.POST.get('street')
         town = request.POST.get('town')
+        state = request.POST.get('state')
+        zip_code = request.POST.get('zip_code')
         contact = request.POST.get('contact')
         opening_time = request.POST.get('opening_time')
         closing_time = request.POST.get('closing_time')
@@ -77,9 +126,14 @@ def edit_restaurant(request, *args, **kwargs):
         email = request.POST.get('email')
         logo = request.FILES.get('logo')
         delivery_time = request.POST.get('delivery_time')
+
+
         rest_qs = request.restaurant
         rest_qs.name = name
+        rest_qs.street = street
         rest_qs.town = town
+        rest_qs.state = state
+        rest_qs.zip_code = zip_code
         rest_qs.contact = contact
         rest_qs.opening_time = opening_time
         rest_qs.closing_time = closing_time
@@ -89,6 +143,28 @@ def edit_restaurant(request, *args, **kwargs):
         if logo != None:
             rest_qs.logo = logo
         rest_qs.delivery_time = delivery_time
+        
+        if form.is_valid():
+            print('asdsadsa')
+            print(form.cleaned_data['location_point'])
+
+        location = request.POST.get('location_point')
+        location = location.replace(" ", "")[1:-2]
+        coordinates_x = location.split(",")[1]
+        coordinates_y = location.split(",")[2]
+        longitude = coordinates_x.split(":[")[1]
+        latitude = float(coordinates_y)
+        longitude = float(longitude)
+        # latitude = latitude / 100000
+        # longitude = longitude / 100000
+        # longitude = str(longitude)
+        # latitude = str(latitude)
+        # print(longitude, latitude)
+        points = Point(longitude, latitude)
+        print(points)
+
+        location = GEOSGeometry('POINT(' + longitude + ' ' + latitude + ')')
+        rest_qs.location_point = location
         rest_qs.save()
 
         rest_cuisine = RestaurantCuisine.objects.get(restaurant=rest_qs)

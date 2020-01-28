@@ -7,11 +7,14 @@ from django.forms import widgets
 from django.db.models import Sum
 from django.core.validators import validate_email
 import re
-from .models import RestaurantRequest, FoodMenu, FoodCustomize, RestaurantFoodCategory
+from .models import RestaurantRequest, FoodMenu, FoodCustomize, RestaurantFoodCategory, Restaurant
 
 from django.contrib.gis.geos import Point
 
 from django.contrib.auth import get_user_model
+from django.contrib.gis import forms as gisforms
+from django.contrib.gis.geos import GEOSGeometry
+
 User = get_user_model()
 
 class RestaurantRequestForm(forms.ModelForm):
@@ -123,3 +126,27 @@ class  FoodMenuModifierForm(forms.ModelForm):
         model = FoodCustomize
         fields = ('name_of_ingredient', 'cost_of_addition', 'calories', 'type')
 
+
+class RestaurantForm(forms.ModelForm):
+    opening_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    closing_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    
+    class Meta:
+        model = Restaurant
+        fields = ('name', 'location_point', 'street', 'town', 'state', 'zip_code', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 'delivery_charge', 'logo', 'registration_number', 'email', 'delivery_time')
+
+    def __init__(self, *args, **kwargs):
+        super(RestaurantForm, self).__init__(*args, **kwargs)
+        if not self.fields['location_point'].initial:
+            self.fields['location_point'].initial = Point(-73.935242, 40.730610, srid=4326)
+        self.fields['name'].widget.attrs.update({'placeholder': 'Name of restaurant'})
+        self.fields['street'].widget.attrs.update({'placeholder': 'Street'})
+        self.fields['town'].widget.attrs.update({'placeholder': 'Town'})
+        self.fields['state'].widget.attrs.update({'placeholder': 'State'})
+        self.fields['zip_code'].widget.attrs.update({'placeholder': 'Zip Code'})
+        self.fields['contact'].widget.attrs.update({'placeholder': 'Contact Number'})
+        self.fields['delivery_upto'].widget.attrs.update({'placeholder': 'Accepted delivery location upto...'})
+        self.fields['delivery_charge'].widget.attrs.update({'placeholder': 'E.g. 4'})
+        self.fields['registration_number'].widget.attrs.update({'placeholder': 'Restaurant registration number'})
+        self.fields['email'].widget.attrs.update({'placeholder': 'Email of restaurant'})
+        self.fields['delivery_time'].widget.attrs.update({'placeholder': 'E.g. 10-20(in minutes)'})

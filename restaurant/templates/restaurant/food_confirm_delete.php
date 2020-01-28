@@ -27,3 +27,6 @@
 
     </section>
     {% include 'restaurant/footer.php' %}
+
+  </body>
+</html>

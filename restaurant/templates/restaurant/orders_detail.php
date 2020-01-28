@@ -109,3 +109,6 @@
             $("#total").html("$" + total);
         });
     </script>
+
+  </body>
+</html>

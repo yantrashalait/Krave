@@ -28,13 +28,13 @@ class Restaurant(models.Model):
 
     @property
     def longitude(self):
-        if self.location:
-            return self.location.x
+        if self.location_point:
+            return self.location_point.x
     
     @property
     def latitude(self):
-        if self.location:
-            return self.location.y        
+        if self.location_point:
+            return self.location_point.y        
 
     def __str__(self):
         return self.name
@@ -215,7 +215,6 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)
     payment = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
-    location_text = models.CharField(max_length=255, default='')
     location_point = PointField(geography=True, srid=4326, blank=True, null=True)
     note = models.TextField(default='')
     id_string = models.CharField(unique=True, default='', max_length=255)
@@ -223,6 +222,12 @@ class Order(models.Model):
     total_price = models.FloatField(default=0)
     delivery_person = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="deliveries", null=True, blank=True, on_delete=models.DO_NOTHING)
     paid = models.BooleanField(default=False)
+
+    address_line1 = models.CharField(max_length=255, default='')
+    address_line1 = models.CharField(max_length=255, default='')
+    city = models.CharField(max_length=255, default='')
+    state = models.CharField(max_length=255, default='')
+    zip_code = models.CharField(max_length=255, default='')
 
     def __unicode__(self):
         return self.user.username    
