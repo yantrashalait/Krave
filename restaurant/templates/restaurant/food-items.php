@@ -26,7 +26,7 @@
                                         <tr>
                                             <td>{{ item.name }}</td>
                                             <td>${{ item.new_price }}</td>
-                                            <td><a href="categories-detail.php">{{ item.category }}</a></td>
+                                            <td>{{ item.category }}</td>
                                             <td class="ac-bt-hl-fd-ls">
                                                 <a class="btn btn-primary" href="{% url 'restaurant:menu-edit' request.restaurant.id item.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                 <a class="btn btn-danger" href="{% url 'restaurant:menu-delete' request.restaurant.id item.id %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>

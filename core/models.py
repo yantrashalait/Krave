@@ -199,10 +199,11 @@ class FoodCart(models.Model):
 class Order(models.Model):
     STATUS_CHOICES = (
         (0, 'Pending'),
-        (1, 'Approved'),
-        (2, 'Rejected'),
-        (3, 'Prepared'),
-        (4, 'Delivered')
+        (1, 'Checked Out'),
+        (2, 'Approved'),
+        (3, 'Rejected'),
+        (4, 'Prepared'),
+        (5, 'Delivered')
     )
 
     PAYMENT_TYPE = (
@@ -216,7 +217,7 @@ class Order(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)
     payment = models.IntegerField(choices=PAYMENT_TYPE, null=True, blank=True)
     location_point = PointField(geography=True, srid=4326, blank=True, null=True)
-    note = models.TextField(default='')
+    note = models.TextField(default='', null=True, blank=True)
     id_string = models.CharField(unique=True, default='', max_length=255)
     added_date = models.DateTimeField(auto_now=True)
     total_price = models.FloatField(default=0)
@@ -224,7 +225,7 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
 
     address_line1 = models.CharField(max_length=255, default='')
-    address_line1 = models.CharField(max_length=255, default='')
+    address_line2 = models.CharField(max_length=255, default='')
     city = models.CharField(max_length=255, default='')
     state = models.CharField(max_length=255, default='')
     zip_code = models.CharField(max_length=255, default='')

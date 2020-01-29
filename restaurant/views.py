@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
-from core.models import Order, FoodMenu, FoodCustomize, Restaurant, RestaurantCuisine, Cuisine
+from core.models import Order, FoodMenu, FoodCustomize, Restaurant, RestaurantCuisine, Cuisine, RestaurantFoodCategory
 from core.forms import FoodMenuForm, FoodMenuModifierForm, RestaurantForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
@@ -17,6 +17,7 @@ from .permissions import RestaurantAdminMixin
 from django.contrib.gis.geos import Point
 import json
 from django.contrib.gis.geos import GEOSGeometry
+from django.db.models import Q
 
 
 ModifierImageFormset = inlineformset_factory(FoodMenu, FoodCustomize, form=FoodMenuModifierForm, fields=['name_of_ingredient', 'calories', 'cost_of_addition', 'type'], extra=1, max_num=10)
@@ -44,14 +45,21 @@ class DashboardView(RestaurantAdminMixin, CreateView):
             self.object.save()
             if modifierform.is_valid():
                 for form in modifierform:
-                    f = form.save(commit=False)
-                    f.food = self.object
-                    f.save()
-                return HttpResponseRedirect('/restaurant/' + str(self.request.restaurant.id))
+                    if form.cleaned_data.get('name_of_ingredient') != '':
+                        f = form.save(commit=False)
+                        f.food = self.object
+                        f.save()
+                        return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
+                return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(DashboardView, self).get_form_kwargs(*args, **kwargs)
+        kwargs['restaurant'] = self.request.restaurant
+        return kwargs
 
 
 class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
@@ -81,32 +89,42 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
         self.object.location_point = location
         self.object.save()
         if 'cuisines[]' in self.request.POST:
-            rest_cuisine = RestaurantCuisine.objects.get(restaurant=self.object)
+            rest_cuisine, created = RestaurantCuisine.objects.get_or_create(restaurant=self.object)
             for item in self.request.POST.getlist('cuisines[]'):
                 id_ = int(item)
                 cuisine =  Cuisine.objects.get(id=id_)
                 if not cuisine in rest_cuisine.cuisine.all():
                     rest_cuisine.cuisine.add(cuisine)
             rest_cuisine.save()
+        
+        if 'categories' in self.request.POST:
+            categories = self.request.POST.get('categories').replace(" ", "").split(',')
+            for item in categories:
+                RestaurantFoodCategory.objects.get_or_create(restaurant=self.object, category=item)
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id})
 
 
-class OrderView(RestaurantAdminMixin, TemplateView):
+class OrderView(RestaurantAdminMixin, ListView):
     login_url = 'login'
+    model = Order
     template_name = 'restaurant/orders.php'
+    context_object_name = 'orders'
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(OrderView, self).get_context_data(**kwargs)
-        context['orders'] = Order.objects.filter(cart__restaurant=self.request.restaurant, status=0)
-        return context
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1)
 
 
-class AcceptedOrderView(RestaurantAdminMixin, TemplateView):
+class AcceptedOrderView(RestaurantAdminMixin, ListView):
     login_url = 'login'
     template_name = 'restaurant/accepted-orders.php'
+    model = Order
+    context_object_name = "orders"
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(cart__restaurant=self.request.restaurant, status=2)
 
 
 class MenuListView(RestaurantAdminMixin, ListView):
@@ -153,6 +171,11 @@ class MenuEditView(RestaurantAdminMixin, UpdateView):
                     else:
                         return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
         return super().form_valid(form)
+    
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MenuEditView, self).get_form_kwargs(*args, **kwargs)
+        kwargs['restaurant'] = self.request.restaurant
+        return kwargs
 
     def get_success_url(self):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})

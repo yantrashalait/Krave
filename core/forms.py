@@ -104,10 +104,13 @@ class FoodMenuForm(forms.ModelForm):
     new_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
     calories = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Calories'}))
+    category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all())
 
     def __init__(self, *args, **kwargs):
+        restaurant = kwargs.pop('restaurant')
         super(FoodMenuForm, self).__init__(*args, **kwargs)
         self.fields['category'].widget.attrs.update({'class': 'fd-ct'})
+        self.fields['category'].queryset = RestaurantFoodCategory.objects.filter(restaurant=restaurant)
 
     class Meta:
         model = FoodMenu

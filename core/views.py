@@ -38,6 +38,11 @@ from user.models import UserProfile
 from user.forms import ValidatingPasswordChangeForm
 from django.contrib import messages
 
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.conf import settings
+from decimal import Decimal
+
 import random
 import string
 
@@ -461,8 +466,6 @@ def place_order(request, *args, **kwargs):
     if request.method == "POST":
         order = Order()
         order.user = request.user
-        order.status = 0
-        order.payment = 1
         order.location_text = ''
         total = 0
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
@@ -483,6 +486,13 @@ def place_order(request, *args, **kwargs):
         order.state = request.POST.get('state', '')
         order.zip_code = request.POST.get('zip', '')
 
+        if request.POST.get('payment') == 'cod':
+            order.payment = 1
+        elif request.POST.get('payment') == 'paypal':
+            order.payment = 2
+        else:
+            order.payment = 1
+
         last_order = Order.objects.last()
         if last_order:
             order_id = Order.objects.last().id
@@ -495,6 +505,8 @@ def place_order(request, *args, **kwargs):
             order.id_string = id_string
         else:
             order.id_string = id_string
+        
+        order.status = 1
         order.save()
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             order.cart.add(item)
@@ -503,15 +515,12 @@ def place_order(request, *args, **kwargs):
         order.save()
 
         request.session['order_id'] = order.id
-        return redirect('core:process_payment')
+
+        if order.payment == 2:
+            return redirect('core:process_payment')
         
 
     return HttpResponseRedirect('/')        
-
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages
-from django.conf import settings
-from decimal import Decimal
 
 
 def process_payment(request):

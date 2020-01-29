@@ -108,6 +108,16 @@
                                             </div>
                                         </div>
                                     </div>   
+                                    <div class="fm-ls sm-mb">
+                                        <label>Food categories your serve (separate with comma)</label>
+                                        <p>
+                                            {% for item in request.restaurant.food_category.all %}
+                                                {{ item.category }}, 
+                                            {% endfor %}
+                                        </p>
+                                        <input type="text" name="categories" placeholder="E.g. Burger, Sekuwa">
+                                    </div>
+
                                     {% if rest_cuisine %} 
                                     <div class="fm-ls sm-mb">
                                         <label>Selected Cuisines</label>
@@ -154,7 +164,7 @@
     
     {% include 'restaurant/footer.php' %}
     <script>
-        if ('{{ request.restaurant.location_point }}' != ''){
+        if ('{{ request.restaurant.location_point }}' != 'None'){
             var points = [{{ request.restaurant.latitude }}, {{ request.restaurant.longitude }}];
         }
         else{

@@ -170,11 +170,13 @@
           </div>
            <h5 class="head__payment">PAYMENT OPTIONS</h5>
           <div class="payment__methods">
+            <input type="radio" name="payment" value="paypal" required>
             <div class="card paypal__mtd">
               <img src="{% static 'images/Paypal.png' %}" alt="Paypal" title="Paypal">
             </div>
+            <input type="radio" name="payment" value="cod" required>
             <div class="card master__mtd">
-              <img src="{% static 'images/Master_Card.png' %}" alt="Master Card" title="Master Card">
+              <img style="width:64px; height:64px;" src="{% static 'images/cod.png' %}" alt="Paypal" title="Paypal">
             </div>
           </div>
             <div class="col-md-6 mx-auto mb-3">
