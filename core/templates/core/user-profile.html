@@ -24,15 +24,15 @@
         		<div class="user__profile__nav">
 	        		 <ul class="nav nav-tabs" role="tablist">
 		                <li class="nav-item">
-		                    <a class="nav-link active" data-toggle="tab" href="#home">
+		                    <a class="nav-link links active" data-toggle="tab" href="#home">
 		                        <i class="fa fa-user-o" aria-hidden="true"></i>My Profile</a>
 		                </li>
 		                <li class="nav-item">
-		                    <a class="nav-link" data-toggle="tab" href="#menu1">
+		                    <a class="nav-link links" id="password_link" data-toggle="tab" href="#menu1">
 		                        <i class="fa fa-key" aria-hidden="true"></i>Password</a>
 		                </li>
 		                <li class="nav-item">
-		                    <a class="nav-link" data-toggle="tab" href="#menu2">
+		                    <a class="nav-link links" data-toggle="tab" href="#menu2">
 		                        <i class="fa fa-shopping-basket" aria-hidden="true"></i>Order History</a>
 		                </li>
 		             </ul>
@@ -179,6 +179,13 @@
         var loadFile = function(event) {
             var image = document.getElementById('output');
             image.src = URL.createObjectURL(event.target.files[0]);
-        };
+		};
+		
+		if('{{ password_error }}' === '1'){
+			$(".nav-link").each(function(){
+				$(this).removeClass("active");
+			})
+			$("#password_link").trigger("click");
+		}
     </script>
     {% endblock %}

@@ -29,7 +29,7 @@ def userprofile(request, *args, **kwargs):
                 messages.success(request, 'Your password was successfully updated!')
                 return redirect(reverse_lazy('user:profile'))
             else:
-                return render(request, 'core/user-profile.html', {'profile': user_profile, 'password_form': password_form, 'password-reset': 1, 'order_history': past_orders, 'current_orders': current_orders})
+                return render(request, 'core/user-profile.html', {'password_error': 1, 'profile': user_profile, 'password_form': password_form, 'password-reset': 1, 'order_history': past_orders, 'current_orders': current_orders})
     else:
         password_form = ValidatingPasswordChangeForm(request.user)
         
