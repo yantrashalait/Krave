@@ -14,7 +14,8 @@ function readURL(input) {
   }
 }
 
-$("#id_img").change(function() {
+$("#id_logo").change(function() {
+  console.log('asdasd');
   readURL(this);
 });
 

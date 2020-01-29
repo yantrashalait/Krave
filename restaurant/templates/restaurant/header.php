@@ -80,7 +80,7 @@
                                 </div>
                             </div>
                             <div class="ac-bt-hl">
-                                <a class="ac-bt" href="{% url 'restaurant:restaurant-edit' request.restaurant.id %}">Edit</a>
+                                <a class="ac-bt" href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}">Edit</a>
                                 <a class="ac-bt" href="{% url 'logout' %}">Logout</a>
                             </div>
                         </div>

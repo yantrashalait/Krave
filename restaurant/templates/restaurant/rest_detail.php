@@ -22,8 +22,7 @@
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">
                                             <div class="up-im">
-                                                <!-- <input type='file' name="logo" id="imgInp" /> -->
-                                                {{ form.logo }}
+                                                <input type='file' name="logo" id="id_logo" />
                                                 <div class="up-im-bt">
                                                     <div class="up-im-cn">
                                                         <div class="up-im-bt-tl">
