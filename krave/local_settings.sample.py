@@ -22,7 +22,7 @@ DATABASES = {
 }
 
 from .settings import INSTALLED_APPS
-INSTALLED_APPS += ['paypal.standard.ipn']
+INSTALLED_APPS += ['paypal.standard.ipn', 'social_django']
 
 PAYPAL_TEST = True
 

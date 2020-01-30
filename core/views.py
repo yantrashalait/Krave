@@ -65,10 +65,8 @@ def restaurant_register(request, *args, **kwargs):
     if request.method == 'POST':
         form = RestaurantRequestForm(request.POST)
         if form.is_valid():
-            print('valid chaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             form.save()
         else:
-            print('not valid')
             return render(request, 'core/add_resturent.html', {'form': form})
         return HttpResponseRedirect('/')
 
@@ -181,6 +179,8 @@ class DashboardView(TemplateView):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             if self.request.user.groups.filter(name='restaurant-owner').exists():
+                if not self.request.restaurant.email:
+                    return HttpResponseRedirect(reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id}))
                 return HttpResponseRedirect(reverse('restaurant:dashboard', kwargs={'rest_id': self.request.restaurant.id}))
             else:
                 return render(self.request, self.template_name, context=self.get_context_data())

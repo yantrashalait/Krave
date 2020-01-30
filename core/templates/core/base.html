@@ -120,7 +120,7 @@
                       </div>
                       <div id="user__pofl_drpdown" class="popup__top profile nav__cart__list">
                         <a href="#">
-                          <img src="{% static 'images/user.png' %}" >                      
+                          <img src="{{ request.user.profile.first.image.url }}" alt="">                   
                         </a>
                       </div>    
                     </div>
@@ -166,7 +166,7 @@
                       </span>
                   </div>
                   <div class="user__prof__avatar">
-                      <img src="{% static 'images/user.png' %}" alt="">
+                      <img src="{{ request.user.profile.first.image.url }}" alt="">
                       <div class="user__name__edit">
                            <div class="avatar__name">
                             <span>{{ request.user.username }}</span>
