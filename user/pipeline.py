@@ -25,11 +25,11 @@ def email_validate(strategy, backend, uid, user, response, *args, **kwargs):
     # and email is in use
     if django_user_exists and not social_auth_user_exists:
         return {
-            'user':u
+            'user':user
         }
     else:
         return {
-            'user':u
+            'user':user
         }
 
 
@@ -41,12 +41,20 @@ def create_role(backend, uid, user, response, social=None, *args, **kwargs):
         social = backend.strategy.storage.user.create_social_auth(user, uid, backend.name)
    
     u = User.objects.get(email=email)
-
-    group = Group.objects.get(name="customer")
-    userrole = UserRole.objects.filter(user=u)
-    if not userrole:
-        UserRole.objects.create(user=u, group=group)
-    
+    try:
+        if u.user_roles.group.name == 'restaurant-owner':
+            pass
+        else:
+            group = Group.objects.get(name="customer")
+            userrole = UserRole.objects.filter(user=u)
+            if not userrole:
+                UserRole.objects.create(user=u, group=group)
+    except:
+        group = Group.objects.get(name="customer")
+        userrole = UserRole.objects.filter(user=u)
+        if not userrole:
+            UserRole.objects.create(user=u, group=group)
+        
     return {
         'social':social,
         'user':user,
@@ -60,6 +68,15 @@ def create_profile(strategy, backend, uid, user, response, social=None, *args, *
     redirect = strategy.redirect
 
     u = User.objects.get(email=email)
+    try:
+        if u.user_roles.group.name == 'restaurant-owner':
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+            restaurant_id = u.user_roles.restaurant.id
+            return HttpResponseRedirect(reverse('restaurant:dashboard', kwargs={'rest_id': restaurant_id}))
+    except:
+        pass
+
     try:
         profile = UserProfile.objects.get(user=u)
         user.backend = 'django.contrib.auth.backends.ModelBackend'
