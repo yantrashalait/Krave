@@ -445,12 +445,13 @@ def add_to_order(request, *args, **kwargs):
 
                 if 'optional_modifiers' in request.POST:
                     opt_modifiers = request.POST.getlist('optional_modifiers')
+                    print(opt_modifiers)
                     for item in opt_modifiers:
-                        modifier = FoodCustomize.objects.get(name_of_ingredient=item, food=food)
+                        modifier = FoodCustomize.objects.get(name_of_ingredient=item.replace("_", " "), food=food)
                         cart.modifier.add(modifier)
                 
                 if 'radio3' in request.POST:
-                    modifier = FoodCustomize.objects.get(name_of_ingredient=request.POST.get('radio3', None), food=food)
+                    modifier = FoodCustomize.objects.get(name_of_ingredient=request.POST.get('radio3', None).replace("_", " "), food=food)
                     cart.modifier.add(modifier)
                 cart.save()
             
