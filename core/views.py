@@ -508,11 +508,13 @@ def place_order(request, *args, **kwargs):
             order.id_string = id_string
         
         order.status = 1
+        order._runsignal = False
         order.save()
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             order.cart.add(item)
             item.checked_out = True
             item.save()
+        order._runsignal = True
         order.save()
 
         request.session['order_id'] = order.id
