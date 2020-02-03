@@ -110,6 +110,7 @@
 		  </div>
 	  </div> 
 	  </div>
+	{% include 'core/footer.html' %}
   {% endblock %}
   {% block scripts %}
   <script>
@@ -162,7 +163,7 @@
   
 					  modifiers.forEach(function(modifier){
 						if (modifier.fields.type === 1){
-						  var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" /><span> ' + modifier.fields.name_of_ingredient.split(' ').join('_') + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
+						  var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" value="' + modifier.fields.name_of_ingredient.split(' ').join('_') + '"/><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
 						}
 						$('#modifiers').append(modifier_content);
 					  });
