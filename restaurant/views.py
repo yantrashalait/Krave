@@ -191,6 +191,22 @@ class MenuDeleteView(RestaurantAdminMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
+    
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL. If the object is protected, send an error message.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        try:
+            self.object.delete()
+        except Exception as e:
+            error = e
+            return render(request, 'restaurant/food_confirm_delete.php', {'message': error})
+
+        return HttpResponseRedirect(success_url)
 
 
 @login_required

@@ -105,9 +105,15 @@ class FoodMenu(models.Model):
     calories = models.FloatField(null=True, blank=True, help_text="calories contained in this food")
     created_date = models.DateTimeField(auto_now=True)
     modified_date = models.DateTimeField(auto_now=True)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+    def delete(self, *args, **kwargs):
+        if FoodCart.objects.filter(food__pk=self.pk).exists():
+            raise Exception("Cannot delete food. This item is added in user's cart.")
+        super(FoodMenu, self).delete(*args, **kwargs)
 
 
 CUSTOMIZE_TYPE = (

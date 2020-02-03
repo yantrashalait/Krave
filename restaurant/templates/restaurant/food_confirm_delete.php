@@ -14,8 +14,12 @@
                             <div class="ad-fd-fm pd-tb-md">
                                 <form method="POST">
                                     {% csrf_token %}
+                                    {% if message %}
+                                    {{ message }}
+                                    {% else %}
                                     <p>Do you really want to delete "{{ object }}"?</p>
                                     <button class="btn btn-danger" >Confirm</button>
+                                    {% endif %}
                                 </form>
                             </div>
                     </div>
