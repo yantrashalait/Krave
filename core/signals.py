@@ -1,9 +1,10 @@
 from django.shortcuts import get_object_or_404
-from .models import Order
+from .models import Order, Notification, Restaurant
 from paypal.standard.ipn.signals import valid_ipn_received
 from django.dispatch import receiver
- 
- 
+from django.db.models.signals import post_save 
+
+
 @receiver(valid_ipn_received)
 def payment_notification(sender, **kwargs):
     ipn = sender
@@ -15,3 +16,10 @@ def payment_notification(sender, **kwargs):
             # mark the order as paid
             order.paid = True
             order.save()
+
+
+@receiver(post_save, sender=Order)
+def order_created_notification(sender, **kwargs):
+    print(**kwargs)
+
+
