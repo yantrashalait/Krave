@@ -39,8 +39,9 @@ def create_role(backend, uid, user, response, social=None, *args, **kwargs):
 
     if user and not social:
         social = backend.strategy.storage.user.create_social_auth(user, uid, backend.name)
-   
+    
     u = User.objects.get(email=email)
+    
     try:
         if u.user_roles.group.name == 'restaurant-owner':
             pass
