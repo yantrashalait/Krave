@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.gis.db.models import PointField
 from datetime import datetime
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import fields
 
 
 """
@@ -238,6 +240,22 @@ class Order(models.Model):
 
     def __unicode__(self):
         return self.user.username    
+
+
+class Notification(models.Model):
+    source = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = fields.GenericForeignKey('source', 'object_id')
+    destination = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications")
+    title = models.CharField(max_length=255)
+    food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="notifications", null=True, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="notifications", null=True, blank=True)
+    cart = models.ForeignKey(FoodCart, on_delete=models.CASCADE, related_name="notifications", null=True, blank=True)
+    date_created = models.DateTimeField(auto_now=True)
+    is_seen = models.BooleanField(default=False)
+    description = models.TextField(null=True, blank=True)                                                                                                                                                                                                                                                                                                                 
+
+
 
     
     

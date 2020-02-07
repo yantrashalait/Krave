@@ -31,11 +31,11 @@ class DashboardView(RestaurantAdminMixin, CreateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         if self.request.method == "POST":
             context['modifierform'] = ModifierImageFormset(self.request.POST, prefix='modifierform', instance=self.object)
-        
+
         else:
             context['modifierform'] = ModifierImageFormset(prefix='modifierform', instance=self.object)
         return context
-    
+
     def form_valid(self, form):
         context = self.get_context_data()
         modifierform = context['modifierform']
@@ -96,7 +96,7 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
                 if not cuisine in rest_cuisine.cuisine.all():
                     rest_cuisine.cuisine.add(cuisine)
             rest_cuisine.save()
-        
+
         if 'categories' in self.request.POST:
             categories = self.request.POST.get('categories').replace(" ", "").split(',')
             for item in categories:
@@ -150,11 +150,11 @@ class MenuEditView(RestaurantAdminMixin, UpdateView):
         context = super(MenuEditView, self).get_context_data(**kwargs)
         if self.request.method == "POST":
             context['modifierform'] = ModifierImageFormset(self.request.POST, prefix='modifierform', instance=self.object)
-        
+
         else:
             context['modifierform'] = ModifierImageFormset(prefix='modifierform', instance=self.object)
         return context
-    
+
     def form_valid(self, form):
         context = self.get_context_data()
         modifierform = context['modifierform']
@@ -171,7 +171,7 @@ class MenuEditView(RestaurantAdminMixin, UpdateView):
                     else:
                         return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
         return super().form_valid(form)
-    
+
     def get_form_kwargs(self, *args, **kwargs):
         kwargs = super(MenuEditView, self).get_form_kwargs(*args, **kwargs)
         kwargs['restaurant'] = self.request.restaurant
@@ -191,7 +191,7 @@ class MenuDeleteView(RestaurantAdminMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
-    
+
     def delete(self, request, *args, **kwargs):
         """
         Call the delete() method on the fetched object and then redirect to the
@@ -233,3 +233,13 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(Order, id=self.kwargs.get('order_id'))
+
+
+
+def accept_order(request, *args, **kwargs):
+    order = Order.objects.get(id=kwargs.get('order_id'))
+    order.status = 2
+    order._approved = True
+    order.save()
+
+    return redirect(reverse_lazy('restaurant:order', kwargs={'rest_id': request.restaurant.id}))

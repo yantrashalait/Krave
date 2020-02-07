@@ -32,7 +32,7 @@ def userprofile(request, *args, **kwargs):
                 return render(request, 'core/user-profile.html', {'password_error': 1, 'profile': user_profile, 'password_form': password_form, 'password-reset': 1, 'order_history': past_orders, 'current_orders': current_orders})
     else:
         password_form = ValidatingPasswordChangeForm(request.user)
-        
+
     return render(request, 'core/user-profile.html', {'profile': user_profile, 'password_form': password_form, 'order_history': past_orders, 'current_orders': current_orders})
 
 
@@ -50,7 +50,7 @@ def edit_profile(request, *args, **kwargs):
 
         if last_name != user.last_name:
             user.last_name = last_name
-        
+
         user.save()
         print(request.POST)
 
@@ -60,6 +60,5 @@ def edit_profile(request, *args, **kwargs):
         user_profile.zip_code = zip
         user_profile.image = image
         user_profile.save()
-        
-        return redirect(reverse_lazy('user:profile'))
 
+        return redirect(reverse_lazy('user:profile'))
