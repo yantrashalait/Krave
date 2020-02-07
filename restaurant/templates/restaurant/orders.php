@@ -32,8 +32,8 @@
                                                 {{ order.get_status_display }}
                                             </td>
                                             <td class="ac-bt-hl-fd-ls">
-                                                <button class="btn btn-primary">Accept</button>
                                                 <button class="btn btn-danger">Reject</button>
+                                                <a href="{% url 'restaurant:accept-order' order.id %}" class="btn btn-primary">Accept</a>
                                             </td>
                                         </tr>
                                         {% endfor %}

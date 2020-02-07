@@ -6,7 +6,7 @@
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -73,18 +73,18 @@
             </div>
             <div class="new__restaurant">
                 <a href="#"><div class="restaurant__content">
-                  
+
                   <h4>starting a new restaurant</h4>
-                <span>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</span>  
-                  
+                <span>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour.</span>
+
                 </div></a>
             </div>
             </div>
           </div>
         </div>
       </div>
-    </section>  
-<!-- responsive menu --> 
+    </section>
+<!-- responsive menu -->
   	<header>
       <div class="container">
         <div class="row">
@@ -104,7 +104,7 @@
                       </li>
                       </ul>
                     </div>
-                    
+
 
                     {% if request.user.is_authenticated %}
                     <div class="nav__cart">
@@ -112,17 +112,17 @@
                         <i class="fa fa-cart-arrow-down" aria-hidden="true">
                          <span>{{ cart_count }}</span>
                         </i>
-                      </div> 
+                      </div>
                       <div id="notify_drpdwn" class="popup__top nofify nav__cart__list">
                         <i class="fa fa-bell" aria-hidden="true">
-                          <span>2</span>
-                        </i>                        
+                          <span>{{ notification_count }}</span>
+                        </i>
                       </div>
                       <div id="user__pofl_drpdown" class="popup__top profile nav__cart__list">
                         <a href="#">
-                          <img src="{{ request.user.profile.first.image.url }}" alt="">                   
+                          <img src="{{ request.user.profile.first.image.url }}" alt="">
                         </a>
-                      </div>    
+                      </div>
                     </div>
                     {% else %}
                     <div class="nav__sec__user_signin">
@@ -184,7 +184,7 @@
                   </div>
                 </div>
               {% endif %}
-                
+
 
                </div>
           </div>
@@ -215,7 +215,7 @@
                 <div class="food__det__crt">
                   <div class="food__det__crt__lvl1">
                     {% for item in cart %}
-                    <div class="food__det__lstss">  
+                    <div class="food__det__lstss">
                       <div class="order__content__list">
                         <div class="order__content__list_content">
                           <span class="content__title">{{ item.food.name }}</span>
@@ -234,7 +234,7 @@
                     {% endfor %}
                   </div>
                 </div>
-              </div>              
+              </div>
             </div>
 
           </div>

@@ -25,7 +25,7 @@ def email_validate(strategy, backend, uid, user, response, *args, **kwargs):
     # and email is in use
     if django_user_exists and not social_auth_user_exists:
         return {
-            'user':user
+            'user':u
         }
     else:
         return {
@@ -39,9 +39,9 @@ def create_role(backend, uid, user, response, social=None, *args, **kwargs):
 
     if user and not social:
         social = backend.strategy.storage.user.create_social_auth(user, uid, backend.name)
-    
+
     u = User.objects.get(email=email)
-    
+
     try:
         if u.user_roles.group.name == 'restaurant-owner':
             pass
@@ -55,7 +55,7 @@ def create_role(backend, uid, user, response, social=None, *args, **kwargs):
         userrole = UserRole.objects.filter(user=u)
         if not userrole:
             UserRole.objects.create(user=u, group=group)
-        
+
     return {
         'social':social,
         'user':user,
