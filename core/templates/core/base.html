@@ -120,7 +120,11 @@
                       </div>
                       <div id="user__pofl_drpdown" class="popup__top profile nav__cart__list">
                         <a href="#">
+                          {% if request.user.profile.first.image %}
                           <img src="{{ request.user.profile.first.image.url }}" alt="">
+                          {% else %}
+                          <img src="{% static 'images/user.png' %}" alt="">
+                          {% endif %}
                         </a>
                       </div>
                     </div>
@@ -166,7 +170,11 @@
                       </span>
                   </div>
                   <div class="user__prof__avatar">
+                      {% if request.user.profile.first.image %}
                       <img src="{{ request.user.profile.first.image.url }}" alt="">
+                      {% else %}
+                      <img src="{% static 'images/user.png' %}" alt="">
+                      {% endif %}
                       <div class="user__name__edit">
                            <div class="avatar__name">
                             <span>{{ request.user.username }}</span>

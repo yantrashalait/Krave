@@ -44,6 +44,8 @@ def edit_profile(request, *args, **kwargs):
         address = request.POST.get('address')
         zip = request.POST.get('zip')
         image = request.POST.get('image')
+        print(request.POST)
+
         user = User.objects.get(id=request.user.id)
         if first_name != user.first_name:
             user.first_name = first_name
@@ -52,13 +54,13 @@ def edit_profile(request, *args, **kwargs):
             user.last_name = last_name
 
         user.save()
-        print(request.POST)
 
         user_profile, created = UserProfile.objects.get_or_create(user=user)
         user_profile.contact = contact
         user_profile.address = address
         user_profile.zip_code = zip
-        user_profile.image = image
+        if image != '':
+            user_profile.image = image
         user_profile.save()
 
         return redirect(reverse_lazy('user:profile'))

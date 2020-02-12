@@ -93,7 +93,7 @@ def acceptRequest(request, *args, **kwargs):
     req.accepted = True
     req.save()
 
-    # create user from the provided information in the request 
+    # create user from the provided information in the request
     username = generate_username(req.name)
     password = User.objects.make_random_password()
     email = req.email_of_owner
@@ -112,7 +112,7 @@ def acceptRequest(request, *args, **kwargs):
     registration_number = req.registration_number
 
     restaurant, created = Restaurant.objects.get_or_create(
-        name=name, 
+        name=name,
         contact=contact,
         owner=owner,
         registration_number=registration_number,
@@ -140,7 +140,7 @@ def acceptRequest(request, *args, **kwargs):
     email = EmailMessage(
         mail_subject, message, to=[to_email]
     )
-    email.send()    
+    email.send()
 
     return HttpResponseRedirect('/requests/')
 
@@ -175,7 +175,7 @@ class DashboardView(TemplateView):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['foods'] = FoodMenu.objects.order_by('-created_date')[:10]
         return context
-    
+
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             if self.request.user.groups.filter(name='restaurant-owner').exists():
@@ -190,7 +190,7 @@ class DashboardView(TemplateView):
 
 class RestaurantDetail(TemplateView):
     template_name = 'core/restaurant__detail.html'
-    
+
     def get_context_data(self, *args, **kwargs):
         context = super(RestaurantDetail, self).get_context_data(**kwargs)
         name = self.kwargs.get('rest_name').replace('_', ' ')
@@ -214,7 +214,7 @@ class RestaurantListView(ListView):
             object_list = self.model.objects.filter(name__icontains=name)
         else:
             object_list = self.model.objects.all()
-        
+
         return object_list
 
 
@@ -225,7 +225,7 @@ def search(request, *args, **kwargs):
     if request.method == 'POST':
         food_menu = FoodMenu.objects.filter(Q(name__icontains=request.POST.get('search', '')) | Q(category__category__icontains=request.POST.get('search', '')))
         return render(request, 'core/search.html', {'foods': food_menu})
-    
+
     else:
         return render(request, 'core/search.html')
 
@@ -260,7 +260,7 @@ class FoodListView(ListView):
             object_list = self.model.objects.filter(name__icontains=name)
         else:
             object_list = self.model.objects.all()
-        
+
         return object_list
 
 
@@ -424,7 +424,7 @@ def activate(request, uidb64, token):
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
-        if 'food_identifier' in request.POST:        
+        if 'food_identifier' in request.POST:
             if 'qty' in request.POST:
                 if int(request.POST.get('qty', 0)) < 1:
                     print('Items are less than 1') # here handle exception
@@ -449,13 +449,13 @@ def add_to_order(request, *args, **kwargs):
                     for item in opt_modifiers:
                         modifier = FoodCustomize.objects.get(name_of_ingredient=item.replace("_", " "), food=food)
                         cart.modifier.add(modifier)
-                
+
                 if 'radio3' in request.POST:
                     modifier = FoodCustomize.objects.get(name_of_ingredient=request.POST.get('radio3', None).replace("_", " "), food=food)
                     cart.modifier.add(modifier)
                 cart.save()
-            
-        return HttpResponseRedirect(reverse('core:food-cart')) 
+
+        return HttpResponseRedirect(reverse('core:food-cart'))
 
 
 """
@@ -472,6 +472,9 @@ def place_order(request, *args, **kwargs):
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             total += item.get_total
             restaurant = item.restaurant
+
+            item.checked_out = True
+            item.save()
 
         total += restaurant.delivery_charge
         order.total_price = total
@@ -506,7 +509,7 @@ def place_order(request, *args, **kwargs):
             order.id_string = id_string
         else:
             order.id_string = id_string
-        
+
         order.status = 1
         order._runsignal = False
         order.save()
@@ -521,16 +524,16 @@ def place_order(request, *args, **kwargs):
 
         if order.payment == 2:
             return redirect('core:process_payment')
-        
 
-    return HttpResponseRedirect('/')        
+
+    return HttpResponseRedirect('/')
 
 
 def process_payment(request):
     order_id = request.session.get('order_id')
     order = get_object_or_404(Order, id=order_id)
     host = request.get_host()
- 
+
     paypal_dict = {
         'business': settings.PAYPAL_RECEIVER_EMAIL,
         'amount': '%.2f' % order.total_price,
@@ -544,7 +547,7 @@ def process_payment(request):
         'cancel_return': 'http://{}{}'.format(host,
                                               reverse('core:payment_cancelled')),
     }
- 
+
     form = PayPalPaymentsForm(initial=paypal_dict)
     return render(request, 'core/process_payment.html', {'order': order, 'form': form})
 
@@ -552,8 +555,8 @@ def process_payment(request):
 def payment_done(request):
     del request.session['order_id']
     return render(request, 'core/payment_done.html')
- 
- 
+
+
 @csrf_exempt
 def payment_canceled(request):
     return render(request, 'core/payment_cancelled.html')
