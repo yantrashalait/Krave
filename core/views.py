@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
 from django.views.generic import DetailView, ListView, TemplateView, CreateView
-from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodCustomize, Order
+from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodExtra, FoodStyle, Order
 from django.conf import settings
 from userrole.models import UserRole
 from django.contrib.auth.models import Group

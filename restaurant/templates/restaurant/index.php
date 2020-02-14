@@ -3,25 +3,6 @@
                     <div class="rh-bd-tp-m-hl">
                         <div class="rb-pd-rl">
                             <div class="tp-m">
-                                <!-- <div class="fr-u">
-                                    <ul>
-                                        <li>
-                                            <a href="#">Overview</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Menus</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Categories</a>
-                                        </li>
-                                        <li class="active">
-                                            <a href="#">Items</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Modifier Groups</a>
-                                        </li>
-                                    </ul>
-                                </div> -->
                                 <div class="fr-pr">
                                     <ul>
                                         <li>
@@ -105,7 +86,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
@@ -124,83 +105,139 @@
                                     <!-- form list -->
 
                                     <!-- form list -->
-                                    {{ modifierform.management_form }}
-                                    {% for modifier_single in modifierform.forms %}
+                                    {{ styleform.management_form }}
                                     <div class="fm-ls sm-mb">
-                                        <label>Modifier Group (Required) Note: Some notes for Restaurant Owner</label>
-                                        <div class="md-gp">
+                                        <label>Styles that can come with the food item.</label>
+                                            <div class="md-gp">
+                                    {% for style_single in styleform.forms %}
                                             <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
                                                 <div style="display: none;">
-                                                    {{ modifier_single.id }}
+                                                    {{ style_single.id }}
                                                 </div>
                                                 <div class="md-gp-in">
                                                     <div class="md-gp-in-ls">
-                                                        <label>Modifier Name</label>
-                                                        {{ modifier_single.name_of_ingredient }}
-                                                        {% if modifier_single.name_of_ingredient.errors %}
-                                                        {{ modifier_single.name_of_ingredient.errors }}
+                                                        <label>Name of style*</label>
+                                                        {{ style_single.name_of_style }}
+                                                        {% if style_single.name_of_style.errors %}
+                                                        {{ style_single.name_of_style.errors }}
                                                         {% endif %}
                                                     </div>
                                                     <div class="md-gp-in-ls">
-                                                        <label>Modifier Price</label>
-                                                        {{ modifier_single.cost_of_addition }}
-                                                        {% if modifier_single.cost_of_addition.errors %}
-                                                        {{ modifier_single.cost_of_addition.errors }}
+                                                        <label>Price</label>
+                                                        {{ style_single.cost }}
+                                                        {% if style_single.cost.errors %}
+                                                        {{ style_single.cost.errors }}
                                                         {% endif %}
                                                     </div>
                                                     <div class="md-gp-in-ls">
-                                                        <label>Modifier Calories</label>
-                                                        {{ modifier_single.calories }}
-                                                        {% if modifier_single.calories.errors %}
-                                                        {{ modifier_single.calories.errors }}
-                                                        {% endif %}
-                                                    </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Type Of Modifier</label>
-                                                        {{ modifier_single.type }}
-                                                        {% if modifier_single.type.errors %}
-                                                        {{ modifier_single.type.errors }}
+                                                        <label>Calories</label>
+                                                        {{ style_single.calories }}
+                                                        {% if style_single.calories.errors %}
+                                                        {{ style_single.calories.errors }}
                                                         {% endif %}
                                                     </div>
                                                 </div>
                                             </div>
-                                            {% for error in modifier_single.errors %}
+                                            {% for error in style_single.errors %}
                                             <p>{{ error }}</p>
                                             {% endfor %}
-                                            {% with modifierform.empty_form as form %}
-                                            <div id="modifierempty_form" style="display:none">
+                                            {% with styleform.empty_form as form %}
+                                            <div id="styleempty_form" style="display:none">
                                                 <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
                                                     <div class="md-gp-in">
                                                         <div style="display: none;">
                                                             {{ form.id }}
                                                         </div>
                                                         <div class="md-gp-in-ls">
-                                                            <label>Modifier Name</label>
-                                                            {{ form.name_of_ingredient }}
+                                                            <label>Name of style*</label>
+                                                            {{ form.name_of_style }}
                                                         </div>
                                                         <div class="md-gp-in-ls">
-                                                            <label>Modifier Price</label>
-                                                            {{ form.cost_of_addition }}
+                                                            <label>Price</label>
+                                                            {{ form.cost }}
                                                         </div>
                                                         <div class="md-gp-in-ls">
-                                                            <label>Modifier Calories</label>
+                                                            <label>Calories</label>
                                                             {{ form.calories }}
-                                                        </div>
-                                                        <div class="md-gp-in-ls">
-                                                            <label>Type Of Modifier</label>
-                                                            {{ form.type }}
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             {% endwith %}
-                                            <button class="md-gp-bt" id="cl-bt-rd">Add More Modifier</button>
-                                        </div>
-                                    </div>
+
                                     {% endfor %}
-                                    
+                                    <button class="md-gp-bt" id="cl-bt-rd">Add More Styles</button>
+                                    </div>
+                                  </div>
+
+
                                     <!-- form list -->
 
+                                    {{ extraform.management_form }}
+                                    <div class="fm-ls sm-mb">
+                                        <label>Extras that can come with the food item.</label>
+                                        <div class="md-gp">
+                                    {% for extra_single in extraform.forms %}
+                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                                <div style="display: none;">
+                                                    {{ extra_single.id }}
+                                                </div>
+                                                <div class="md-gp-in">
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Name of extra*</label>
+                                                        {{ extra_single.name_of_extra }}
+                                                        {% if extra_single.name_of_extra.errors %}
+                                                        {{ extra_single.name_of_extra.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Price</label>
+                                                        {{ extra_single.cost }}
+                                                        {% if extra_single.cost.errors %}
+                                                        {{ extra_single.cost.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                    <div class="md-gp-in-ls">
+                                                        <label>Calories</label>
+                                                        {{ extra_single.calories }}
+                                                        {% if extra_single.calories.errors %}
+                                                        {{ extra_single.calories.errors }}
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% for error in extra_single.errors %}
+                                            <p>{{ error }}</p>
+                                            {% endfor %}
+                                            {% with extraform.empty_form as form %}
+                                            <div id="extraempty_form" style="display:none">
+                                                <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                                    <div class="md-gp-in">
+                                                        <div style="display: none;">
+                                                            {{ form.id }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Name of extra*</label>
+                                                            {{ form.name_of_extra }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Price</label>
+                                                            {{ form.cost }}
+                                                        </div>
+                                                        <div class="md-gp-in-ls">
+                                                            <label>Calories</label>
+                                                            {{ form.calories }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endwith %}
+
+                                    {% endfor %}
+                                    <button class="md-gp-bt" id="cl-bt-rd-et">Add More Extras</button>
+                                  </div>
+                                </div>
+                                    <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                       <button class="sb-bt mx-auto d-flex">Add Food Item</button>
                                     </div>
@@ -214,16 +251,25 @@
         </div>
 
     </section>
-    
-    {% include 'restaurant/footer.php' %} 
+
+    {% include 'restaurant/footer.php' %}
     <script>
         $("#cl-bt-rd").click(function (e) {
             e.preventDefault();
             var $self = $(this);
-            var form_idx = $('#id_modifierform-TOTAL_FORMS').val();
+            var form_idx = $('#id_styleform-TOTAL_FORMS').val();
             var cloneIndexrd = $(".md-gp-ls-rd").length;
-            $self.before($('#modifierempty_form').html().replace(/__prefix__/g, form_idx));
-            $('#id_modifierform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            $self.before($('#styleempty_form').html().replace(/__prefix__/g, form_idx));
+            $('#id_styleform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        });
+
+        $("#cl-bt-rd-et").click(function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            var form_idx = $('#id_extraform-TOTAL_FORMS').val();
+            var cloneIndexrd = $(".md-gp-ls-rd").length;
+            $self.before($('#extraempty_form').html().replace(/__prefix__/g, form_idx));
+            $('#id_extraform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
         });
     </script>
   </body>

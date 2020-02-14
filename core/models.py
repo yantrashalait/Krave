@@ -23,7 +23,7 @@ class Restaurant(models.Model):
     delivery_charge = models.FloatField(help_text="Delivery charges in dollars", null=True, blank=True)
     owner = models.CharField(max_length=500, null=True, blank=True)
     logo = models.ImageField(upload_to="restaurant/logo/", null=True, blank=True)
-    registration_number = models.CharField(max_length=500, null=True, blank=True)   
+    registration_number = models.CharField(max_length=500, null=True, blank=True)
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
     delivery_time = models.CharField(default='', max_length=200)
@@ -32,11 +32,11 @@ class Restaurant(models.Model):
     def longitude(self):
         if self.location_point:
             return self.location_point.x
-    
+
     @property
     def latitude(self):
         if self.location_point:
-            return self.location_point.y        
+            return self.location_point.y
 
     def __str__(self):
         return self.name
@@ -58,11 +58,11 @@ class RestaurantCuisine(models.Model):
     cuisine = models.ManyToManyField(Cuisine)
 
     def __str__(self):
-        return self.restaurant.name + ' ' 
+        return self.restaurant.name + ' '
 
 
 """
-    This model stores the food categories 
+    This model stores the food categories
 """
 class RestaurantFoodCategory(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='food_category')
@@ -123,15 +123,24 @@ CUSTOMIZE_TYPE = (
     (2, 'required')
 )
 
-class FoodCustomize(models.Model):
-    food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="customizes")
-    name_of_ingredient = models.CharField(max_length=500, help_text="Name of ingredient that can be added")
-    cost_of_addition = models.FloatField(help_text="Cost of additional ingredient per unit(in dollars)")
-    type = models.IntegerField(choices=CUSTOMIZE_TYPE)
+class FoodStyle(models.Model):
+    food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="styles")
+    name_of_style = models.CharField(max_length=255, help_text="Style that comes with this food.")
+    cost = models.FloatField(help_text="Cost of style(in dollars)", null=True, blank=True)
     calories = models.CharField(max_length=100, null=True, blank=True, help_text="calories contained in this ingredient(in cal)")
 
     def __str__(self):
-        return self.name_of_ingredient
+        return self.name_of_style
+
+
+class FoodExtra(models.Model):
+    food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="extras")
+    name_of_extra = models.CharField(max_length=255, help_text="Extra things that can come with the food")
+    cost = models.FloatField(help_text="Cost of extras(in dollars)", null=True, blank=True)
+    calories = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return self.name_of_extra
 
 
 class FoodReview(models.Model):
@@ -141,7 +150,7 @@ class FoodReview(models.Model):
 
     def __str__(self):
         return self.food.name + ' ' + self.user.username
-    
+
 
 class FoodRating(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="food_rating")
@@ -172,7 +181,7 @@ class RestaurantRequest(models.Model):
     def longitude(self):
         if self.location:
             return self.location.x
-    
+
     @property
     def latitude(self):
         if self.location:
@@ -189,7 +198,8 @@ class FoodCart(models.Model):
     added_on = models.DateTimeField(auto_now=True)
     modified_on = models.DateTimeField(auto_now=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
-    modifier = models.ManyToManyField(FoodCustomize, related_name='orders')
+    style = models.ForeignKey(FoodStyle, related_name='cart', on_delete=models.CASCADE, null=True, blank=True)
+    extras = models.ManyToManyField(FoodExtra, related_name='cart')
     checked_out = models.BooleanField(default=False)
 
     def __str__(self):
@@ -239,7 +249,7 @@ class Order(models.Model):
     zip_code = models.CharField(max_length=255, default='')
 
     def __unicode__(self):
-        return self.user.username    
+        return self.user.username
 
 
 class Notification(models.Model):
@@ -253,13 +263,4 @@ class Notification(models.Model):
     cart = models.ForeignKey(FoodCart, on_delete=models.CASCADE, related_name="notifications", null=True, blank=True)
     date_created = models.DateTimeField(auto_now=True)
     is_seen = models.BooleanField(default=False)
-    description = models.TextField(null=True, blank=True)                                                                                                                                                                                                                                                                                                                 
-
-
-
-    
-    
-
-
-
-
+    description = models.TextField(null=True, blank=True)

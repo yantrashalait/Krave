@@ -7,7 +7,7 @@ from django.forms import widgets
 from django.db.models import Sum
 from django.core.validators import validate_email
 import re
-from .models import RestaurantRequest, FoodMenu, FoodCustomize, RestaurantFoodCategory, Restaurant
+from .models import RestaurantRequest, FoodMenu, FoodStyle, FoodExtra, RestaurantFoodCategory, Restaurant
 
 from django.contrib.gis.geos import Point
 
@@ -117,23 +117,34 @@ class FoodMenuForm(forms.ModelForm):
         fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'calories', 'image')
 
 
-class  FoodMenuModifierForm(forms.ModelForm):
-    type = forms.ChoiceField(widget=forms.Select(attrs={'class': 'fd-ct'}), choices=((1, "Optional"), (2, "Required")))
+class  FoodMenuStyleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(FoodMenuModifierForm, self).__init__(*args, **kwargs)
-        self.fields['name_of_ingredient'].required = False
-        self.fields['cost_of_addition'].required = False
+        super(FoodMenuStyleForm, self).__init__(*args, **kwargs)
+        self.fields['name_of_style'].required = False
+        self.fields['cost'].required = False
 
     class Meta:
-        model = FoodCustomize
-        fields = ('name_of_ingredient', 'cost_of_addition', 'calories', 'type')
+        model = FoodStyle
+        fields = ('name_of_style', 'cost', 'calories')
 
+
+class FoodMenuExtraForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(FoodMenuExtraForm, self).__init__(*args, **kwargs)
+        self.fields['name_of_extra'].required = False
+        self.fields['cost'].required = False
+
+    class Meta:
+        model = FoodExtra
+        fields = ('name_of_extra', 'cost', 'calories')
+        
 
 class RestaurantForm(forms.ModelForm):
     opening_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
     closing_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
-    
+
     class Meta:
         model = Restaurant
         fields = ('name', 'location_point', 'street', 'town', 'state', 'zip_code', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 'delivery_charge', 'logo', 'registration_number', 'email', 'delivery_time')

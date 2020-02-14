@@ -7,8 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
-from core.models import Order, FoodMenu, FoodCustomize, Restaurant, RestaurantCuisine, Cuisine, RestaurantFoodCategory
-from core.forms import FoodMenuForm, FoodMenuModifierForm, RestaurantForm
+from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, Cuisine, RestaurantFoodCategory
+from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
 from django.db import transaction
@@ -20,7 +20,8 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.db.models import Q
 
 
-ModifierImageFormset = inlineformset_factory(FoodMenu, FoodCustomize, form=FoodMenuModifierForm, fields=['name_of_ingredient', 'calories', 'cost_of_addition', 'type'], extra=1, max_num=10)
+StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'calories', 'cost',], extra=1, max_num=10)
+ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'calories', 'cost'], extra=1, max_num=10)
 
 class DashboardView(RestaurantAdminMixin, CreateView):
     model = FoodMenu
@@ -30,26 +31,35 @@ class DashboardView(RestaurantAdminMixin, CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
         if self.request.method == "POST":
-            context['modifierform'] = ModifierImageFormset(self.request.POST, prefix='modifierform', instance=self.object)
+            context['styleform'] = StyleFormSet(self.request.POST, prefix='styleform', instance=self.object)
+            context['extraform'] = ExtraFormSet(self.request.POST, prefix='extraform', instance=self.object)
 
         else:
-            context['modifierform'] = ModifierImageFormset(prefix='modifierform', instance=self.object)
+            context['styleform'] = StyleFormSet(prefix='styleform', instance=self.object)
+            context['extraform'] = ExtraFormSet(prefix='extraform', instance=self.object)
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
-        modifierform = context['modifierform']
+        styleform = context['styleform']
+        extraform = context['extraform']
         with transaction.atomic():
             self.object = form.save(commit=False)
             self.object.restaurant = self.request.restaurant
             self.object.save()
-            if modifierform.is_valid():
-                for form in modifierform:
-                    if form.cleaned_data.get('name_of_ingredient') != '':
+            if styleform.is_valid() and extraform.is_valid():
+                for form in styleform:
+                    if form.cleaned_data.get('name_of_style') != '':
                         f = form.save(commit=False)
                         f.food = self.object
                         f.save()
-                        return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
+
+                for form in extraform:
+                    if form.cleaned_data.get('name_of_extra') != '':
+                        f = form.save(commit=False)
+                        f.food = self.object
+                        f.save()
+
                 return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
         return super().form_valid(form)
 
@@ -149,27 +159,35 @@ class MenuEditView(RestaurantAdminMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         context = super(MenuEditView, self).get_context_data(**kwargs)
         if self.request.method == "POST":
-            context['modifierform'] = ModifierImageFormset(self.request.POST, prefix='modifierform', instance=self.object)
+            context['styleform'] = StyleFormSet(self.request.POST, prefix='styleform', instance=self.object)
+            context['extraform'] = ExtraFormSet(self.request.POST, prefix='extraform', instance=self.object)
 
         else:
-            context['modifierform'] = ModifierImageFormset(prefix='modifierform', instance=self.object)
+            context['styleform'] = StyleFormSet(prefix='styleform', instance=self.object)
+            context['extraform'] = ExtraFormSet(prefix='extraform', instance=self.object)
         return context
 
     def form_valid(self, form):
         context = self.get_context_data()
-        modifierform = context['modifierform']
+        styleform = context['styleform']
+        extraform = context['extraform']
         self.object = form.save()
 
         with transaction.atomic():
-            if modifierform.is_valid():
-                for form in modifierform:
-                    if form.cleaned_data.get('name_of_ingredient') != '':
+            if styleform.is_valid() and extraform.is_valid():
+                for form in styleform:
+                    if form.cleaned_data.get('name_of_style') != '':
                         f = form.save(commit=False)
                         f.food = self.object
                         f.save()
-                        return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
-                    else:
-                        return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
+                for form in extraform:
+                    if form.cleaned_data.get('name_of_extra') != '':
+                        f = form.save(commit=False)
+                        f.food = self.object
+                        f.save()
+
+                return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
+
         return super().form_valid(form)
 
     def get_form_kwargs(self, *args, **kwargs):
