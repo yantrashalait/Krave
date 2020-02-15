@@ -16,6 +16,7 @@
                                             <th>Date</th>
                                             <th>Transaction</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -30,6 +31,9 @@
                                             </td>
                                             <td>
                                                 {{ order.get_status_display }}
+                                            </td>
+                                            <td class="ac-bt-hl-fd-ls">
+                                                <a href="{% url 'restaurant:ready-order' order.id %}" class="btn btn-primary">Ready For Delivery</a>
                                             </td>
                                         </tr>
                                         {% endfor %}

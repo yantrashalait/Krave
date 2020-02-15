@@ -19,6 +19,7 @@ urlpatterns = [
     path('password/change', views.change_password, name='change-password'),
 
     path('order/accept/<int:order_id>', views.accept_order, name="accept-order"),
+    path('order/ready/<int:order_id>', views.ready_order, name="ready-order"),
 
 
 ]

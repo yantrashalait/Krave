@@ -59,4 +59,14 @@ def order_approved_notification(sender, instance, created, **kwargs):
         pass
 
 
+@receiver(post_save, sender=Order)
+def order_prepared_notification(sender, instance, created, **kwargs):
+    try:
+        if instance._prepared:
+            pass
+    except:
+        pass
+
+
 post_save.connect(order_created_notification, sender=Order)
+post_save.connect(order_approved_notification, sender=Order)

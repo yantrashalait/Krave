@@ -266,3 +266,12 @@ def accept_order(request, *args, **kwargs):
     order.save()
 
     return redirect(reverse_lazy('restaurant:order', kwargs={'rest_id': request.restaurant.id}))
+
+
+def ready_order(request, *args, **kwargs):
+    order = Order.objects.get(id=kwargs.get('order_id'))
+    order.status = 4
+    order._prepared = True
+    order.save()
+
+    return redirect(reverse_lazy('restaurant:order', kwargs={'rest_id': request.restaurant.id}))
