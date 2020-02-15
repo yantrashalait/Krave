@@ -80,10 +80,6 @@
                                                 <label>New Price</label>
                                                 {{ form.new_price }}
                                             </div>
-                                            <div class="fm-hf-ls">
-                                                <label>Calories</label>
-                                                {{ form.calories }}
-                                            </div>
                                         </div>
                                     </div>
 
@@ -129,13 +125,6 @@
                                                         {{ style_single.cost.errors }}
                                                         {% endif %}
                                                     </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Calories</label>
-                                                        {{ style_single.calories }}
-                                                        {% if style_single.calories.errors %}
-                                                        {{ style_single.calories.errors }}
-                                                        {% endif %}
-                                                    </div>
                                                 </div>
                                             </div>
                                             {% for error in style_single.errors %}
@@ -155,10 +144,6 @@
                                                         <div class="md-gp-in-ls">
                                                             <label>Price</label>
                                                             {{ form.cost }}
-                                                        </div>
-                                                        <div class="md-gp-in-ls">
-                                                            <label>Calories</label>
-                                                            {{ form.calories }}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -197,13 +182,6 @@
                                                         {{ extra_single.cost.errors }}
                                                         {% endif %}
                                                     </div>
-                                                    <div class="md-gp-in-ls">
-                                                        <label>Calories</label>
-                                                        {{ extra_single.calories }}
-                                                        {% if extra_single.calories.errors %}
-                                                        {{ extra_single.calories.errors }}
-                                                        {% endif %}
-                                                    </div>
                                                 </div>
                                             </div>
                                             {% for error in extra_single.errors %}
@@ -224,10 +202,6 @@
                                                             <label>Price</label>
                                                             {{ form.cost }}
                                                         </div>
-                                                        <div class="md-gp-in-ls">
-                                                            <label>Calories</label>
-                                                            {{ form.calories }}
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -239,7 +213,11 @@
                                 </div>
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
+                                      {% if form.instance.pk %}
+                                      <button class="sb-bt mx-auto d-flex">Edit Food Item</button>
+                                      {% else %}
                                       <button class="sb-bt mx-auto d-flex">Add Food Item</button>
+                                      {% endif %}
                                     </div>
                                 </form>
                             </div>

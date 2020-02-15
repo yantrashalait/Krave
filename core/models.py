@@ -98,13 +98,12 @@ class FoodMenu(models.Model):
     category = models.ForeignKey(RestaurantFoodCategory, on_delete=models.CASCADE, related_name="food")
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    ingredients = models.TextField(null=True)
+    ingredients = models.TextField(null=True, blank=True)
     old_price = models.FloatField(null=True, blank=True)
     new_price = models.FloatField()
     # The preparation time of each food may vary according to the restaurant.
     preparation_time = models.CharField(max_length=100, null=True)
     image = models.ImageField(upload_to='menu/', null=True, blank=True)
-    calories = models.FloatField(null=True, blank=True, help_text="calories contained in this food")
     created_date = models.DateTimeField(auto_now=True)
     modified_date = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
@@ -127,7 +126,6 @@ class FoodStyle(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="styles")
     name_of_style = models.CharField(max_length=255, help_text="Style that comes with this food.")
     cost = models.FloatField(help_text="Cost of style(in dollars)", null=True, blank=True)
-    calories = models.CharField(max_length=100, null=True, blank=True, help_text="calories contained in this ingredient(in cal)")
 
     def __str__(self):
         return self.name_of_style
@@ -137,7 +135,6 @@ class FoodExtra(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="extras")
     name_of_extra = models.CharField(max_length=255, help_text="Extra things that can come with the food")
     cost = models.FloatField(help_text="Cost of extras(in dollars)", null=True, blank=True)
-    calories = models.CharField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.name_of_extra

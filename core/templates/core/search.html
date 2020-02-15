@@ -58,7 +58,6 @@
           </div>
           <div class="food__detail__description">
               <h3></h3>
-              <span></span>
               <p class="food__content__popup"></p>
           </div>
           <form method="post">
@@ -142,8 +141,6 @@
 
                     $(".food__detail__description h3").html(food_data[0].fields.name);
 
-                    var cal = food_data[0].fields.calories + 'cal';
-                    $(".food__detail__description span").html(cal);
 
                     var desc = food_data[0].fields.description;
                     $(".food__detail__description p").html(desc);
@@ -158,7 +155,7 @@
         					  styles = data.styles;
         					  styles = jQuery.parseJSON(styles);
         					  styles.forEach(function(style){
-        							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span><span class="qnty__cals">'+ style.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
+        							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
         							$('#styles').append(style_content);
         					  });
 

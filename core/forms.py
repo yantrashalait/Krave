@@ -103,7 +103,6 @@ class FoodMenuForm(forms.ModelForm):
     old_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Old Price'}))
     new_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
-    calories = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Calories'}))
     category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all())
 
     def __init__(self, *args, **kwargs):
@@ -114,7 +113,7 @@ class FoodMenuForm(forms.ModelForm):
 
     class Meta:
         model = FoodMenu
-        fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'calories', 'image')
+        fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'image')
 
 
 class  FoodMenuStyleForm(forms.ModelForm):
@@ -126,7 +125,7 @@ class  FoodMenuStyleForm(forms.ModelForm):
 
     class Meta:
         model = FoodStyle
-        fields = ('name_of_style', 'cost', 'calories')
+        fields = ('name_of_style', 'cost')
 
 
 class FoodMenuExtraForm(forms.ModelForm):
@@ -138,8 +137,8 @@ class FoodMenuExtraForm(forms.ModelForm):
 
     class Meta:
         model = FoodExtra
-        fields = ('name_of_extra', 'cost', 'calories')
-        
+        fields = ('name_of_extra', 'cost')
+
 
 class RestaurantForm(forms.ModelForm):
     opening_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))

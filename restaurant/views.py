@@ -20,8 +20,8 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.db.models import Q
 
 
-StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'calories', 'cost',], extra=1, max_num=10)
-ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'calories', 'cost'], extra=1, max_num=10)
+StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'cost',], extra=1, max_num=10)
+ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'cost'], extra=1, max_num=10)
 
 class DashboardView(RestaurantAdminMixin, CreateView):
     model = FoodMenu

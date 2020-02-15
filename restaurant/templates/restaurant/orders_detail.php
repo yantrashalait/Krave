@@ -57,7 +57,6 @@
                                                 {% for extra in item.extras.all %}
                                                 <div class="food_modified">
                                                     <span class="fd-md-ttl d-flex">{{ extra.name_of_extra }} (${{ extra.cost }})</span>
-                                                    <span class="fd-md-sp d-flex">{{ extra.calories }}</span>
                                                 </div>
                                                 {% endfor %}
                                             </div>
