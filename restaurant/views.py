@@ -274,4 +274,4 @@ def ready_order(request, *args, **kwargs):
     order._prepared = True
     order.save()
 
-    return redirect(reverse_lazy('restaurant:order', kwargs={'rest_id': request.restaurant.id}))
+    return redirect(reverse_lazy('restaurant:accepted-order', kwargs={'rest_id': request.restaurant.id}))

@@ -3,7 +3,7 @@
                         <div class="rb-pd-rl">
                             <div class="it-ac-hd">
                                 <div class="sc-hd">
-                                    <h1>List of Orders</h1>
+                                    <h1>List of Pending Orders</h1>
                                 </div>
                             </div>
                             <!-- heading -->
