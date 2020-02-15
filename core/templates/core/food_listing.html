@@ -18,7 +18,7 @@
         <div class="col-lg-6 col-sm-6">
           <form class="search-box" method="get">
             <input class="search-input" type="text" placeholder="Search restaurant here.." name="name">
-            
+
             <button type="submit" class="search-smt"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
           </form>
         </div>
@@ -61,10 +61,19 @@
             {% csrf_token %}
           <div class="select__option__food">
             <div class="top__select__intro">
-              <span class="option__head">Select option</span>
-              <span>Required</span>
+                <span class="option__head">Select Style</span>
+                <span>Required</span>
             </div>
-            <div class="popup__content__wrapper" id="modifiers">
+            <div class="popup__content__wrapper" id="styles">
+
+            </div>
+
+            <div class="top__select__intro">
+                <span class="option__head">Select Extra</span>
+                <span>Required</span>
+            </div>
+            <div class="popup__content__wrapper" id="extras">
+
             </div>
             <div class="popup__content__wrapper">
               <!-- <div class="customize__item__popup">
@@ -79,12 +88,12 @@
             </div>
             <div class="popup__divider__line"></div>
             <div class="add__order__popup">
-              <div class="pop__up__add__sub">    
+              <div class="pop__up__add__sub">
                 <p>
                   <span id="minus1" class="qty__btn food__qty__dec minus">
                   <img src="{% static 'images/food__pop__desc.png' %}" alt="">
                   </span>
-      
+
                   <input id="qty1" type="text" value="1" name="qty" class="qty" />
                   <span id="add1" class="qty__btn food__qty__inc add" >
                   <img src="{% static 'images/food__pop__inc.png' %}" alt="">
@@ -102,11 +111,11 @@
           </div>
           </form>
         </div>
-    </div> 
+    </div>
     </div>
     {% include 'core/footer.html' %}
     {% endblock %}
-    
+
 
 {% block scripts %}
 <script>
@@ -129,12 +138,12 @@
 
                     // console.log(food_data.food[0].fields);
                     $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
-                    
+
                     $(".food__detail__description h3").html(food_data[0].fields.name);
 
                     var id_of_food = food_data[0].pk;
                     $("#food__id").val(id_of_food);
-                    
+
                     var cal = food_data[0].fields.calories + 'cal';
                     $(".food__detail__description span").html(cal);
 
@@ -149,28 +158,29 @@
                     var src1 = base_url + 'media/' + food_data[0].fields.image;
                     $("#food_image").attr("src", src1);
 
-                    $("#modifiers").html('');
-                    var modifiers = [];
-                    modifiers = data.modifiers;
-                    modifiers = jQuery.parseJSON(modifiers);
-                    modifiers.forEach(function(modifier){
-                      if (modifier.fields.type === 2){
-                        var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" name="radio3" value="'+ modifier.fields.name_of_ingredient.split(' ').join('_') +'" class="mgr mgr-success mgr-lg" /><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
-                      }
-                      $('#modifiers').append(modifier_content);
-                    });
+                    $("#styles").html('');
+        					  var styles = [];
+        					  styles = data.styles;
+        					  styles = jQuery.parseJSON(styles);
+        					  styles.forEach(function(style){
+        							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span><span class="qnty__cals">'+ style.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
+        							$('#styles').append(style_content);
+        					  });
 
-                    modifiers.forEach(function(modifier){
-                      if (modifier.fields.type === 1){
-                        var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" class="mgc mgc-success mgc-lg" value="'+ modifier.fields.name_of_ingredient.split(' ').join('_') +'" /><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
-                      }
-                      $('#modifiers').append(modifier_content);
-                    });
+        						$("#extras").html('');
+        					  var extras = [];
+        					  extras = data.extras;
+        					  extras = jQuery.parseJSON(extras);
+
+        					  extras.forEach(function(extra){
+        						  var extra_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input name="extras" type="checkbox" class="mgc mgc-success mgc-lg" value="' + extra.fields.name_of_extra.split(' ').join('_') + '"/><span> ' + extra.fields.name_of_extra + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ extra.fields.cost + '</span></div></div>';
+        							$('#extras').append(extra_content);
+        					  });
                 }
             });
-            
+
         });
-        
+
     });
     $("#food__detail").on('submit', function(e){
       if (jQuery('input[type=radio][name=radio3]').length){

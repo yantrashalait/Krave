@@ -19,7 +19,7 @@
         <div class="row align-items-center">
           <div class="col-lg-8">
             <div class="resturent_details">
-                  <div class="resturent__logo"> 
+                  <div class="resturent__logo">
                     {% if restaurant.logo %}
                         <img src="{{ restaurant.logo.url }}">
                       {% else %}
@@ -36,7 +36,7 @@
                             <a href="#">{{ item.name }}</a>
                           {% endfor %}
                         </li>
-                      </ul> 
+                      </ul>
                     </div>
                   </div>
                   <div class="res_info__bottom">
@@ -52,19 +52,19 @@
 
                         </div>
                         <div class="details__review___and__address">
-                            <span class="resturent_address">{{ restaurant.street }}, {{ restaurant.town }}, {{ restaurant.state }} - {{ restaurant.zip_code }}</span>                        
+                            <span class="resturent_address">{{ restaurant.street }}, {{ restaurant.town }}, {{ restaurant.state }} - {{ restaurant.zip_code }}</span>
                         </div>
                     </div>
                     <div class="delivery__info__fees">
                      <span class="food_delivery_fee btns__fees">${{ restaurant.delivery_charge }} delivery fee</span>
                       <span class="food_delivery_time btns__fees">{{ restaurant.delivery_time }} min</span>
                       {% if restaurant.location_point %}
-                      <button id="more__info" class="resturent_more_info btns__fees">more info</button> 
+                      <button id="more__info" class="resturent_more_info btns__fees">more info</button>
                       {% endif %}
                     </div>
                   </div>
                   </div>
-            </div>           
+            </div>
           </div>
           <div class="col-lg-4">
             <div class="resturent__opening__time">
@@ -132,7 +132,7 @@
                 <span class="location__cordinates">
                   <i class="fa fa-map-marker" aria-hidden="true"></i>
                   <a href="#">{{ restaurant.street }}, {{ restaurant.town }}, {{ restaurant.state }} - {{ restaurant.zip_code }}</a>
-                </span>        
+                </span>
               </div>
           </div>
         </div>
@@ -154,11 +154,19 @@
             {% csrf_token %}
             <div class="select__option__food">
               <div class="top__select__intro">
-                  <span class="option__head">Select option</span>
+                  <span class="option__head">Select Style</span>
                   <span>Required</span>
               </div>
-              <div class="popup__content__wrapper" id="modifiers">
-                
+              <div class="popup__content__wrapper" id="styles">
+
+              </div>
+
+              <div class="top__select__intro">
+                  <span class="option__head">Select Extra</span>
+                  <span>Required</span>
+              </div>
+              <div class="popup__content__wrapper" id="extras">
+
               </div>
               <div class="popup__content__wrapper">
                   <!-- <div class="customize__item__popup">
@@ -173,7 +181,7 @@
               </div>
               <div class="popup__divider__line"></div>
               <div class="add__order__popup">
-                  <div class="pop__up__add__sub">    
+                  <div class="pop__up__add__sub">
                       <p>
                         <span id="minus1" class="qty__btn food__qty__dec minus">
                           <img src="{% static 'images/food__pop__desc.png' %}" alt="">
@@ -196,7 +204,7 @@
             </div>
         </form>
       </div>
-   </div> 
+   </div>
   </div>
   {% include 'core/footer.html' %}
 {% endblock %}
@@ -216,7 +224,7 @@
     }
     var points = [y, x];
     console.log(points);
-    
+
     var map = L.map('map').setView(points, 19);
 
     var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -286,12 +294,12 @@
 
                   // console.log(food_data.food[0].fields);
                   $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
-                  
+
                   $(".food__detail__description h3").html(food_data[0].fields.name);
 
                   var id_of_food = food_data[0].pk;
                   $("#food__id").val(id_of_food);
-                  
+
                   var cal = food_data[0].fields.calories + 'cal';
                   $(".food__detail__description span").html(cal);
 
@@ -303,27 +311,28 @@
                   var src1 = base_url + 'media/' + food_data[0].fields.image;
                   $("#food_image").attr("src", src1);
 
-                  $("#modifiers").html('');
-                  var modifiers = [];
-                  modifiers = data.modifiers;
-                  modifiers = jQuery.parseJSON(modifiers);
-                  modifiers.forEach(function(modifier){
-                    if (modifier.fields.type === 2){
-                      var modifier_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" name="radio3" value="'+ modifier.fields.name_of_ingredient.split(' ').join('_') +'" class="mgr mgr-success mgr-lg"/><span> ' + modifier.fields.name_of_ingredient + '</span><span class="qnty__cals">'+ modifier.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + modifier.fields.cost_of_addition + '</span></div></div>'
-                    }
-                    $('#modifiers').append(modifier_content);
-                  });
+                  $("#styles").html('');
+      					  var styles = [];
+      					  styles = data.styles;
+      					  styles = jQuery.parseJSON(styles);
+      					  styles.forEach(function(style){
+      							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span><span class="qnty__cals">'+ style.fields.calories + ' cal</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
+      							$('#styles').append(style_content);
+      					  });
 
-                  modifiers.forEach(function(modifier){
-                    if (modifier.fields.type === 1){
-                      var modifier_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input type="checkbox" name="optional_modifiers" value="' + modifier.fields.name_of_ingredient.split(' ').join('_') + '" class="mgc mgc-success mgc-lg" /><span> ' + modifier.fields.name_of_ingredient + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ modifier.fields.cost_of_addition + '</span></div></div>';
-                    }
-                    $('#modifiers').append(modifier_content);
-                  });
+      						$("#extras").html('');
+      					  var extras = [];
+      					  extras = data.extras;
+      					  extras = jQuery.parseJSON(extras);
+
+      					  extras.forEach(function(extra){
+      						  var extra_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input name="extras" type="checkbox" class="mgc mgc-success mgc-lg" value="' + extra.fields.name_of_extra.split(' ').join('_') + '"/><span> ' + extra.fields.name_of_extra + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ extra.fields.cost + '</span></div></div>';
+      							$('#extras').append(extra_content);
+      					  });
               }
           });
-          
-      });           
+
+      });
   });
 
   // for category nav scroll

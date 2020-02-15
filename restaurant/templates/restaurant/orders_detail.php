@@ -38,7 +38,7 @@
                                             <p>No Instructions Available</p>
                                         {% endif %}
                                     </div>
-                                    
+
                             <div class="order-pop-table">
                                 <table class="table table-striped checkout-first-accor">
                                     <thead>
@@ -52,12 +52,12 @@
                                         {% for item in order.cart.all %}
                                       <tr>
                                         <td>
-                                            <span class="food_item_name order_det_ls">{{ item.food.name }} (${{ item.food.new_price }})</span>
+                                            <span class="food_item_name order_det_ls">{{ item.food.name }}{% if item.style %}-{{ item.style.name_of_style }} (${{ item.style.cost }}){% else %} (${{ item.food.new_price }}){% endif %}</span>
                                             <div class="food_modified-gp">
-                                                {% for modifier in item.modifier.all %}
+                                                {% for extra in item.extras.all %}
                                                 <div class="food_modified">
-                                                    <span class="fd-md-ttl d-flex">{{ modifier.name_of_ingredient }} (${{ modifier.cost_of_addition }})</span>
-                                                    <span class="fd-md-sp d-flex">{{ modifier.calories }}</span>
+                                                    <span class="fd-md-ttl d-flex">{{ extra.name_of_extra }} (${{ extra.cost }})</span>
+                                                    <span class="fd-md-sp d-flex">{{ extra.calories }}</span>
                                                 </div>
                                                 {% endfor %}
                                             </div>
@@ -88,7 +88,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>  
+                            </div>
 
                                 </div>
                             </div>

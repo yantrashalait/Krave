@@ -208,9 +208,13 @@ class FoodCart(models.Model):
     @property
     def get_total(self):
         total = 0
-        for item in self.modifier.all():
-            total += item.cost_of_addition
-        total += self.food.new_price * self.number_of_food
+        for item in self.extras.all():
+            total += item.cost
+
+        if self.style:
+            total += self.style.cost * self.number_of_food
+        else:
+            total += self.food.new_price * self.number_of_food
         return total
 
 

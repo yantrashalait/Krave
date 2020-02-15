@@ -236,10 +236,12 @@ def search(request, *args, **kwargs):
 def get_food_detail(request, *args, **kwargs):
     if request.method == 'GET':
         food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
-        customization = food.customizes.all()
+        styles = food.styles.all()
+        extras = food.extras.all()
         food = serializers.serialize('json', [food])
-        customization = serializers.serialize('json', customization)
-        data = {'food': food, 'modifiers': customization}
+        styles = serializers.serialize('json', styles)
+        extras = serializers.serialize('json', extras)
+        data = {'food': food, 'styles': styles, 'extras': extras}
         return JsonResponse(data, safe=False)
 
 
@@ -270,7 +272,6 @@ class FoodCartListView(LoginRequiredMixin, ListView):
     context_object_name = 'lists'
 
     def get_queryset(self):
-        print(self.model.objects.filter(user=self.request.user, checked_out=False))
         return self.model.objects.filter(user=self.request.user, checked_out=False)
 
 
@@ -424,10 +425,11 @@ def activate(request, uidb64, token):
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
+        print(request.POST)
         if 'food_identifier' in request.POST:
             if 'qty' in request.POST:
                 if int(request.POST.get('qty', 0)) < 1:
-                    print('Items are less than 1') # here handle exception
+                    return render(request, 'core/message.html', {'message': 'Items are less than 1.'})
 
                 quantity = request.POST.get('qty', 1)
                 food_id = int(request.POST.get('food_identifier'))
@@ -443,16 +445,15 @@ def add_to_order(request, *args, **kwargs):
 
                 cart = FoodCart.objects.create(food=food, user=request.user, number_of_food=quantity, restaurant=restaurant)
 
-                if 'optional_modifiers' in request.POST:
-                    opt_modifiers = request.POST.getlist('optional_modifiers')
-                    print(opt_modifiers)
-                    for item in opt_modifiers:
-                        modifier = FoodCustomize.objects.get(name_of_ingredient=item.replace("_", " "), food=food)
-                        cart.modifier.add(modifier)
+                if 'extras' in request.POST:
+                    extras = request.POST.getlist('extras')
+                    for item in extras:
+                        extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                        cart.extras.add(extra)
 
                 if 'radio3' in request.POST:
-                    modifier = FoodCustomize.objects.get(name_of_ingredient=request.POST.get('radio3', None).replace("_", " "), food=food)
-                    cart.modifier.add(modifier)
+                    style = FoodStyle.objects.get(name_of_style=request.POST.get('radio3', None).replace("_", " "), food=food)
+                    cart.style = style
                 cart.save()
 
         return HttpResponseRedirect(reverse('core:food-cart'))
@@ -472,9 +473,6 @@ def place_order(request, *args, **kwargs):
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             total += item.get_total
             restaurant = item.restaurant
-
-            item.checked_out = True
-            item.save()
 
         total += restaurant.delivery_charge
         order.total_price = total

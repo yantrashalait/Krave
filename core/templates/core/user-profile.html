@@ -146,11 +146,11 @@
             		                    <!-- <span><strong>$59.0</strong></span> -->
 	                            	</div>
 	                                <ul>
-										{% for item in current_orders %}
-											{% for obj in item.cart.all %}
-												<li>{{ obj.food.name }} <span>(${{obj.get_total}})</span></li>
-											{% endfor %}
-										{% endfor %}
+																	{% for item in current_orders %}
+																		{% for obj in item.cart.all %}
+																			<li>{{ obj.food.name }} <span>(${{obj.get_total}})</span></li>
+																		{% endfor %}
+																	{% endfor %}
 
 	                                </ul>
 	                            </div>
@@ -159,11 +159,11 @@
             		                    <span>PAST ORDERS (Delivered)</span>
 	                            	</div>
 	                                <ul>
-										{% for item in order_history %}
-											{% for obj in item.cart.all %}
-												<li>{{ obj.food.name }}<span>(${{obj.get_total}})</span></li>
-											{% endfor %}
-										{% endfor %}
+																	{% for item in order_history %}
+																		{% for obj in item.cart.all %}
+																			<li>{{ obj.food.name }}<span>(${{obj.get_total}})</span></li>
+																		{% endfor %}
+																	{% endfor %}
 	                                </ul>
 	                            </div>
 	                        </div>

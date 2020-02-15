@@ -226,17 +226,17 @@
                     <div class="food__det__lstss">
                       <div class="order__content__list">
                         <div class="order__content__list_content">
-                          <span class="content__title">{{ item.food.name }}</span>
-                          {% for modifier in item.modifier.all %}
+                          <span class="content__title">{{ item.food.name }} {% if item.style %}- {{ item.style.name_of_style }}{% endif %}</span>
+                          {% for extra in item.extras.all %}
                           <p>
-                            <span class="item_name">{{ modifier.name_of_ingredient }} (${{ modifier.cost_of_addition }})</span>
-                            <span>{{ modifier.calories }}</span>
+                            <span class="item_name">{{ extra.name_of_extra }} (${{ extra.cost }})</span>
+                            <span>{{ extra.calories }}</span>
                           </p>
                           {% endfor %}
                         </div>
                       </div>
                       <div class="order__price__detail">
-                          <span class="content__title">${{ item.food.new_price }} </span>
+                          <span class="content__title">${{ item.get_total }} </span>
                       </div>
                     </div>
                     {% endfor %}
