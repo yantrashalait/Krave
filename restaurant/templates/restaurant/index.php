@@ -53,9 +53,9 @@
                                             </div>
                                             <div class="pv-im-hl">
                                                 {% if form.instance.image %}
-                                                    <img id="blah" src="{{ form.instance.image.url }}" alt="your image" />
+                                                    <img id="food_blah" src="{{ form.instance.image.url }}" alt="your image" />
                                                 {% else %}
-                                                    <img id="blah" src="{% static 'restaurant/images/upload__prv.jpg' %}" alt="your image" />
+                                                    <img id="food_blah" src="{% static 'restaurant/images/upload__prv.jpg' %}" alt="your image" />
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -167,7 +167,7 @@
                                                 <div style="display: none;">
                                                     {{ extra_single.id }}
                                                 </div>
-                                                <div class="md-gp-in">
+                                                <div claid_logoss="md-gp-in">
                                                     <div class="md-gp-in-ls">
                                                         <label>Name of extra*</label>
                                                         {{ extra_single.name_of_extra }}

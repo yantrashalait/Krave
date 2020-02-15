@@ -1,23 +1,38 @@
 (function($) {
-'use strict'; 
+'use strict';
 $(document).ready(function(){
 
 function readURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
-    
+
     reader.onload = function(e) {
       $('#blah').attr('src', e.target.result);
     }
-    
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function readFoodURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#food_blah').attr('src', e.target.result);
+    }
+
     reader.readAsDataURL(input.files[0]);
   }
 }
 
 $("#id_logo").change(function() {
-  console.log('asdasd');
   readURL(this);
 });
+
+$('#id_img').change(function(){
+  readFoodURL(this);
+})
 
 $('.fd-ct').select2({
     placeholder: "Select a Category"
@@ -46,5 +61,4 @@ $('#fd-it-ls-dt').DataTable();
 });// document ready
 
 
-})(window.jQuery);  
- 
+})(window.jQuery);
