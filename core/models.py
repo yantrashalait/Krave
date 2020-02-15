@@ -99,7 +99,7 @@ class FoodMenu(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     ingredients = models.TextField(null=True)
-    old_price = models.FloatField()
+    old_price = models.FloatField(null=True, blank=True)
     new_price = models.FloatField()
     # The preparation time of each food may vary according to the restaurant.
     preparation_time = models.CharField(max_length=100, null=True)

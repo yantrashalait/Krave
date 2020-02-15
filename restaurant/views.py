@@ -49,13 +49,15 @@ class DashboardView(RestaurantAdminMixin, CreateView):
             self.object.save()
             if styleform.is_valid() and extraform.is_valid():
                 for form in styleform:
-                    if form.cleaned_data.get('name_of_style') != '':
+                    name_of_style = form.cleaned_data.get('name_of_style')
+                    if name_of_style != '' and name_of_style != None and name_of_style != ' ':
+                        print(name_of_style)
                         f = form.save(commit=False)
                         f.food = self.object
                         f.save()
-
                 for form in extraform:
-                    if form.cleaned_data.get('name_of_extra') != '':
+                    name_of_extra = form.cleaned_data.get('name_of_extra')
+                    if name_of_extra != '' and name_of_extra != None and name_of_extra != ' ':
                         f = form.save(commit=False)
                         f.food = self.object
                         f.save()
@@ -176,12 +178,15 @@ class MenuEditView(RestaurantAdminMixin, UpdateView):
         with transaction.atomic():
             if styleform.is_valid() and extraform.is_valid():
                 for form in styleform:
-                    if form.cleaned_data.get('name_of_style') != '':
+                    name_of_style = form.cleaned_data.get('name_of_style')
+                    if name_of_style != '' and name_of_style != None and name_of_style != ' ':
+                        print(name_of_style)
                         f = form.save(commit=False)
                         f.food = self.object
                         f.save()
                 for form in extraform:
-                    if form.cleaned_data.get('name_of_extra') != '':
+                    name_of_extra = form.cleaned_data.get('name_of_extra')
+                    if name_of_extra != '' and name_of_extra != None and name_of_extra != ' ':
                         f = form.save(commit=False)
                         f.food = self.object
                         f.save()
