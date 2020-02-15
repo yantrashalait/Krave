@@ -33,7 +33,7 @@
                                                 {{ order.get_status_display }}
                                             </td>
                                             <td class="ac-bt-hl-fd-ls">
-                                                <a href="{% url 'restaurant:ready-order' order.id %}" class="btn btn-primary">Ready For Delivery</a>
+                                                <a href="{% url 'restaurant:ready-order' order.id %}" class="btn btn-success">Ready for delivery</a>
                                             </td>
                                         </tr>
                                         {% endfor %}
