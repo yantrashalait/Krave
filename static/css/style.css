@@ -21,7 +21,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;   
+    font-family: 'Roboto', sans-serif;
      font-size: 14px;
     color: #333e48;
     background-color: #f5f5f5;
@@ -53,7 +53,7 @@ select, textarea, input {
 }
 
 .resp__menu__bar{
-    position: relative;    
+    position: relative;
     width: 20px;
     height: 2px;
     background: #24272a;
@@ -61,7 +61,7 @@ select, textarea, input {
 
 .resp__menu__bar:before{
     content: '';
-    position: absolute;    
+    position: absolute;
     width: 20px;
     height: 2px;
     background: #24272a;
@@ -70,7 +70,7 @@ select, textarea, input {
 
 .resp__menu__bar:after{
     content: '';
-    position: absolute;    
+    position: absolute;
     width: 20px;
     height: 2px;
     background: #24272a;
@@ -148,7 +148,7 @@ text-decoration: none;
 }
 
 .nav__cart__list{
-    
+
 margin: 0 0 0 15px;
 }
 .popup__top.profile {
@@ -264,7 +264,7 @@ section.gery__bg {
 }
 .form-submit:hover{
     transition:1s;
-    background-color: black; 
+    background-color: black;
 }
 .login-detail {
     text-transform: capitalize;
@@ -306,7 +306,7 @@ section.landing {
     font-family: 'FuturaPTMedium';
 }
 .landing-top-info h1{
-    
+
 margin: 0 0 2rem 0;
 }
 
@@ -346,7 +346,7 @@ i.fa.fa-check {
     width: 75px;
     background: #fff;
     border-radius: 50px;
-    position: relative;    
+    position: relative;
     text-align: center;
 }
 .food-item-mrg {
@@ -357,8 +357,8 @@ i.fa.fa-check {
 }
  .food-items .item a:hover{
     color: #000000;
-    text-decoration: none;  
-} 
+    text-decoration: none;
+}
 
 span.food__title {
     padding: 40px 0 20px 0;
@@ -423,8 +423,8 @@ i.fa.fa-google {
 .resturent_details {
    display: flex;
     text-transform: capitalize;
-    color: #fff;     
-    padding: 10rem 0 3rem 0;    
+    color: #fff;
+    padding: 10rem 0 3rem 0;
     flex-wrap: wrap;
 }
 .restaurants_name__item h4{
@@ -486,7 +486,7 @@ text-decoration: none;
     margin-left: 10px;
     border: none;
     text-transform: capitalize;
-        color: #fff;                                                                                                   
+        color: #fff;
 }
 .top__banner{
     background-image: linear-gradient(to top,rgba(0,0,0,0.8),rgba(0,0,0,0.6)), url(../images/banner.png);
@@ -515,7 +515,7 @@ span.catrg_type {
     font-weight: 600;
     color: #000000;
     text-transform: capitalize;
-}  
+}
 .line__bar_psedo:after{
     content: "";
     display: block;
@@ -525,7 +525,7 @@ span.catrg_type {
     position: absolute;
     bottom: 0%;
 
-} 
+}
 
 .category_nav {
 }
@@ -535,7 +535,7 @@ span.catrg_type {
 .category_nav li{
     list-style-type: none;
     text-transform: capitalize;
-  
+
 }
 .category_nav_caro .item a{
     color: #000000;
@@ -548,8 +548,8 @@ span.catrg_type {
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #f5f5f5;    
-    z-index: 99;    
+    background-color: #f5f5f5;
+    z-index: 99;
 }
 
 i.fa.fa-ellipsis-h {
@@ -563,7 +563,7 @@ i.fa.fa-ellipsis-h {
 .categ__info {
     display: flex;
     background: #fff;
-    cursor: pointer;    
+    cursor: pointer;
     align-items: center;
 }
 .dinner__categ:after{
@@ -754,7 +754,7 @@ section.checkout {
 .signin__checkout{
       text-transform: capitalize;
       font-size: 13px;
-  
+
 }
 .create__accoutn__button {
     padding-top: 20px;
@@ -766,7 +766,7 @@ section.checkout {
     justify-content: space-between;
 }
 .create__accoutn__button button{
-    text-transform: capitalize;    
+    text-transform: capitalize;
     width: 48%;
     max-width: 48%;
     padding: 7px 0;
@@ -777,7 +777,7 @@ section.checkout {
     background-color: #6aca20;
 }
 .button_sign_in {
-    border: none;    
+    border: none;
     background-color: #000;
     color: #fff;
 }
@@ -834,7 +834,7 @@ section.checkout {
     font-weight: 600;
 }
 .add_item_categ a{
-    color:#92d85b; 
+    color:#92d85b;
 }
 .add_item_categ a:hover{
     text-decoration: none;
@@ -866,7 +866,7 @@ section.checkout {
 }
 .edit__selected__items a {
     color:#92d85b;
-    font-weight: 600; 
+    font-weight: 600;
 }
 .edit__selected__items a:hover {
     text-decoration: none;
@@ -910,7 +910,7 @@ section.checkout {
     color: #000000;
     display: flex;
     justify-content: space-between;
-    font-weight: 600;    
+    font-weight: 600;
 }
 .grand__total:before{
     content: "";
@@ -936,11 +936,11 @@ section.checkout {
 /*Add Resturent css*/
 .resturent__solog strong {
     display: flex;
-} 
+}
 .business__detail {
     background-color: #6aca20;
     position: relative;
-} 
+}
 .detail__business__info {
     margin-bottom: 25px;
     display: flex;
@@ -954,7 +954,7 @@ section.checkout {
 }
 .business__story__contain {
     padding-left: 80px;
-} 
+}
 .business_type {
     margin-top: 55px;
     padding-bottom: 19px;
@@ -1139,7 +1139,7 @@ text-decoration: none;
 .content__title{
     font-size: 17px;
     font-weight: 600;
-    color: #000000; 
+    color: #000000;
 }
 span.item_name {
     display: flex;
@@ -1154,7 +1154,7 @@ span.item_name {
     display: flex;
     width: 100%;
     height: 50px;
-    background: #24272a;    
+    background: #24272a;
     bottom: 0;
     position: absolute;
 }
@@ -1162,7 +1162,7 @@ span.item_name {
 .next__checkout a{
     padding: 5px 35px;
     display: flex;
-    justify-content: space-between;  
+    justify-content: space-between;
     color: #fff;
     width: 100%;
     height: 100%;
@@ -1174,9 +1174,9 @@ span.item_name {
 }
 
 .order__list__wrapper{
-    width: 100%;       
-    position: relative;    
-    background: #fff;    
+    width: 100%;
+    position: relative;
+    background: #fff;
     height: 100vh;
     overflow: scroll;
 }
@@ -1184,7 +1184,7 @@ span.item_name {
 section.order__detail {
     position: fixed;
     right: -100%;
-    width: 450px;    
+    width: 450px;
     top: 0;
     transition: all 0.5s ease;
 }
@@ -1467,24 +1467,25 @@ color: #000000;
     height: 100%;
     background: rgb(0,0,0,0.6);
     align-items: center;
+    z-index: 999;
 }
 
 /*top__navbar css*/
 .top__navbar{
     background: #24272a;
-    color: #fff;    
+    color: #fff;
     display: none;
     position: fixed;
     height: 100vh;
     z-index: 999;
-    width: 100%;    
+    width: 100%;
     overflow-y: scroll;
 }
 
 .nav__hldr__resp{
     width: 100%;
     height: 100%;
-    align-items: center;   
+    align-items: center;
     padding: 6rem 0;
     position: relative;
 }
@@ -1555,7 +1556,7 @@ text-decoration: none;
     background: #9e9e9e;
     width: 100%;
     height: 1px;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
 }
 .new__restaurant:after{
     content: "";
@@ -1563,7 +1564,7 @@ text-decoration: none;
     background: #9e9e9e;
     width: 100%;
     height: 1px;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
 .restaurant__content {
     text-align: center;
@@ -1636,19 +1637,19 @@ text-decoration: none;
 
 /* Track */
 .popupcontent__holder::-webkit-scrollbar-track {
-  background: #f1f1f1; 
+  background: #f1f1f1;
   display: none;
 }
- 
+
 /* Handle */
 .popupcontent__holder::-webkit-scrollbar-thumb {
-  background: #888; 
+  background: #888;
   display: none;
 }
 
 /* Handle on hover */
 .popupcontent__holder::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
   display: none;
 }
 
@@ -1721,7 +1722,7 @@ text-decoration: none;
     color: #fff;
 }
 
-.account__logout button:hover{ 
+.account__logout button:hover{
     transition:1s;
     background-color: black;
 }
@@ -1746,15 +1747,15 @@ text-decoration: none;
     display: inline-block;
     border: none !important;
     width: 100%;
-} 
+}
 .user__profile__nav a i{
     width: 15%;
 }
 .user__profile__nav a{
-   color: #000;  
+   color: #000;
 }
 .user__profile__nav a:hover{
-   color: #000;  
+   color: #000;
 }
 .user__profile__nav .nav-tabs .nav-link {
     border:none !important;
@@ -1788,7 +1789,7 @@ text-decoration: none;
     margin-left: 1rem;
     margin-top: 1rem;
     color: #fff;
-    border-radius: 0;    
+    border-radius: 0;
 }
 .tab-pane form .pass__btn{
     border: none;
@@ -1797,19 +1798,19 @@ text-decoration: none;
     margin-left: 1rem;
     margin-top: 1rem;
     color: #fff;
-    border-radius: 0;    
+    border-radius: 0;
 }
 form .form__save{
-    background: #6aca20;    
+    background: #6aca20;
 }
 form .form__save:hover{
-    color: #fff;    
+    color: #fff;
 }
 form .form__cancle{
-    background: #9e9e9ea6;    
+    background: #9e9e9ea6;
 }
 form .form__cancle:hover{
-    color: #fff;    
+    color: #fff;
 }
 .user__form__wrapper form label{
     margin: 0;
@@ -1832,7 +1833,7 @@ form .form__cancle:hover{
     padding: 1rem 0;
 }
 .history__detail ul span{
-    padding-left: 1rem; 
+    padding-left: 1rem;
 }
 .current__order__hist:before{
     content: '';
@@ -1848,7 +1849,7 @@ form .form__cancle:hover{
     background: #dcdcdc;
     width: 100%;
     height: 1px;
-    position: absolute; 
+    position: absolute;
 }
 .past__order__hist:after{
     content: '';
@@ -1856,7 +1857,7 @@ form .form__cancle:hover{
     background: #dcdcdc;
     width: 100%;
     height: 1px;
-    position: absolute; 
+    position: absolute;
 }
 .order__detail___tlt__prc {
     display: flex;

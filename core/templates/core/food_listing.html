@@ -151,7 +151,7 @@
                     $(".order__btn__price").html(price);
 
                     // var base_url = "http://localhost:8000/";
-                    var base_url = "http://157.245.213.171:8000/";
+                    var base_url = "https://krave.yantrashala.com/";
                     var src1 = base_url + 'media/' + food_data[0].fields.image;
                     $("#food_image").attr("src", src1);
 
@@ -160,7 +160,7 @@
         					  styles = data.styles;
         					  styles = jQuery.parseJSON(styles);
         					  styles.forEach(function(style){
-        							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span>></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
+        							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
         							$('#styles').append(style_content);
         					  });
 
