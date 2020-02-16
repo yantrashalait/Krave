@@ -15,11 +15,15 @@ urlpatterns = [
     path('<int:rest_id>/menu/<int:food_id>/edit', views.MenuEditView.as_view(), name="menu-edit"),
     path('<int:rest_id>/menu/<int:food_id>/delete', views.MenuDeleteView.as_view(), name="menu-delete"),
 
+    path('<int:rest_id>/category', views.CategoryListView.as_view(), name="category-list"),
+    path('<int:rest_id>/category/add', views.CategoryCreateView.as_view(), name="category-add"),
+    path('<int:rest_id>/category/<int:category_id>/edit', views.CategoryEditView.as_view(), name="category-edit"),
+    path('<int:rest_id>/category/<int:category_id>/delete', views.CategoryDeleteView.as_view(), name="category-delete"),
+
     # password change
     path('password/change', views.change_password, name='change-password'),
 
     path('order/accept/<int:order_id>', views.accept_order, name="accept-order"),
     path('order/ready/<int:order_id>', views.ready_order, name="ready-order"),
-
 
 ]

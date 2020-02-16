@@ -163,3 +163,9 @@ class RestaurantForm(forms.ModelForm):
         self.fields['registration_number'].widget.attrs.update({'placeholder': 'Restaurant registration number'})
         self.fields['email'].widget.attrs.update({'placeholder': 'Email of restaurant'})
         self.fields['delivery_time'].widget.attrs.update({'placeholder': 'E.g. 10-20(in minutes)'})
+
+
+class RestaurantCategoryForm(forms.ModelForm):
+    class Meta:
+        model = RestaurantFoodCategory
+        fields = ('category', )

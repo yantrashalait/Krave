@@ -1,10 +1,10 @@
-{% load static %}
 {% include 'restaurant/header.php' %}
+{% load static %}
                     <div class="it-ad-hl pd-tb-md">
                         <div class="rb-pd-rl">
                             <div class="it-ac-hd">
                                 <div class="sc-hd">
-                                    <h1>Items</h1>
+                                    <h1>Delete Food</h1>
                                 </div>
                                 <!-- <div class="ac-bt-hl">
                                       <button class="ac-bt">Save</button>
@@ -12,20 +12,15 @@
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
-                                <table id="fd-it-ls-dt" class="display">
-                                    <thead>
-                                        <tr>
-                                            <th>Display Name</th>
-                                            <th>Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><a href="#">Chicken Sandwich</a></td>
-                                            <td>$5.00</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    {% if message %}
+                                    {{ message }}
+                                    {% else %}
+                                    <p>Do you really want to delete "{{ object }}"?</p>
+                                    <button class="btn btn-danger" >Confirm</button>
+                                    {% endif %}
+                                </form>
                             </div>
                     </div>
                 </div>
