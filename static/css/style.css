@@ -1190,6 +1190,7 @@ section.order__detail {
   width: 450px;
   top: 0;
   transition: all 0.5s ease;
+  z-index: 9;
 }
 .food__det__crt {
   display: flex;
@@ -1965,5 +1966,10 @@ form .form__cancle:hover {
 /* new added css 20162020*/
 .section.all_home__banner {
   padding: 3rem 0;
+}
+.popoverlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 /* new added css 20162020*/
