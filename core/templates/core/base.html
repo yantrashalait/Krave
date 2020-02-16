@@ -108,15 +108,32 @@
 
                     {% if request.user.is_authenticated %}
                     <div class="nav__cart">
-                      <div  id="cart_drpdwn" class="popup__top cart nav__cart__list">
+                      <div  id="cart_drpdwn" class="cart nav__cart__list">
                         <i class="fa fa-cart-arrow-down" aria-hidden="true">
                          <span>{{ cart_count }}</span>
                         </i>
                       </div>
                       <div id="notify_drpdwn" class="popup__top nofify nav__cart__list">
                         <i class="fa fa-bell" aria-hidden="true">
-                          <span>{{ notification_count }}</span>
+                          <span class="notify__num">{{ notification_count }}</span>
                         </i>
+                        <div id="nav__popup" class="dprdwn fav_drp">
+                          <span class="drpdwn_cls">close</span>
+                          <div class="drpdwn_header">
+                              <span class="drpdwn_hdingtxt">
+                                  Notification
+                              </span>
+                          </div>
+                          <div class="drp_added_itms">
+
+                              <p>You need to be logged in to view your notification.</p>
+                              <div class="drp_more_items">
+                                  <div class="drp_vew_mritemsbtn">
+                                      <a href="{% url 'login' %}">Login</a>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                       </div>
                       <div id="user__pofl_drpdown" class="popup__top profile nav__cart__list">
                         <a href="#">
@@ -126,6 +143,37 @@
                           <img src="{% static 'images/user.png' %}" alt="">
                           {% endif %}
                         </a>
+                        {% if request.user.is_authenticated %}
+                        <div id="user__detail__drp" class="dprdwn fav_drp">
+                          <span class="drpdwn_cls">close</span>
+                          <div class="drpdwn_header">
+                              <span class="drpdwn_hdingtxt">
+                                   <strong>My Profile</strong>
+                              </span>
+                          </div>
+                          <div class="user__prof__avatar">
+                              {% if request.user.profile.first.image %}
+                              <img src="{{ request.user.profile.first.image.url }}" alt="">
+                              {% else %}
+                              <img src="{% static 'images/user.png' %}" alt="">
+                              {% endif %}
+                              <div class="user__name__edit">
+                                   <div class="avatar__name">
+                                    <span>{{ request.user.username }}</span>
+                                  </div>
+                                <div>
+                                  <a href="{% url 'user:profile' %}">Edit Profile</a>
+                                </div>
+                             </div>
+                          </div>
+                          <hr>
+                          <div class="drp_more_items">
+                              <div class="drp_vew_mritemsbtn">
+                                <a href="{% url 'logout' %}">Logout</a>
+                               </div>
+                          </div>
+                        </div>
+                      {% endif %}
                       </div>
                     </div>
                     {% else %}
@@ -143,57 +191,6 @@
                     </div>
                     {% endif %}
                   </div>
-
-                  <div id="nav__popup" class="dprdwn fav_drp">
-                    <span class="drpdwn_cls">close</span>
-                    <div class="drpdwn_header">
-                        <span class="drpdwn_hdingtxt">
-                            Notification
-                        </span>
-                    </div>
-                    <div class="drp_added_itms">
-
-                        <p>You need to be logged in to view your notification.</p>
-                        <div class="drp_more_items">
-                            <div class="drp_vew_mritemsbtn">
-                                <a href="{% url 'login' %}">Login</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% if request.user.is_authenticated %}
-                <div id="user__detail__drp" class="dprdwn fav_drp">
-                  <span class="drpdwn_cls">close</span>
-                  <div class="drpdwn_header">
-                      <span class="drpdwn_hdingtxt">
-                           <strong>My Profile</strong>
-                      </span>
-                  </div>
-                  <div class="user__prof__avatar">
-                      {% if request.user.profile.first.image %}
-                      <img src="{{ request.user.profile.first.image.url }}" alt="">
-                      {% else %}
-                      <img src="{% static 'images/user.png' %}" alt="">
-                      {% endif %}
-                      <div class="user__name__edit">
-                           <div class="avatar__name">
-                            <span>{{ request.user.username }}</span>
-                          </div>
-                        <div>
-                          <a href="{% url 'user:profile' %}">Edit Profile</a>
-                        </div>
-                     </div>
-                  </div>
-                  <hr>
-                  <div class="drp_more_items">
-                      <div class="drp_vew_mritemsbtn">
-                        <a href="{% url 'logout' %}">Logout</a>
-                       </div>
-                  </div>
-                </div>
-              {% endif %}
-
-
                </div>
           </div>
         </div>

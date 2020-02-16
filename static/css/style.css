@@ -222,7 +222,7 @@ span.drpdwn_hdingtxt {
   left: 11px;
   font-size: 10px;
 }
-.nofify span {
+.nofify span.notify__num {
   background: #6aca20;
   border-radius: 50px;
   padding: 1px 3px;
