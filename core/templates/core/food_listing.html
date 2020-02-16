@@ -34,14 +34,15 @@
             </div>
 
             <div class="food__item_image">
-              <img src="{{ item.image.url }}">
+              {% if item.image %}
+      					<img src="{{ item.image.url }}">
+      				{% endif %}
             </div>
           </div>
         </div>
         {% endfor %}
         </div>
       </div>
-    </div>
   </section>
   {% endblock %}
   {% block popup %}

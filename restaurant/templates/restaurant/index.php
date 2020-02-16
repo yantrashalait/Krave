@@ -105,8 +105,8 @@
                                     <div class="fm-ls sm-mb">
                                         <label>Styles that can come with the food item.</label>
                                             <div class="md-gp">
-                                    {% for style_single in styleform.forms %}
-                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                              {% for style_single in styleform.forms %}
+                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id-st">
                                                 <div style="display: none;">
                                                     {{ style_single.id }}
                                                 </div>
@@ -132,7 +132,7 @@
                                             {% endfor %}
                                             {% with styleform.empty_form as form %}
                                             <div id="styleempty_form" style="display:none">
-                                                <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                                <div class="md-gp-ls-rd" id="md-gp-ls-rd-id-st">
                                                     <div class="md-gp-in">
                                                         <div style="display: none;">
                                                             {{ form.id }}
@@ -163,11 +163,11 @@
                                         <label>Extras that can come with the food item.</label>
                                         <div class="md-gp">
                                     {% for extra_single in extraform.forms %}
-                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                            <div class="md-gp-ls-rd" id="md-gp-ls-rd-id-et">
                                                 <div style="display: none;">
                                                     {{ extra_single.id }}
                                                 </div>
-                                                <div claid_logoss="md-gp-in">
+                                                <div class="md-gp-in">
                                                     <div class="md-gp-in-ls">
                                                         <label>Name of extra*</label>
                                                         {{ extra_single.name_of_extra }}
@@ -189,7 +189,7 @@
                                             {% endfor %}
                                             {% with extraform.empty_form as form %}
                                             <div id="extraempty_form" style="display:none">
-                                                <div class="md-gp-ls-rd" id="md-gp-ls-rd-id">
+                                                <div class="md-gp-ls-rd" id="md-gp-ls-rd-id-et">
                                                     <div class="md-gp-in">
                                                         <div style="display: none;">
                                                             {{ form.id }}
@@ -236,7 +236,7 @@
             e.preventDefault();
             var $self = $(this);
             var form_idx = $('#id_styleform-TOTAL_FORMS').val();
-            var cloneIndexrd = $(".md-gp-ls-rd").length;
+            var cloneIndexrd = $(".md-gp-ls-rd-st").length;
             $self.before($('#styleempty_form').html().replace(/__prefix__/g, form_idx));
             $('#id_styleform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
         });
@@ -245,7 +245,7 @@
             e.preventDefault();
             var $self = $(this);
             var form_idx = $('#id_extraform-TOTAL_FORMS').val();
-            var cloneIndexrd = $(".md-gp-ls-rd").length;
+            var cloneIndexrd = $(".md-gp-ls-rd-et").length;
             $self.before($('#extraempty_form').html().replace(/__prefix__/g, form_idx));
             $('#id_extraform-TOTAL_FORMS').val(parseInt(form_idx) + 1);
         });

@@ -107,7 +107,9 @@
               </div>
 
               <div class="food__item_image">
-                <img src="{{ food.image.url }}">
+                {% if food.image %}
+        					<img src="{{ food.image.url }}">
+        				{% endif %}
               </div>
             </div>
           </div>
