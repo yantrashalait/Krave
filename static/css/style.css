@@ -1190,7 +1190,7 @@ section.order__detail {
   width: 450px;
   top: 0;
   transition: all 0.5s ease;
-  z-index: 9;
+  z-index: 99;
 }
 .food__det__crt {
   display: flex;
