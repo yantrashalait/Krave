@@ -209,7 +209,7 @@
             <div class="order__title">
               <h3>Your order</h3>
               <span>
-                From <a href="#">{{ cart.0.restaurant.name }} </a>
+                From <a href="{% url 'core:restaurant-detail' cart.0.restaurant.name|space_to_underscore %}">{{ cart.0.restaurant.name }} </a>
               </span>
             </div>
             <div class="order__body__content">
