@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
 from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, Cuisine, RestaurantFoodCategory
-from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm
+from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm, RestaurantCategoryForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
 from django.db import transaction
@@ -109,10 +109,6 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
                     rest_cuisine.cuisine.add(cuisine)
             rest_cuisine.save()
 
-        if 'categories' in self.request.POST:
-            categories = self.request.POST.get('categories').replace(" ", "").split(',')
-            for item in categories:
-                RestaurantFoodCategory.objects.get_or_create(restaurant=self.object, category=item)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -230,6 +226,81 @@ class MenuDeleteView(RestaurantAdminMixin, DeleteView):
             return render(request, 'restaurant/food_confirm_delete.php', {'message': error})
 
         return HttpResponseRedirect(success_url)
+
+
+# crud for restaurant food categories
+class CategoryListView(RestaurantAdminMixin, ListView):
+    login_url = 'login'
+    model = RestaurantFoodCategory
+    template_name = 'restaurant/categories-list.php'
+    context_object_name = 'categories'
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(restaurant=self.request.restaurant)
+
+
+class CategoryEditView(RestaurantAdminMixin, UpdateView):
+    login_url = 'login'
+    model = RestaurantFoodCategory
+    template_name = 'restaurant/categories-add.php'
+    form_class = RestaurantCategoryForm
+
+    def get_object(self):
+        id_ = self.kwargs.get('category_id')
+        return get_object_or_404(RestaurantFoodCategory, pk=id_)
+
+
+    def get_success_url(self):
+        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
+
+
+class CategoryDeleteView(RestaurantAdminMixin, DeleteView):
+    login_url = 'login'
+    model = RestaurantFoodCategory
+    template_name = 'restaurant/restaurantfoodcategory-confirm-delete.php'
+
+    def get_object(self):
+        id_ = self.kwargs.get('category_id')
+        return get_object_or_404(RestaurantFoodCategory, pk=id_)
+
+    def get_success_url(self):
+        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL. If the object is protected, send an error message.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+
+        try:
+            self.object.delete()
+        except Exception as e:
+            error = e
+            return render(request, 'restaurant/restaurantfoodcategory-confirm-delete.php', {'message': error})
+
+        return HttpResponseRedirect(success_url)
+
+
+class CategoryCreateView(RestaurantAdminMixin, CreateView):
+    login_url = 'login'
+    template_name = 'restaurant/categories-add.php'
+    form_class = RestaurantCategoryForm
+    model = RestaurantFoodCategory
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        with transaction.atomic():
+            self.object = form.save(commit=False)
+            self.object.restaurant = self.request.restaurant
+            self.object.save()
+
+            return HttpResponseRedirect(reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id}))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
 
 
 @login_required

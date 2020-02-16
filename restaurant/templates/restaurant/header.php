@@ -5,7 +5,7 @@
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/style.css' %}">
@@ -37,6 +37,9 @@
                             <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant Detail</a>
                         </li>
                         <li>
+                            <a href="{% url 'restaurant:category-list' request.restaurant.id %}"><i class="fa fa-cubes" aria-hidden="true"></i> Restaurant Food Categories</a>
+                        </li>
+                        <li>
                             <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
                         </li>
                         <li>
@@ -63,7 +66,7 @@
                         {% if request.restaurant %}
                         <div class="rb-pd-rl rs-in-hl">
                             <div class="rs-in">
-                                <div class="rs-lg"> 
+                                <div class="rs-lg">
                                     {% if request.restaurant.logo %}
                                     <img src="{{ request.restaurant.logo.url }}" alt="">
                                     {% else %}
@@ -80,7 +83,7 @@
                                 </div>
                             </div>
                             <div class="ac-bt-hl">
-                                <a class="ac-bt" href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}">Edit</a>
+                                <!-- <a class="ac-bt" href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}">Edit</a> -->
                                 <a class="ac-bt" href="{% url 'logout' %}">Logout</a>
                             </div>
                         </div>

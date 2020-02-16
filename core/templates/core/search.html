@@ -64,32 +64,19 @@
           <form method="post">
               {% csrf_token %}
           <div class="select__option__food">
-            <div class="top__select__intro">
+            <div class="top__select__intro" id="parent_style" style="display:none;">
                 <span class="option__head">Select Style</span>
-                <span>Required</span>
             </div>
             <div class="popup__content__wrapper" id="styles">
 
             </div>
 
-            <div class="top__select__intro">
+            <div class="top__select__intro" id="parent_extra" style="display:none;">
                 <span class="option__head">Select Extra</span>
-                <span>Required</span>
             </div>
             <div class="popup__content__wrapper" id="extras">
 
             </div>
-              <div class="popup__content__wrapper">
-                  <!-- <div class="customize__item__popup">
-                      <a href="#" class="customize__content">Customize this item</a>
-                      <a href="#" class="customize__icon"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
-                  </div> -->
-                  <div class="caution__about__food">
-                      <p class="caution__contion">
-                          <strong>WARNING:</strong> The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
-                      </p>
-                  </div>
-              </div>
               <div class="popup__divider__line"></div>
               <div class="add__order__popup">
                   <div class="pop__up__add__sub">
@@ -158,6 +145,7 @@
         					  styles.forEach(function(style){
         							var style_content = '<div class="radio__box__wrapper space__between"><div class="radio__box__contain"><label><input required type="radio" value="'+ style.fields.name_of_style.split(' ').join('_') +'" name="radio3" class="mgr mgr-success mgr-lg"/><span> ' + style.fields.name_of_style + '</span></label></div><div class="radio__box__price"><span class="radio__price__info">$' + style.fields.cost + '</span></div></div>'
         							$('#styles').append(style_content);
+                      $('#parent_style').show();
         					  });
 
         						$("#extras").html('');
@@ -168,6 +156,7 @@
         					  extras.forEach(function(extra){
         						  var extra_content = '<div class="checkbox__wrapper space__between"><div class="checkbox__content"><label><input name="extras" type="checkbox" class="mgc mgc-success mgc-lg" value="' + extra.fields.name_of_extra.split(' ').join('_') + '"/><span> ' + extra.fields.name_of_extra + '</span></label></div><div class="check__item__price"><span class="radio__price__info">$'+ extra.fields.cost + '</span></div></div>';
         							$('#extras').append(extra_content);
+                      $('#parent_extra').show();
         					  });
                 }
             });

@@ -40,7 +40,7 @@
                                             <div class="pv-im-hl">
                                             {% if request.restaurant.logo %}
                                                 <img id="blah" src="{{ request.restaurant.logo.url }}" alt="your image" />
-                                            
+
                                             {% else %}
                                                 <img id="blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
                                             {% endif  %}
@@ -82,7 +82,7 @@
                                         <label>Restaurant Registration Number</label>
                                         {{ form.registration_number }}
                                     </div>
-                                    <!-- form list -->                                    
+                                    <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
@@ -107,18 +107,9 @@
                                                 {{ form.delivery_charge }}
                                             </div>
                                         </div>
-                                    </div>   
-                                    <div class="fm-ls sm-mb">
-                                        <label>Food categories your serve (separate with comma)</label>
-                                        <p>
-                                            {% for item in request.restaurant.food_category.all %}
-                                                {{ item.category }}, 
-                                            {% endfor %}
-                                        </p>
-                                        <input type="text" name="categories" placeholder="E.g. Burger, Sekuwa">
                                     </div>
 
-                                    {% if rest_cuisine %} 
+                                    {% if rest_cuisine %}
                                     <div class="fm-ls sm-mb">
                                         <label>Selected Cuisines</label>
                                         <p>
@@ -126,20 +117,20 @@
                                             {{ item.name }}
                                         {% endfor %}
                                         </p>
-                                        
+
                                     </div>
                                     {% endif %}
-                                    <!-- form list -->                               
+                                    <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Types of Cuisines</label>
-                                        
+
                                             <select name="cuisines[]" class="fd-ct" multiple="multiple">
                                                 <option></option>
                                                 {% for item in cuisine %}
                                                 <option value="{{ item.id }}">{{ item.name }}</option>
                                                 {% endfor %}
                                             </select>
-                                              
+
                                     </div>
                                     {{ form.media }}
                                     <div class="fm-ls sm-mb">
@@ -161,7 +152,7 @@
         </div>
 
     </section>
-    
+
     {% include 'restaurant/footer.php' %}
     <script>
         if ('{{ request.restaurant.location_point }}' != 'None'){
@@ -212,7 +203,7 @@
 
             iconUrl:"{% static 'images/marker.png' %}",
             shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png'
-        }); 
+        });
         var marker = L.marker(points,{icon:icons}).addTo(map);
 
 
@@ -220,7 +211,7 @@
             lat = e.latlng.lat;
             lon = e.latlng.lng;
 
-            //Clear existing marker, 
+            //Clear existing marker,
             if (marker != undefined) {
                 map.removeLayer(marker);
                 console.log(lat);
@@ -230,7 +221,7 @@
             };
 
             //Add a marker to show where you clicked.
-            marker = L.marker([lat,lon], {icon:icons}).addTo(map);  
+            marker = L.marker([lat,lon], {icon:icons}).addTo(map);
         });
     </script>
 

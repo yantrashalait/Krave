@@ -20,7 +20,7 @@ urlpatterns = [
     # for registration
     path('register/', views.register, name='register'),
     path('activate/<slug:uidb64>/<slug:token>/', views.activate, name='activate'),
-    
+
     # restaurant views
     path('restaurant-lists', views.RestaurantListView.as_view(), name="restaurant-list"),
     path('restaurant-detail/<slug:rest_name>', views.RestaurantDetail.as_view(), name='restaurant-detail'),
@@ -34,6 +34,7 @@ urlpatterns = [
     # food cart of user
     path('food/cart/', views.FoodCartListView.as_view(), name='food-cart'),
     path('food/cart/<slug:username>', views.FoodCartListView.as_view(), name='food-cart'),
+    path('food/cart/delete/<slug:cart_id>', views.FoodCartDeleteView.as_view(), name="cart-delete"),
 
     #add to order
     path('order/add/', views.add_to_order, name="add-to-order"),

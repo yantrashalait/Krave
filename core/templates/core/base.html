@@ -209,13 +209,13 @@
             <div class="order__title">
               <h3>Your order</h3>
               <span>
-                From <a href="#">{{ cart.0.restaurant.name }} </a>
+                From <a href="{% url 'core:restaurant-detail' cart.0.restaurant.name|space_to_underscore %}">{{ cart.0.restaurant.name }} </a>
               </span>
             </div>
             <div class="order__body__content">
               <div class="wrapper__content__divider"></div>
               <div class="content__head">
-                <div class="list__down">1
+                <div class="list__down">{{ cart_count }}
                     <a href="#">
                       <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     </a>
