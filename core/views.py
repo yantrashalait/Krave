@@ -435,7 +435,6 @@ def activate(request, uidb64, token):
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
-        print(request.POST)
         if 'food_identifier' in request.POST:
             if 'qty' in request.POST:
                 if int(request.POST.get('qty', 0)) < 1:
