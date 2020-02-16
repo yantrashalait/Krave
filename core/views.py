@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, render_to_response
-from django.views.generic import DetailView, ListView, TemplateView, CreateView
+from django.views.generic import DetailView, ListView, TemplateView, CreateView, DeleteView
 from .models import RestaurantRequest, Restaurant, FoodMenu, RestaurantImage, FoodCart, FoodExtra, FoodStyle, Order
 from django.conf import settings
 from userrole.models import UserRole
@@ -274,6 +274,16 @@ class FoodCartListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user, checked_out=False)
 
+
+class FoodCartDeleteView(LoginRequiredMixin, DeleteView):
+    model = FoodCart
+
+    def get_object(self):
+        id_ = self.kwargs.get('cart_id')
+        return get_object_or_404(FoodCart, pk=id_)
+
+    def get_success_url(self):
+        return reverse('core:food-cart', kwargs={'username': self.request.user.username})
 
 def web_authenticate(username=None, password=None):
     try:

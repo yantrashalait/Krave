@@ -64,7 +64,12 @@
                   </p>
                 </div>
                 <div class="added__item_price">${{ item.get_total }}</div>
+                <form method="POST" action="{% url 'core:cart-delete' item.id %}">
+                  {% csrf_token %}
+                  <button class="fa fa-trash"></button>
+                </form>
              </div>
+
              <div class="selected__items">
                   {% if item.style %}
                   <span>${{ item.style.cost }}</span>
