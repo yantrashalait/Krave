@@ -114,9 +114,11 @@
                         </i>
                       </div>
                       <div id="notify_drpdwn" class="popup__top nofify nav__cart__list">
+                        <div class="forPopup">
                         <i class="fa fa-bell" aria-hidden="true">
                           <span class="notify__num">{{ notification_count }}</span>
                         </i>
+                      </div>
                         <div id="nav__popup" class="dprdwn fav_drp">
                           <span class="drpdwn_cls">close</span>
                           <div class="drpdwn_header">
@@ -136,13 +138,13 @@
                       </div>
                       </div>
                       <div id="user__pofl_drpdown" class="popup__top profile nav__cart__list">
-                        <a href="#">
+                        <div class="forPopup">
                           {% if request.user.profile.first.image %}
                           <img src="{{ request.user.profile.first.image.url }}" alt="">
                           {% else %}
                           <img src="{% static 'images/user.png' %}" alt="">
                           {% endif %}
-                        </a>
+                        </div>
                         {% if request.user.is_authenticated %}
                         <div id="user__detail__drp" class="dprdwn fav_drp">
                           <span class="drpdwn_cls">close</span>
@@ -205,9 +207,11 @@
             </span>
             <div class="order__title">
               <h3>Your order</h3>
+              {% if cart %}
               <span>
                 From <a href="{% url 'core:restaurant-detail' cart.0.restaurant.name|space_to_underscore %}">{{ cart.0.restaurant.name }} </a>
               </span>
+              {% endif %}
             </div>
             <div class="order__body__content">
               <div class="wrapper__content__divider"></div>

@@ -1,5 +1,5 @@
 (function($) {
-'use strict'; 
+'use strict';
 $(document).ready(function(){
     $('.success__strories__carousel').owlCarousel({
             loop: true,
@@ -59,17 +59,6 @@ $(document).ready(function(){
         $(".order__detail").css({'right' : '-100%'})
    })
 
-   $(".drpdwn_cls").click(function(){
-    $("#cart__popup").css({'display' : 'none'})
-   })
-
-   $("#notify_drpdwn").click(function(){
-        $("#nav__popup").css({'display' : 'block'})
-   });
-
-   $(".drpdwn_cls").click(function(){
-    $("#nav__popup").css({'display' : 'none'})
-   })
 
 
 
@@ -104,15 +93,26 @@ $('.category_nav_caro .owl-item').click(function(e){
   e.preventDefault();
   $(this).addClass('active-second');
    $(this).siblings().removeClass('active-second');
-  
+
 })
 
-$("#user__pofl_drpdown").click(function(){
-  $("#user__detail__drp").css({'display' : 'block'})
-});
-$(".drpdwn_cls").click(function(){
-$("#user__detail__drp").css({'display' : 'none'})
+// new added feb 2020
+$('.forPopup').click(function(){
+  $(this).siblings('.dprdwn').toggle()
+  if($(this).parent().siblings().children('.dprdwn').not('visible')){
+    $(this).parent().siblings().children('.dprdwn').css({display:''})
+  }
 })
+
+$('body').click(function(e){
+  if(!$(e.target).is('.popup__top')){
+    console.log('test');
+  }
+})
+
+// new added feb 2020
+
+
 
 });// document ready
 
@@ -124,4 +124,4 @@ $(".pop__up__order__placed___close").click(function(){
  $("#order__place").css({'display' : 'none'})
 })
 
-})(window.jQuery);  
+})(window.jQuery);
