@@ -778,6 +778,13 @@ section.checkout {
   max-width: 48%;
   padding: 7px 0;
 }
+.create__accoutn__button a{
+  color: #fff;
+}
+.create__accoutn__button a:hover{
+  text-decoration: none;
+
+}
 .button__new_account {
   border: none;
   color: #fff;
@@ -1344,6 +1351,7 @@ p.caution__contion {
   width: 100%;
   padding: 15px 0px 15px 0px;
   text-align: center;
+  border:none;
 }
 .add_order__btn:hover {
   text-decoration: none;
@@ -1974,3 +1982,15 @@ form .form__cancle:hover {
   height: 100%;
 }
 /* new added css 20162020*/
+
+/* new added cart delete button */
+button.cart__delete__btn {
+    border: none;
+    background: #f5f5f5;
+}
+
+.cart__delete__btn i{
+  color: #fd5d6c;
+  font-size: 18px;
+}
+/* new added cart delete button */
