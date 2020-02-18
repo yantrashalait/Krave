@@ -191,16 +191,14 @@ class RestaurantRequest(models.Model):
 class FoodCart(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.DO_NOTHING, related_name='cart')
     number_of_food = models.IntegerField(default=1)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='cart')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='cart', null=True, blank=True)
     added_on = models.DateTimeField(auto_now=True)
     modified_on = models.DateTimeField(auto_now=True)
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, null=True, blank=True)
     style = models.ForeignKey(FoodStyle, related_name='cart', on_delete=models.CASCADE, null=True, blank=True)
     extras = models.ManyToManyField(FoodExtra, related_name='cart')
     checked_out = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.food.name + ' ' + self.user.username
+    session_key = models.CharField(max_length=255, null=True, blank=True)
 
     @property
     def get_total(self):

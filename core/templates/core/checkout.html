@@ -19,8 +19,8 @@
                   </span>
                 </div>
                 <div class="create__accoutn__button">
-                  <button class="button__new_account" href="{% url 'core:register' %}">create account</button>
-                  <button class="button_sign_in" href="{% url 'login' %}">sign in</button>
+                  <button class="button__new_account"><a href="{% url 'core:register' %}">create account</a></button>
+                  <button class="button_sign_in"><a href="{% url 'login' %}">sign in</a></button>
                 </div>
               {% endif %}
               <div  class="delivery__detail">
@@ -50,7 +50,7 @@
             {% for item in lists %}
             <div class="added__item_list">
               <div class="list__item__head">
-                <div class="item__title">{{ item.food.name }} - {{ item.style.name_of_style }}</div>
+                <div class="item__title">{{ item.food.name }} {% if item.style %}- {{ item.style.name_of_style }}{% endif %}</div>
                 <div class="checkout__order__list">
                   <p>
                       <!-- <span id="minus1" class="qty__btn food__qty__dec minus">
@@ -118,9 +118,13 @@
                 <span id="total"></span>
               </div>
               <input id="total_price_order" type="text" value="" name="total_price_order" hidden />
+              {% if request.user.is_authenticated %}
               <div class="grand__total__button">
                 <button id="place_order">Place Order</button>
               </div>
+              {% else %}
+              <p>You need to be logged in to place the order.</p>
+              {% endif %}
             </div>
 
 

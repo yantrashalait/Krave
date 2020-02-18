@@ -9,6 +9,7 @@ from urllib.request import urlretrieve
 from urllib.parse import urlparse
 from django.core.files import File
 from django.contrib.auth import get_user_model
+from core.models import FoodCart
 
 User = get_user_model()
 
@@ -77,6 +78,9 @@ def create_profile(strategy, backend, uid, user, response, social=None, *args, *
             return HttpResponseRedirect(reverse('restaurant:dashboard', kwargs={'rest_id': restaurant_id}))
     except:
         pass
+
+    if FoodCart.objects.filter(session_key=strategy.session.session_key, user=None, checked_out=False).exists():
+        FoodCart.objects.filter(session_key=strategy.session.session_key, user=None, checked_out=False).update(user=u)
 
     try:
         profile = UserProfile.objects.get(user=u)

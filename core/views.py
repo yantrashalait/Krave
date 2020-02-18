@@ -266,13 +266,17 @@ class FoodListView(ListView):
         return object_list
 
 
-class FoodCartListView(LoginRequiredMixin, ListView):
+class FoodCartListView(ListView):
     template_name = 'core/checkout.html'
     model = FoodCart
     context_object_name = 'lists'
 
     def get_queryset(self):
-        return self.model.objects.filter(user=self.request.user, checked_out=False)
+        if self.request.user.is_authenticated:
+            return self.model.objects.filter(user=self.request.user, checked_out=False)
+        else:
+            print(self.request.session.session_key)
+            return self.model.objects.filter(session_key = self.request.session.session_key, checked_out=False)
 
 
 class FoodCartDeleteView(LoginRequiredMixin, DeleteView):
@@ -300,6 +304,9 @@ def web_authenticate(username=None, password=None):
 
 
 def signin(request):
+    if not request.session.session_key:
+        request.session.save()
+    session_key = request.session.session_key
     if request.user.is_authenticated:
         return redirect('core:dashboard')
     if request.method == 'POST':
@@ -310,6 +317,8 @@ def signin(request):
             user, valid_email = web_authenticate(username=username, password=pwd)
             if user is not None:
                 if user.is_active:
+                    if FoodCart.objects.filter(session_key=session_key, checked_out=False, user=None).exists():
+                        FoodCart.objects.filter(session_key=session_key, checked_out=False, user=None).update(user=user)
                     login(request, user)
                     return HttpResponseRedirect(reverse('core:dashboard'))
                 else:
@@ -431,28 +440,25 @@ def activate(request, uidb64, token):
 """
     View to add foods to order then proceed to cart
 """
-@login_required(login_url='/login/')
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
-        if 'food_identifier' in request.POST:
-            if 'qty' in request.POST:
-                if int(request.POST.get('qty', 0)) < 1:
-                    return render(request, 'core/message.html', {'message': 'Items are less than 1.'})
-
-                quantity = request.POST.get('qty', 1)
+        if not request.user.is_authenticated:
+            print('not authenticate')
+            if 'food_identifier' in request.POST:
+                if int(request.POST.get('qty', 1)) < 1:
+                    quantity = 1
+                else:
+                    quantity = request.POST.get('qty', 1)
                 food_id = int(request.POST.get('food_identifier'))
                 food = FoodMenu.objects.get(id=food_id)
 
                 restaurant = Restaurant.objects.get(id=food.restaurant.id)
+                if not request.session.session_key:
+                    request.session.save()
+                print(request.session.session_key)
 
-                # uncomment the following line to check if the user is placing foods to cart from
-                # different restaurants
-                if FoodCart.objects.filter(user=request.user).count() > 0:
-                    if FoodCart.objects.filter(~Q(restaurant=restaurant), checked_out=False).exists():
-                        return render(request, 'core/message.html', {'message': 'You have already ordered food from another restaurant. To place order from another restaurant, you need to checkout the first order.'})
-
-                cart = FoodCart.objects.create(food=food, user=request.user, number_of_food=quantity, restaurant=restaurant)
+                cart = FoodCart.objects.create(food=food, session_key=request.session.session_key, number_of_food=quantity, restaurant=restaurant)
 
                 if 'extras' in request.POST:
                     extras = request.POST.getlist('extras')
@@ -463,7 +469,38 @@ def add_to_order(request, *args, **kwargs):
                 if 'radio3' in request.POST:
                     style = FoodStyle.objects.get(name_of_style=request.POST.get('radio3', None).replace("_", " "), food=food)
                     cart.style = style
+
                 cart.save()
+        else:
+            if 'food_identifier' in request.POST:
+                if 'qty' in request.POST:
+                    if int(request.POST.get('qty', 0)) < 1:
+                        return render(request, 'core/message.html', {'message': 'Items are less than 1.'})
+
+                    quantity = request.POST.get('qty', 1)
+                    food_id = int(request.POST.get('food_identifier'))
+                    food = FoodMenu.objects.get(id=food_id)
+
+                    restaurant = Restaurant.objects.get(id=food.restaurant.id)
+
+                    # uncomment the following line to check if the user is placing foods to cart from
+                    # different restaurants
+                    if FoodCart.objects.filter(user=request.user).count() > 0:
+                        if FoodCart.objects.filter(~Q(restaurant=restaurant), checked_out=False).exists():
+                            return render(request, 'core/message.html', {'message': 'You have already ordered food from another restaurant. To place order from another restaurant, you need to checkout the first order.'})
+
+                    cart = FoodCart.objects.create(food=food, user=request.user, number_of_food=quantity, restaurant=restaurant)
+
+                    if 'extras' in request.POST:
+                        extras = request.POST.getlist('extras')
+                        for item in extras:
+                            extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                            cart.extras.add(extra)
+
+                    if 'radio3' in request.POST:
+                        style = FoodStyle.objects.get(name_of_style=request.POST.get('radio3', None).replace("_", " "), food=food)
+                        cart.style = style
+                    cart.save()
 
         return HttpResponseRedirect(reverse('core:food-cart'))
 
