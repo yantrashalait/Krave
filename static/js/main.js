@@ -52,12 +52,18 @@ $(document).ready(function(){
         $("#food__decspt__handler").css({'display': 'none'});
     });
 
-   $("#cart_drpdwn").click(function(){
-        $(".order__detail").css({'right' : '0'})
+   $("#cart_drpdwn").click(function(event){
+        $('#nav__popup').css({display:'none'});
+        $("#user__detail__drp").css({display:'none'});
+        $(".order__detail").css({'right' : '0'});
+        event.stopPropagation();
    });
+
    $('.order__close__btn').click(function(){
-        $(".order__detail").css({'right' : '-100%'})
+        $(".order__detail").css({'right' : '-100%'});
    })
+
+
 
 
 
@@ -105,10 +111,19 @@ $('.forPopup').click(function(){
 })
 
 $('body').click(function(e){
-  if(!$(e.target).is('.popup__top')){
-    console.log('test');
+  if(!$(e.target).parent().is('#cart_drpdwn')){
+    $(".order__detail").css({'right' : '-100%'});
+  }
+
+  if (!$(e.target).parent().parent().is('#notify_drpdwn')){
+    $('#nav__popup').css({display:'none'});
+  }
+
+  if (!$(e.target).parent().parent().is('#user__pofl_drpdown')){
+    $("#user__detail__drp").css({display:'none'});
   }
 })
+
 
 // new added feb 2020
 
