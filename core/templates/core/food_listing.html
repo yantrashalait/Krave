@@ -11,7 +11,7 @@
 </style>
 <section class="category__item__details">
     <div class="container">
-      <div class="category_main_head">
+      <div class="category_main_head mt-4">
           <span>All Foods</span>
       </div>
       <div class="row pb-4">
@@ -25,7 +25,7 @@
       </div>
       <div class="row">
         {% for item in foods %}
-        <div class="col-md-6 mb-4">
+        <div class="col-md-6 mb-5">
           <div class="categ__info" data-id="{{ item.id }}">
             <div class="categ__head">
               <span class="food_item__name">{{ item.name }}</span>
