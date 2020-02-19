@@ -203,13 +203,14 @@ span.drpdwn_hdingtxt {
 }
 .dprdwn {
   position: absolute;
-  top: 100%;
+  /* top: 100%; */
   z-index: 99;
   width: 330px;
   background: #fff;
   border: 1px solid #eaeaea;
   padding: 10px;
   top: 170%;
+  right: 0;
 }
 .drp_vew_mritemsbtn a:hover {
   text-decoration: none;
