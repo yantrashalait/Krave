@@ -1,5 +1,6 @@
 from django.template import Library
 from core.models import FoodMenu
+from datetime import datetime
 
 register = Library()
 
@@ -19,3 +20,11 @@ def get_total_price(obj):
     for item in obj:
         total += item.get_total
     return total
+
+
+@register.filter
+def is_past_time(obj):
+    if datetime.now().time() > obj:
+        return True
+    else:
+        return False

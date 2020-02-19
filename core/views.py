@@ -279,7 +279,7 @@ class FoodCartListView(ListView):
             return self.model.objects.filter(session_key = self.request.session.session_key, checked_out=False)
 
 
-class FoodCartDeleteView(LoginRequiredMixin, DeleteView):
+class FoodCartDeleteView(DeleteView):
     model = FoodCart
 
     def get_object(self):
@@ -287,7 +287,10 @@ class FoodCartDeleteView(LoginRequiredMixin, DeleteView):
         return get_object_or_404(FoodCart, pk=id_)
 
     def get_success_url(self):
-        return reverse('core:food-cart', kwargs={'username': self.request.user.username})
+        if not self.request.user.is_authenticated:
+            return reverse('core:food-cart')
+        else:
+            return reverse('core:food-cart', kwargs={'username': self.request.user.username})
 
 def web_authenticate(username=None, password=None):
     try:

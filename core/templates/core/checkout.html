@@ -182,16 +182,18 @@
           </div>
            <h5 class="head__payment">PAYMENT OPTIONS</h5>
           <div class="payment__methods">
-            <input type="radio" name="payment" value="paypal" required>
+
             <div class="card paypal__mtd">
-              <img src="{% static 'images/Paypal.png' %}" alt="Paypal" title="Paypal">
+              <label for="paypal"><img src="{% static 'images/Paypal.png' %}" alt="Paypal" title="Paypal"></label>
+              <span><input type="radio" name="payment" id="paypal" value="paypal" required>pay <span class="payment__total"> </span> with paypal</span>
             </div>
-            <input type="radio" name="payment" value="cod" required>
+
             <div class="card master__mtd">
-              <img style="width:64px; height:64px;" src="{% static 'images/cod.png' %}" alt="Paypal" title="Paypal">
+              <label for="cod"><img style="width:64px; height:64px;" src="{% static 'images/cod.png' %}" alt="cod" title="cod"></label>
+              <span><input type="radio" name="payment" id="cod" value="cod" required>pay <span class="payment__total"> </span> with paypal</span>
             </div>
           </div>
-            <div class="col-md-6 mx-auto mb-3">
+            <div class="col-md-6 mx-auto mb-3 mt-5">
               <button type="submit" id="order_submit" class="delivery__btn">Submit</button>
           </div>
         </form>
@@ -207,6 +209,8 @@
       var total = parseInt(food_total) + parseInt(delivery_cost);
       $("#total").html("$" + total);
       $("#total_price_order").val(total);
+
+      $(".payment__total").html("$" + total);
     });
 
     // $("#place_order").on('click', function(){

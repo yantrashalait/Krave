@@ -1,5 +1,5 @@
 {% include 'restaurant/header.php' %}
-{% load filters %}
+{% load rest_filters %}
                     <div class="it-ad-hl pd-tb-md">
                         <div class="rb-pd-rl">
                             <div class="it-ac-hd">
