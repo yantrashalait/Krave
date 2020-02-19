@@ -11,7 +11,7 @@ class User(AbstractUser):
 
 
 class UserProfile(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     location = PointField(geography=True, srid=4326, blank=True, null=True)
     image = models.ImageField(upload_to='profile_pics/')
     address = models.CharField(max_length=255)
@@ -22,7 +22,7 @@ class UserProfile(models.Model):
     def longitude(self):
         if self.location:
             return self.location.x
-    
+
     @property
     def latitude(self):
         if self.location:
@@ -30,4 +30,3 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username + ' - ' + 'Profile'
-

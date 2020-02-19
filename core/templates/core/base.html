@@ -132,9 +132,22 @@
                                 <div class="noty__wrapper">
                                 <a href="#">
                                   <div class="noty__img">
-                                    <img src="{% static 'images/user.png' %}" alt="">
+                                    {% if noti.content_object.user_roles.restaurant %}
+                                      {% if noti.content_object.user_roles.restaurant.logo %}
+                                        <img src="{{ noti.content_object.user_roles.restaurant.logo.url }}" alt="">
+                                      {% else %}
+                                        <img src="{% static 'images/user.png' %}" alt="">
+                                      {% endif %}
+                                    {% else %}
+                                      {% if noti.content_object.profile.image %}
+                                        <img src="{{ noti.content_object.profile.image.url }}" alt="">
+                                      {% else %}
+                                        <img src="{% static 'images/user.png' %}" alt="">
+                                      {% endif %}
+                                    {% endif %}
                                   </div>
                                   <div class="noty__content">
+
                                     <span class="noty__head">{{ noti.title }}</span>
                                     <span>{{ noti.description }}</span>
                                   </div>

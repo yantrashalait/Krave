@@ -46,10 +46,11 @@ def order_approved_notification(sender, instance, created, **kwargs):
     try:
         if instance._approved:
             user = instance.user
-            noti = Notification(content_object=user, order=instance, title="Order Approved")
             for item in instance.cart.all():
                 restaurant = item.restaurant
-            userrole = UserRole.objects.filter(restaurant=restaurant)
+            userrole = UserRole.objects.get(restaurant=restaurant)
+            source_user = userrole.user
+            noti = Notification(content_object=source_user, order=instance, title="Order Approved")
             destination = user
             description = "Your order '" + instance.id_string +"' has been accepted."
             noti.description = description
