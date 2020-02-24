@@ -58,7 +58,8 @@ def edit_profile(request, *args, **kwargs):
         user_profile.contact = contact
         user_profile.address = address
         user_profile.zip_code = zip
-        if image != '':
+        print(image)
+        if image != '' and image != None:
             user_profile.image = image
         user_profile.save()
 
