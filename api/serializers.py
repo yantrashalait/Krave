@@ -7,8 +7,8 @@ from rest_framework.validators import UniqueValidator
 from django.core.exceptions import ValidationError
 
 
-base_url = 'http://localhost:8000/api/v1/'
-# base_url = 'https://www.krave.yantrashala.com/api/v1/'
+# base_url = 'http://localhost:8000/api/v1/'
+base_url = 'https://www.krave.yantrashala.com/api/v1/'
 
 
 
