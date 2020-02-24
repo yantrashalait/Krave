@@ -1,11 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .serializers import RestaurantSerializer, RestaurantRequestSerializer, UserSerializer, \
-    UserProfileSerializer, FoodMenuSerializer, RestaurantSingleSerializer, \
-        RestaurantFoodCategorySerializer, UserCartSerializer
+from .serializers import RestaurantListSerializer, RestaurantRequestSerializer, UserSerializer, \
+UserProfileSerializer, FoodMenuSerializer, RestaurantDetailSerializer, RestaurantFoodCategorySerializer, \
+UserCartSerializer, CategorySerializer, CategorySingleSerializer, FoodMenuDetailSerializer
 from core.models import Restaurant, RestaurantRequest, FoodMenu, RestaurantFoodCategory, FoodCart
 from rest_framework.permissions import BasePermission, IsAuthenticated
 from rest_framework import permissions
@@ -28,7 +28,7 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=False)
         try:
             user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)            
+            token, created = Token.objects.get_or_create(user=user)
             return Response({
                 'status': True,
                 'msg': 'Login Successful',
@@ -41,7 +41,7 @@ class CustomAuthToken(ObtainAuthToken):
                     'customer': user.is_customer,
                     'delivery': user.is_deliveryman,
                 }
-                
+
             })
         except KeyError:
             return Response({
@@ -49,6 +49,32 @@ class CustomAuthToken(ObtainAuthToken):
                 'msg': 'Login Failed',
             })
 
+
+class CategoryViewSet(ListAPIView):
+    serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return RestaurantFoodCategory.objects.all().distinct()
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        })
+
+class CategorySingleViewSet(RetrieveAPIView):
+    serializer_class = CategorySingleSerializer
+
+    def get_object(self):
+        return get_object_or_404(RestaurantFoodCategory, id=self.kwargs.get('category_id'))
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object())
+        return Response({
+            'status': True,
+            'data': serializer.data
+        })
 
 class RestaurantFoodCategoryViewSet(ListCreateAPIView):
     serializer_class = RestaurantFoodCategorySerializer
@@ -62,7 +88,7 @@ class RestaurantFoodCategoryViewSet(ListCreateAPIView):
             'status': True,
             'data': serializer.data
         })
-    
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if not serializer.is_valid():
@@ -83,7 +109,7 @@ class RestaurantFoodCategorySingleViewSet(RetrieveUpdateAPIView):
 
     def get_object(self):
         return RestaurantFoodCategory.objects.get(id=self.kwargs.get('category_id'))
-    
+
     def retrieve(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         return Response({
@@ -107,15 +133,15 @@ class RestaurantFoodCategorySingleViewSet(RetrieveUpdateAPIView):
         })
 
 
-class RestaurantViewSet(ListAPIView):
-    serializer_class = RestaurantSerializer
+class RestaurantListViewSet(ListAPIView):
+    serializer_class = RestaurantListSerializer
 
     def get_queryset(self):
         if self.request.query_params.get('name'):
             name = self.request.query_params.get('name')
             return Restaurant.objects.filter(name__icontains=name).prefetch_related('food_category')
         return Restaurant.objects.all().prefetch_related('food_category')
-    
+
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
@@ -123,19 +149,20 @@ class RestaurantViewSet(ListAPIView):
             'data': serializer.data
         })
 
+
 class RestaurantSingleViewSet(RetrieveUpdateAPIView):
-    serializer_class = RestaurantSingleSerializer
+    serializer_class = RestaurantDetailSerializer
 
     def get_object(self):
         return Restaurant.objects.get(id=self.kwargs.get('rest_id'))
-    
+
     def retrieve(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         return Response({
             'status': True,
             'data': serializer.data
         })
-    
+
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object(), data=request.data)
         if not serializer.is_valid():
@@ -143,7 +170,7 @@ class RestaurantSingleViewSet(RetrieveUpdateAPIView):
                 'status': False,
                 'msg': serializer.errors
             })
-        
+
         self.perform_update(serializer)
         return Response({
             'status': True,
@@ -152,37 +179,23 @@ class RestaurantSingleViewSet(RetrieveUpdateAPIView):
         })
 
 
-
-class FoodMenuViewSet(ListCreateAPIView):
+class RestaurantFoodListViewSet(ListAPIView):
     serializer_class = FoodMenuSerializer
 
     def get_queryset(self):
         return FoodMenu.objects.filter(restaurant_id=self.kwargs.get('rest_id'))
-    
+
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
-            'status': True, 
+            'status': True,
             'data': serializer.data
         })
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if not serializer.is_valid():
-            return Response({
-                'status': False,
-                'msg': serializer.errors
-            })
-        self.perform_create(serializer)
-        return Response({
-            'status': True,
-            'data': serializer.data,
-            'msg': 'Successfully created'
-        })
 
 class FoodMenuSingleViewSet(RetrieveUpdateDestroyAPIView):
-    serializer_class = FoodMenuSerializer
-    
+    serializer_class = FoodMenuDetailSerializer
+
     def get_object(self):
         return FoodMenu.objects.get(pk=self.kwargs.get('food_id'))
 
@@ -192,7 +205,7 @@ class FoodMenuSingleViewSet(RetrieveUpdateDestroyAPIView):
             'status': True,
             'data': serializer.data
         })
-    
+
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object(), data=request.data)
         if not serializer.is_valid():
@@ -206,7 +219,7 @@ class FoodMenuSingleViewSet(RetrieveUpdateDestroyAPIView):
             'msg': 'Updated successfully.',
             'data': serializer.data
         })
-    
+
     def destroy(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
@@ -233,7 +246,7 @@ class FoodSearch(ListAPIView):
             category = self.request.query_params.get('category')
             return FoodMenu.objects.filter(category__name__icontains=category)
         return FoodMenu.objects.all()
-    
+
     def get(self, request, *args, **kwargs):
         serializer = self.get_queryset(self.get_queryset(), many=True)
         return Response({
@@ -249,7 +262,7 @@ class FoodSearch(ListAPIView):
 #         return RestaurantFoodCategory.objects.filter(restaurant__id=self.kwargs.get('pk'))
 
 
-    
+
 
 
 # class RestaurantDetailViewSet(RetrieveAPIView):
@@ -285,7 +298,7 @@ class UserCreationViewSet(APIView):
             if user:
                 return Response(
                     {
-                        'status': True, 
+                        'status': True,
                         'msg': 'User Registration Success',
                     }
                 )
@@ -298,7 +311,7 @@ class UserCreationViewSet(APIView):
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     serializer_class = UserProfileSerializer
-    
+
     def get_queryset(self, pk=None):
         if not pk:
             return UserProfile.objects.all()
@@ -311,7 +324,7 @@ class UserCartViewSet(ListCreateAPIView):
 
     def get_queryset(self):
         return FoodCart.objects.filter(user__id=self.kwargs.get('user_id'))
-    
+
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
@@ -339,7 +352,7 @@ class UserCartSingleViewSet(RetrieveUpdateDestroyAPIView):
 
     def get_object(self):
         return FoodCart.objects.get(id=self.kwargs.get('cart_id'))
-    
+
     def retrieve(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         return Response({
@@ -359,7 +372,7 @@ class UserCartSingleViewSet(RetrieveUpdateDestroyAPIView):
             'status': True,
             'msg': 'Successfully updated.',
             'data': serializer.data
-        }) 
+        })
 
     def destroy(self, request, *args, **kwargs):
         try:

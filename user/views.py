@@ -43,8 +43,7 @@ def edit_profile(request, *args, **kwargs):
         contact = request.POST.get('contact')
         address = request.POST.get('address')
         zip = request.POST.get('zip')
-        image = request.POST.get('image')
-        print(request.POST)
+        image = request.FILES.get('image')
 
         user = User.objects.get(id=request.user.id)
         if first_name != user.first_name:

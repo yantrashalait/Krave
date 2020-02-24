@@ -13,19 +13,19 @@ urlpatterns = [
     path('users/add', views.UserCreationViewSet.as_view(), name='add-user'),
 
     #apis for categories
-    # path('category/list', views.CategoryViewSet.as_view(), name='category-list'),
-    # path('category/<int:pk>', views.CategorySingleViewSet.as_view(), name='category-single'),
+    path('category/list', views.CategoryViewSet.as_view(), name='category-list'),
+    path('category/<int:category_id>', views.CategorySingleViewSet.as_view(), name='category-single'),
 
     #apis for restaurant food category
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
     path('restaurant/<int:rest_id>/food/category/<int:category_id>', views.RestaurantFoodCategorySingleViewSet.as_view(), name='rest-food-cat-detail'),
 
     # #apis for restaurant
-    path('restaurant/list', views.RestaurantViewSet.as_view(), name='restaurant-list'),
+    path('restaurant/list', views.RestaurantListViewSet.as_view(), name='restaurant-list'),
     path('restaurant/<int:rest_id>', views.RestaurantSingleViewSet.as_view(), name='restaurant-single'),
 
-    #apis for food menus of a restaurant
-    path('menu/list/<int:rest_id>', views.FoodMenuViewSet.as_view(), name='menu-list'),
+    # apis for restaurant food
+    path('restaurant/<int:rest_id>/food/list', views.RestaurantFoodListViewSet.as_view(), name="restaurant-food-list"),
     path('food/<int:food_id>', views.FoodMenuSingleViewSet.as_view(), name='food-single'),
     path('food/search', views.FoodSearch.as_view(), name='food-search'),
 
