@@ -1,29 +1,32 @@
 (function($) {
-'use strict';
-$(document).ready(function(){
-    $('.success__strories__carousel').owlCarousel({
-            loop: true,
-            rewind: true,
-            responsiveClass: true,
-            nav: true,
-            smartSpeed: 500,
-            dots: false,
-            navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
-            responsive:{
-                0:{
-                    items:1
-                },
-                600:{
-                    items:1
-                },
-                1000:{
-                    items:1
-                }
-            }
-        });
+  "use strict";
+      $(document).ready(function() {
+       $(".success__strories__carousel").owlCarousel({
+        loop: true,
+        rewind: true,
+        responsiveClass: true,
+        nav: true,
+        smartSpeed: 500,
+        dots: false,
+        navText: [
+          '<i class="fa fa-angle-left" aria-hidden="true"></i>',
+          '<i class="fa fa-angle-right" aria-hidden="true"></i>'
+        ],
+        responsive: {
+          0: {
+            items: 1
+          },
+          600: {
+            items: 1
+          },
+          1000: {
+            items: 1
+          }
+        }
+      });
 
-    $('.category_nav_caro').owlCarousel({
-        autoWidth:true,
+      $(".category_nav_caro").owlCarousel({
+        autoWidth: true,
         loop: false,
         rewind: true,
         responsiveClass: true,
@@ -32,7 +35,8 @@ $(document).ready(function(){
         smartSpeed: 500,
         dots: false,
         nav: false
-})
+      });
+
 
 
     // $("#more__info").click(function(){
@@ -50,7 +54,11 @@ $(document).ready(function(){
     // });
     $(".popups__close__button").click(function(){
         $("#food__decspt__handler").css({'display': 'none'});
+        $("body").removeClass("overflow-hidden");
     });
+    $(".pop__up__order__placed___close").click(function() {
+      $("body").removeClass("overflow-hidden");
+     });
 
    $("#cart_drpdwn").click(function(event){
         $('#nav__popup').css({display:'none'});
@@ -93,6 +101,15 @@ $('.close__resp__menu').click(function(){
   $('body').css({'overflow' : 'inherit'});
 })
 
+$(".resp__menu__icn").click(function() {
+  $(".top__navbar").toggle();
+  $("body").css({ overflow: "hidden" });
+});
+
+$(".close__resp__menu").click(function() {
+  $(".top__navbar").hide();
+  $("body").css({ overflow: "inherit" });
+});
 
 
 $('.category_nav_caro .owl-item').click(function(e){
@@ -126,6 +143,9 @@ $('body').click(function(e){
 
 
 // new added feb 2020
+$(".categ__info, .grand__total__button").click(function() {
+  $("body").toggleClass("overflow-hidden");
+});
 
 
 
