@@ -48,6 +48,10 @@ import string
 
 from paypal.standard.forms import PayPalPaymentsForm
 
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 def randomString(stringLength=6):
     """Generate a random string of fixed length """
@@ -126,21 +130,42 @@ def acceptRequest(request, *args, **kwargs):
     user.groups.add(group)
     print('Successfully created')
 
-    mail_subject = 'Restaurant Registered.'
-    current_site = get_current_site(request)
-    message = render_to_string('core/restaurant_registration_success_email.html', {
-        'name': name,
-        'domain': settings.SITE_URL,
-        'username': username,
-        'owner': owner,
-        'password': password,
-    })
+    domain = settings.SITE_URL
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = "Restaurant Registered"
+    msg['From'] = settings.EMAIL_HOST_USER
+    msg['To'] = email
 
-    to_email = email
-    email = EmailMessage(
-        mail_subject, message, to=[to_email]
-    )
-    email.send()
+    html = """
+        <html>
+            <head></head>
+            <body>
+                <p>Hi """ + owner + """,</p>
+                <p>
+                    Your request for registering your restaurant has been successful.
+
+                    Your login credentials are:
+                    <ul>
+                        <li>username: """+ username + """</li>
+                        <li>password: """+ password + """</li>
+                    </ul>
+
+                    <b>Please change the password after logging into your account for security purposes.</b>
+                </p>
+
+                <p>Kindly login to the system by clicking the following link:</p>
+                """+ domain + """/login/.
+            </body>
+        </html>
+    """
+
+    html_part = MIMEText(html, 'html')
+    msg.attach(html_part)
+
+    server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
+    server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+    server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+    server.quit()
 
     return HttpResponseRedirect('/requests/')
 
@@ -385,19 +410,35 @@ def register(request):
             # save user profile
             UserProfile.objects.get_or_create(user=user)
 
-            mail_subject = 'Activate your account.'
-            current_site = get_current_site(request)
-            message = render_to_string('core/acc_active_email.html', {
-                'user': user,
-                'domain': settings.SITE_URL,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
             to_email = email
-            email = EmailMessage(
-                mail_subject, message, to=[to_email]
-            )
-            email.send()
+            domain = settings.SITE_URL
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = account_activation_token.make_token(user)
+
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = "Activate Account"
+            msg['From'] = settings.EMAIL_HOST_USER
+            msg['To'] = to_email
+
+            html = """
+                <html>
+                    <head></head>
+                    <body>
+                        Hi """+ user.username +""",
+                        Please click on the link to confirm your registration,
+                        """ + domain + """/activate/"""+ uid +"""/"""+ token +"""/
+                    </body>
+                </html>
+            """
+
+            html_part = MIMEText(html, 'html')
+            msg.attach(html_part)
+
+            server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
+            server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+            server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+            server.quit()
+
             return render(request, 'core/emailnotify.html', {'email': user.email})
 
         else:
