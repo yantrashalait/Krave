@@ -189,7 +189,7 @@ class CustomPasswordResetForm(PasswordResetForm):
         user = User.objects.get(email=request.POST['email'])
 
         msg = MIMEMultipart('alternative')
-        msg["subject"] = "Password Reset"
+        msg["Subject"] = "Password Reset"
         msg["From"] = settings.EMAIL_HOST_USER
         msg["To"] = to_email
         protocol = "https"
@@ -198,7 +198,6 @@ class CustomPasswordResetForm(PasswordResetForm):
         site_name = "Krave"
         token = token_generator.make_token(user)
         url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
-        print(url)
         html = """
             <html>
                 <head></head>
