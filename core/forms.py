@@ -14,6 +14,18 @@ from django.contrib.gis.geos import Point
 from django.contrib.auth import get_user_model
 from django.contrib.gis import forms as gisforms
 from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.auth.forms import PasswordResetForm
+from django.conf import settings
+from django.urls import reverse_lazy, reverse
+from django.utils.http import int_to_base36
+
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+default_token_generator = PasswordResetTokenGenerator()
 
 User = get_user_model()
 
@@ -169,3 +181,33 @@ class RestaurantCategoryForm(forms.ModelForm):
     class Meta:
         model = RestaurantFoodCategory
         fields = ('category', )
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def save(self, subject_template_name, html_email_template_name, email_template_name, from_email, use_https=True, domain_override=None, request=None,token_generator=default_token_generator, extra_email_context=None):
+        to_email = request.POST['email']
+        user = User.objects.get(email=request.POST['email'])
+
+        msg = MIMEMultipart('alternative')
+        msg["subject"] = "Password Reset"
+        msg["From"] = settings.EMAIL_HOST_USER
+        msg["To"] = to_email
+        protocol = "https"
+        domain = "krave.yantrashala.com"
+        uid = int_to_base36(user.id)
+        site_name = "Krave"
+        token = token_generator.make_token(user)
+        url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
+        print(url)
+        html = """
+            <html>
+                <head></head>
+                <body>
+                    <p>You're receiving this email because you requested a
+                    password reset for your user account at"""+ site_name +"""</p>
+
+                    <p>Please go to the following page and choose a new password:</p><br>
+                    """ + protocol + """://"""+ domain + """/"""+ url +"""/
+                </body>
+            </html>
+        """
