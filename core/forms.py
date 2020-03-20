@@ -206,7 +206,7 @@ class CustomPasswordResetForm(PasswordResetForm):
                     password reset for your user account at"""+ site_name +"""</p>
 
                     <p>Please go to the following page and choose a new password:</p><br>
-                    """ + protocol + """://"""+ domain + """/"""+ url +"""/
+                    """ + protocol + """://"""+ domain + url +"""
                 </body>
             </html>
         """
