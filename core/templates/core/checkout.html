@@ -206,7 +206,7 @@
     $(document).ready(function(){
       var food_total = $("#total_price").attr("data-id");
       var delivery_cost = $("#delivery_cost").attr("data-id");
-      var total = parseInt(food_total) + parseInt(delivery_cost);
+      var total = parseFloat(food_total) + parseFloat(delivery_cost);
       $("#total").html("$" + total);
       $("#total_price_order").val(total);
 
