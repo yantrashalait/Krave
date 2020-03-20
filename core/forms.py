@@ -17,7 +17,8 @@ from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.auth.forms import PasswordResetForm
 from django.conf import settings
 from django.urls import reverse_lazy, reverse
-from django.utils.http import int_to_base36
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 import smtplib
 from email.mime.text import MIMEText
@@ -194,7 +195,7 @@ class CustomPasswordResetForm(PasswordResetForm):
         msg["To"] = to_email
         protocol = "https"
         domain = "krave.yantrashala.com"
-        uid = int_to_base36(user.id)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
         site_name = "Krave"
         token = token_generator.make_token(user)
         url = reverse('password_reset_confirm', kwargs={'uidb64': uid, 'token': token})
@@ -207,6 +208,14 @@ class CustomPasswordResetForm(PasswordResetForm):
 
                     <p>Please go to the following page and choose a new password:</p><br>
                     """ + protocol + """://"""+ domain + url +"""
+                    <br>
+                    <p>
+                    Your username, in case you've forgotten: """+ user.username +"""<br><br>
+
+                    Thanks for using our site!
+
+                    The """+ site_name +""" team
+                    </p>
                 </body>
             </html>
         """
