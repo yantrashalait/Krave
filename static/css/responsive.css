@@ -11,10 +11,10 @@
     }
     .resturent__logo {
         margin-bottom: 20px;
-    }    
+    }
 
     .categ__head {
-	    order: 2;    
+	    order: 2;
 	    width: 100%;
 	}
 	.categ__info {
@@ -22,7 +22,7 @@
 	}
 	.food__item_image {
 	    width: 100%;
-	    justify-content: center;    
+	    justify-content: center;
 	    max-width: 100%;
 	}
 	.google__location__open__hrs{
@@ -65,6 +65,9 @@
 	.google__location__open__hrs{
 		width: 80%;
 	}
+  .content__available__restaurant{
+    flex-wrap: wrap;
+  }
 }
 
 @media screen and (max-width: 768px) {

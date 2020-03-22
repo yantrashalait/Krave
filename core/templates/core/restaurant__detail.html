@@ -155,6 +155,9 @@
             <span class="popups__close__button"><i class="fa fa-times" aria-hidden="true"></i></span>
         </div>
         <div class="food__detail__description">
+            <div class="f__rel__rest">
+              <a href="" id="food__restaurant"></a>
+            </div>
             <h3></h3>
             <p class="food__content__popup"></p>
         </div>
@@ -293,6 +296,8 @@
                   food_data = data.food;
                   food_data = jQuery.parseJSON(food_data);
 
+                  restaurant = data.restaurant;
+                  restaurant = jQuery.parseJSON(restaurant);
 
                   // console.log(food_data.food[0].fields);
                   $("#food__decspt__handler").css({'display': 'flex', 'position': 'fixed' });
@@ -310,6 +315,10 @@
                   var base_url = "http://www.krave.yantrashala.com/";
                   var src1 = base_url + 'media/' + food_data[0].fields.image;
                   $("#food_image").attr("src", src1);
+                  var restaurant_name = restaurant[0].fields.name;
+                  var restaurant_detail = "/restaurant-detail/" + restaurant[0].fields.name.split(' ').join('_')
+                  $("#food__restaurant").html(restaurant_name)
+                  $("#food__restaurant").attr("href", restaurant_detail)
 
                   $("#styles").html('');
       					  var styles = [];

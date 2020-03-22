@@ -261,12 +261,14 @@ def search(request, *args, **kwargs):
 def get_food_detail(request, *args, **kwargs):
     if request.method == 'GET':
         food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
+        restaurant = food.restaurant
         styles = food.styles.all()
         extras = food.extras.all()
+        restaurant = serializers.serialize('json', [restaurant])
         food = serializers.serialize('json', [food])
         styles = serializers.serialize('json', styles)
         extras = serializers.serialize('json', extras)
-        data = {'food': food, 'styles': styles, 'extras': extras}
+        data = {'food': food, 'styles': styles, 'extras': extras, 'restaurant': restaurant}
         return JsonResponse(data, safe=False)
 
 
@@ -558,7 +560,6 @@ def place_order(request, *args, **kwargs):
     if request.method == "POST":
         order = Order()
         order.user = request.user
-        order.location_text = ''
         total = 0
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             total += item.get_total
