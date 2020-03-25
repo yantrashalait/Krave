@@ -35,7 +35,7 @@ body {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', sans-serif;   
+    font-family: 'Roboto', sans-serif;
      font-size: 14px;
     color: #333e48;
 }
@@ -68,7 +68,7 @@ section.editing__notice__holder {
 }
 
 .dash__left__sitemenu{
-    height: 100vh;    
+    height: 100vh;
     padding: 0 0 0 30px;
 }
 
@@ -91,7 +91,7 @@ section.editing__notice__holder {
     font-size: 16px;
     width: 100%;
     display: flex;
-    align-items: center;    
+    align-items: center;
     padding: 1rem 0;
 }
 
@@ -100,7 +100,7 @@ section.editing__notice__holder {
     width: 20px;
 }
 
-.right__body__sec {   
+.right__body__sec {
     width: 100%;
 }
 
@@ -116,7 +116,7 @@ section.editing__notice__holder {
 .tp-m ul li a{
     color: #a7a5a5;
     font-size: 13px;
-    font-weight: 600;    
+    font-weight: 600;
     padding: 15px 0;
 }
 
@@ -146,7 +146,7 @@ section.editing__notice__holder {
 .it-ac-hd{
     border-bottom: 1px solid #ccc;
     padding: 0 0 0.5rem 0;
-    display: flex;    
+    display: flex;
     align-items: center;
     justify-content: space-between;
 }
@@ -174,7 +174,7 @@ section.editing__notice__holder {
 
 
 
-.up-im-bt{    
+.up-im-bt{
     width: 270px;
     height: 220px;
     display: flex;
@@ -194,18 +194,18 @@ section.editing__notice__holder {
 
 .pv-im-hl {
     width: 270px;
-    height: 220px;    
+    height: 220px;
     margin: 0 0 0 2rem;
 }
 
 .pv-im-hl img{
     width: 270px;
-    height: 220px;    
+    height: 220px;
     object-fit: cover;
 }
 
 .ad-fd-fm .fm-ls label{
-    width: 100%;    
+    width: 100%;
     font-size: 17px;
 }
 
@@ -221,7 +221,7 @@ section.editing__notice__holder {
 
 .ad-fd-fm .fm-ls .select2-selection.select2-selection--multiple{
     background-color: #f7f5f7;
-    border: none; 
+    border: none;
     border-radius: 4px;
     height: 40px;
     display: flex;
@@ -272,12 +272,12 @@ section.editing__notice__holder {
 }
 
 .rs-in-tx .rs-nm{
-   font-size: 17px; 
+   font-size: 17px;
 }
 
 .md-gp-in {
     display: flex;
-    flex-wrap: wrap;    
+    flex-wrap: wrap;
     justify-content: space-between;
     border: 1px solid #dedede;
     padding: 30px;
@@ -340,7 +340,7 @@ button.sb-bt {
 .customer-name-prnt a{
     background: #eaeaea;
     border-radius: 5px;
-    padding: 7px 25px;    
+    padding: 7px 25px;
     font-weight: 600;
     color: #000;
 }
@@ -406,7 +406,7 @@ button.sb-bt {
 }
 
 .rws-inf {
-    padding: 0 1rem;    
+    padding: 0 1rem;
     font-size: 1rem;
 }
 
@@ -466,7 +466,7 @@ section.gery__bg {
 }
 .form-submit:hover{
     transition:1s;
-    background-color: black; 
+    background-color: black;
 }
 .login-detail {
     text-transform: capitalize;
@@ -508,7 +508,7 @@ section.landing {
     font-family: 'FuturaPTMedium';
 }
 .landing-top-info h1{
-    
+
 margin: 0 0 2rem 0;
 }
 
@@ -522,4 +522,86 @@ margin: 0 0 2rem 0;
     text-transform: capitalize;
     font-size: 14px;
     margin: 10px 0 20px 0;
+}
+
+/*manual order extras */
+.popup__content__wrapper {
+  padding: 0 22px;
+}
+.checkbox__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.radio__box__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.radio__price__info {
+  color: #000000;
+  font-weight: 600;
+}
+.space__between {
+  margin-bottom: 10px;
+}
+span.qnty__cals {
+  display: flex;
+  padding-left: 20px;
+}
+.radio__box__price {
+  display: flex;
+  align-items: center;
+}
+
+/* manual order */
+
+
+/* newly added for manual order page */
+.radio__wrapper{
+  display: flex;
+}
+
+.radio__wrapper input[type="radio"] {
+    height: 20px;
+    width: 12px;
+}
+
+.radio__wrapper__content{
+  display:flex;
+}
+
+.radio__wrapper__content span{
+  margin-left: 1rem;
+}
+
+.radio__price{
+  margin-left: 5rem;
+}
+
+.radio__price span{
+  font-weight: 600;
+}
+
+.checkbox__wrapper__new{
+  display:flex;
+}
+
+.checkbox__wrapper__new input[type="checkbox"] {
+    height: 20px;
+    width: 12px;
+}
+
+.checkbox__wrapper__content{
+  display:flex;
+}
+
+.checkbox__wrapper__content span{
+  margin-left: 1rem;
+}
+
+.checkbox__price{
+  margin-left: 5rem;
+}
+
+.checkbox__price span{
+  font-weight: 600;
 }

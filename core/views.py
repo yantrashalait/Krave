@@ -490,7 +490,6 @@ def activate(request, uidb64, token):
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            print('not authenticate')
             if 'food_identifier' in request.POST:
                 if int(request.POST.get('qty', 1)) < 1:
                     quantity = 1
@@ -502,7 +501,6 @@ def add_to_order(request, *args, **kwargs):
                 restaurant = Restaurant.objects.get(id=food.restaurant.id)
                 if not request.session.session_key:
                     request.session.save()
-                print(request.session.session_key)
 
                 cart = FoodCart.objects.create(food=food, session_key=request.session.session_key, number_of_food=quantity, restaurant=restaurant)
 

@@ -7,7 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
-from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, Cuisine, RestaurantFoodCategory
+from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, \
+Cuisine, RestaurantFoodCategory, FoodCart
 from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm, RestaurantCategoryForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
@@ -18,7 +19,10 @@ from django.contrib.gis.geos import Point
 import json
 from django.contrib.gis.geos import GEOSGeometry
 from django.db.models import Q
+from django.http import JsonResponse
 
+from django.core import serializers
+from core.views import randomString
 
 StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'cost',], extra=1, max_num=10)
 ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'cost'], extra=1, max_num=10)
@@ -329,7 +333,6 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
         return get_object_or_404(Order, id=self.kwargs.get('order_id'))
 
 
-
 def accept_order(request, *args, **kwargs):
     order = Order.objects.get(id=kwargs.get('order_id'))
     order.status = 2
@@ -346,3 +349,139 @@ def ready_order(request, *args, **kwargs):
     order.save()
 
     return redirect(reverse_lazy('restaurant:accepted-order', kwargs={'rest_id': request.restaurant.id}))
+
+
+def manual_order(request, *args, **kwargs):
+    if request.method == "GET":
+        foods = FoodMenu.objects.filter(restaurant=request.restaurant.id, deleted=False)
+        return render(request, 'restaurant/order-place.php', {'foods': foods})
+
+    if request.method == "POST":
+        food_id = int(request.POST.get('food'))
+        food = FoodMenu.objects.get(id=food_id)
+
+        restaurant = request.restaurant
+        qty = request.POST.get('qty')
+
+        if not request.session.session_key:
+            request.session.save()
+
+        cart = FoodCart.objects.create(food=food, session_key=request.session.session_key, number_of_food=qty, restaurant=restaurant)
+
+        if 'extras' in request.POST:
+            extras = request.POST.getlist('extras')
+            for item in extras:
+                extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                cart.extras.add(extra)
+
+        if 'radio3' in request.POST:
+            style = FoodStyle.objects.get(name_of_style=request.POST.get('radio3', None).replace("_", " "), food=food)
+            cart.style = style
+
+        cart.save()
+
+        return HttpResponseRedirect(reverse('restaurant:food-cart'))
+
+
+class FoodCartListView(ListView):
+    template_name = 'restaurant/checkout.php'
+    model = FoodCart
+    context_object_name = "carts"
+
+    def get_queryset(self):
+        return self.model.objects.filter(session_key=self.request.session.session_key, checked_out=False)
+
+
+class FoodCartDeleteView(DeleteView):
+    model = FoodCart
+    template_name = "restaurant/foodcart_confirm_delete.php"
+
+    def get_object(self):
+        id_ = self.kwargs.get('pk')
+        return get_object_or_404(FoodCart, pk=id_)
+
+    def get_success_url(self):
+        return reverse('restaurant:food-cart')
+
+
+def add_to_order(request, *args, **kwargs):
+    if request.method == "GET":
+        return render(request, "restaurant/order.php")
+    if request.method == "POST":
+        order = Order()
+        cart = FoodCart.objects.filter(session_key=request.session.session_key, checked_out=False)
+        total = 0
+        for item in cart:
+            total += item.get_total
+            restaurant = item.restaurant
+
+        total += restaurant.delivery_charge
+        order.total_price = total
+        order.paid = False
+
+        first_name = request.POST.get("first_name", "")
+        middle_name = request.POST.get("middle_name", "")
+        last_name = request.POST.get("last_name", "")
+        email = request.POST.get("email", "")
+        contact_number = request.POST.get("contact", "")
+
+        address_line1 = request.POST.get("address1", "")
+        address_line2 = request.POST.get("address2", "")
+        city = request.POST.get("city", "")
+        state = request.POST.get("state", "")
+        zip = request.POST.get("zip", "")
+
+        order.first_name = first_name
+        order.last_name = last_name
+        order.middle_name = middle_name
+        order.email = email
+        order.contact_number = contact_number
+        order.address_line1 = address_line1
+        order.address_line2 = address_line2
+        order.city = city
+        order.state = state
+        order.zip_code = zip
+
+        if 'comment' in request.POST:
+            message = request.POST.get('comment', '')
+            order.note = message
+
+        order.payment = 1
+
+        last_order = Order.objects.last()
+        if last_order:
+            order_id = last_order.id
+            order_id = order_id + 1
+
+        else:
+            order_id = 1
+
+        id_string = randomString() + str(order_id)
+        if Order.objects.filter(id_string=id_string).exists():
+            id_string = randomString() + str(order_id)
+            order.id_string = id_string
+        else:
+            order.id_string = id_string
+
+        order.status = 1
+        order._runsignal = False
+        order.save()
+
+        for item in cart:
+            order.cart.add(item)
+            item.checked_out = True
+            item.save()
+        order._runsignal = False
+        order.save()
+
+        return HttpResponseRedirect('/')
+
+def get_styles(request, *args, **kwargs):
+    if request.method == "GET":
+        food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
+        styles = food.styles.all()
+        extras = food.extras.all()
+        styles = serializers.serialize('json', styles)
+        extras = serializers.serialize('json', extras)
+        data = {'styles': styles, 'extras': extras}
+        return JsonResponse(data, safe=False)

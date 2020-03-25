@@ -26,4 +26,10 @@ urlpatterns = [
     path('order/accept/<int:order_id>', views.accept_order, name="accept-order"),
     path('order/ready/<int:order_id>', views.ready_order, name="ready-order"),
 
+    path('order/add/', views.manual_order, name="manual-order"),
+    path('cart/', views.FoodCartListView.as_view(), name="food-cart"),
+    path('cart/delete/<int:pk>/', views.FoodCartDeleteView.as_view(), name="cart-delete"),
+
+    path('add-order/', views.add_to_order, name='add-to-order'),
+
 ]

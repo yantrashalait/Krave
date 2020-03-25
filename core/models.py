@@ -228,7 +228,15 @@ class Order(models.Model):
     )
 
     cart = models.ManyToManyField(FoodCart, related_name="order")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='order')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.DO_NOTHING, related_name='order', null=True, blank=True)
+
+    # used for manual orders
+    first_name = models.CharField(max_length=255, null=True, blank=True)
+    middle_name = models.CharField(max_length=255, null=True, blank=True)
+    last_name = models.CharField(max_length=255, null=True, blank=True)
+    email = models.CharField(max_length=255, null=True, blank=True)
+    contact_number = models.CharField(max_length=255, null=True, blank=True)
+
     last_modified = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS_CHOICES, null=True, blank=True)

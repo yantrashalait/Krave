@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/owl.carousel.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/owl.theme.default.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/select2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/magic-input.css' %}">
     <!-- <link rel="stylesheet" type="text/css" href="css/font-awesome.css"> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -33,6 +34,9 @@
                 {% if request.restaurant.id %}
                 <div class="left__menu__lists">
                     <ul>
+                        <li>
+                          <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Order</a>
+                        </li>
                         <li>
                             <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant Detail</a>
                         </li>
