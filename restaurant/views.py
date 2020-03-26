@@ -475,13 +475,3 @@ def add_to_order(request, *args, **kwargs):
         order.save()
 
         return HttpResponseRedirect('/')
-
-def get_styles(request, *args, **kwargs):
-    if request.method == "GET":
-        food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
-        styles = food.styles.all()
-        extras = food.extras.all()
-        styles = serializers.serialize('json', styles)
-        extras = serializers.serialize('json', extras)
-        data = {'styles': styles, 'extras': extras}
-        return JsonResponse(data, safe=False)

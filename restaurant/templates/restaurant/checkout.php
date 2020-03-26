@@ -40,7 +40,7 @@
                     {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'restaurant:add-to-order' %}">Proceed to order</a>
+            <a href="{% url 'restaurant:add-to-order' %}"><button class="sb-bt mx-auto d-flex">Proceed to order</button></a>
         </div>
       </div>
     </div>

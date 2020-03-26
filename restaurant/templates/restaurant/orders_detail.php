@@ -18,9 +18,8 @@
                                         <a href="#">Print</a>
                                         </div>
                                         <div class="customer-inftxt">
-                                            <span class="cus-inf-attributes"><i class="fa fa-phone" aria-hidden="true"></i>+974 123456</span>
-                                            <span class="cus-inf-attributes"><i class="fa fa-map-marker" aria-hidden="true"></i>Bin Khaled st- Abu Hamour</span>
-                                            <span class="cus-inf-attributes"><i class="fa fa-home"></i>Outlet Name</span>
+                                            <span class="cus-inf-attributes"><i class="fa fa-phone" aria-hidden="true"></i>{% if order.user %}{{ order.user.profile.contact }}{% else %}{{ order.contact_number }}{% endif %}</span>
+                                            <span class="cus-inf-attributes"><i class="fa fa-map-marker" aria-hidden="true"></i>{{ order.address_line1 }}, {{ order.address_line2 }}, {{ order.city }}, {{ order.state }}- {{ order.zip_code }}</span>
                                         </div>
 
                                         <div class="customer-inftxt">
