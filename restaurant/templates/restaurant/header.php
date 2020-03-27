@@ -38,6 +38,9 @@
                           <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Order</a>
                         </li>
                         <li>
+                          <a href="{% url 'restaurant:food-cart' %}"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> View Orders Cart</a>
+                        </li>
+                        <li>
                             <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant Detail</a>
                         </li>
                         <li>

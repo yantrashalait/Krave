@@ -21,7 +21,7 @@
                     </div>
                     <div class="fm-ls sm-mb">
                       <label>Quantity</label>
-                      <input type="number" name="qty">
+                      <input type="number" name="qty" required>
                     </div>
 
                     <div class="fm-ls sm-mb">

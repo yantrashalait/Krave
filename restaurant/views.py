@@ -361,7 +361,7 @@ def manual_order(request, *args, **kwargs):
         food = FoodMenu.objects.get(id=food_id)
 
         restaurant = request.restaurant
-        qty = request.POST.get('qty')
+        qty = request.POST.get('qty', 1)
 
         if not request.session.session_key:
             request.session.save()
