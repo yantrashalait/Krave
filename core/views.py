@@ -46,8 +46,6 @@ from decimal import Decimal
 import random
 import string
 
-from paypal.standard.forms import PayPalPaymentsForm
-
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -604,46 +602,48 @@ def place_order(request, *args, **kwargs):
             order.cart.add(item)
             item.checked_out = True
             item.save()
-        order._runsignal = True
-        order.save()
-
-        request.session['order_id'] = order.id
 
         if order.payment == 2:
-            return redirect('core:process_payment')
+            request.session['order_id'] = order.id
+            return redirect('core:process-payment')
 
-
+        order._runsignal = True
+        order.save()
     return HttpResponseRedirect('/')
 
 
-def process_payment(request):
-    order_id = request.session.get('order_id')
-    order = get_object_or_404(Order, id=order_id)
-    host = request.get_host()
+def process_payment(request, *args, **kwargs):
+    key = settings.STRIPE_PUBLISHABLE_KEY
+    _id = request.session.get('order_id')
+    return render(request, 'core/process_payment.html', {'key': key, 'id': _id})
 
-    paypal_dict = {
-        'business': settings.PAYPAL_RECEIVER_EMAIL,
-        'amount': '%.2f' % order.total_price,
-        'item_name': 'Order {}'.format(order.id),
-        'invoice': str(order.id),
-        'currency_code': 'USD',
-        'notify_url': 'http://{}{}'.format(host,
-                                           reverse('paypal-ipn')),
-        'return_url': 'http://{}{}'.format(host,
-                                           reverse('core:payment_done')),
-        'cancel_return': 'http://{}{}'.format(host,
-                                              reverse('core:payment_cancelled')),
-    }
+import stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
+def charge(request, *args, **kwargs):
+    if request.method == "POST":
+        print(request.POST['order-id'])
+        try:
+            order = Order.objects.get(id=int(request.POST.get('order-id', '')))
+            if order.payment == 1:
+                return render(request, 'core/payment_cancelled.html')
+            elif order.paid == True:
+                return render(request, 'core/payment_cancelled.html')
+            else:
+                charge = stripe.Charge.create(
+                    amount=500,
+                    currency='usd',
+                    description='A django charge',
+                    source=request.POST['stripeToken']
+                )
+                order.paid = True
+                order._runsignal = True
+                order.save()
 
-    form = PayPalPaymentsForm(initial=paypal_dict)
-    return render(request, 'core/process_payment.html', {'order': order, 'form': form})
-
-@csrf_exempt
-def payment_done(request):
-    del request.session['order_id']
-    return render(request, 'core/payment_done.html')
+                return render(request, 'core/payment_done.html')
+        except Order.DoesNotExist:
+            return render(request, 'core/payment_cancelled.html')
 
 
-@csrf_exempt
-def payment_canceled(request):
-    return render(request, 'core/payment_cancelled.html')
+
+    else:
+        return render(request, 'core/payment_done.html')

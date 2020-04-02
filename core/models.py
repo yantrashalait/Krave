@@ -225,6 +225,7 @@ class Order(models.Model):
 
     PAYMENT_TYPE = (
         (1, 'On Delivery'),
+        (2, 'Card'),
     )
 
     cart = models.ManyToManyField(FoodCart, related_name="order")

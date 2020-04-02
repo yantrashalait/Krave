@@ -38,7 +38,6 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='core/password_reset_complete.html'), name='password_reset_complete'),
     path('logout/', auth_views.LogoutView.as_view(template_name='core/login.html'), name='logout'),
 
-    path('paypal/', include('paypal.standard.ipn.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
