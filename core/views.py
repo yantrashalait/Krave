@@ -22,7 +22,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import Sum, Max
 
 
 from django.core.mail import EmailMessage
@@ -300,9 +300,15 @@ class FoodCartListView(ListView):
         if self.request.user.is_authenticated:
             return self.model.objects.filter(user=self.request.user, checked_out=False)
         else:
-            print(self.request.session.session_key)
-            return self.model.objects.filter(session_key = self.request.session.session_key, checked_out=False)
+            return self.model.objects.filter(session_key=self.request.session.session_key, checked_out=False)
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(FoodCartListView, self).get_context_data(**kwargs)
+        max_time = self.get_queryset().aggregate(max_time=Max('food__preparation_time'))
+        if self.get_queryset():
+            delivery_time = self.get_queryset()[0].restaurant.delivery_time
+            context['total_time'] = max_time['max_time'] + delivery_time
+        return context
 
 class FoodCartDeleteView(DeleteView):
     model = FoodCart

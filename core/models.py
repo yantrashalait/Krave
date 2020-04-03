@@ -26,7 +26,7 @@ class Restaurant(models.Model):
     registration_number = models.CharField(max_length=500, null=True, blank=True)
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
-    delivery_time = models.CharField(default='', max_length=200)
+    delivery_time = models.IntegerField(default=0)
 
     @property
     def longitude(self):
@@ -102,7 +102,7 @@ class FoodMenu(models.Model):
     old_price = models.FloatField(null=True, blank=True)
     new_price = models.FloatField()
     # The preparation time of each food may vary according to the restaurant.
-    preparation_time = models.CharField(max_length=100, null=True)
+    preparation_time = models.IntegerField(null=True)
     image = models.ImageField(upload_to='menu/', null=True, blank=True)
     created_date = models.DateTimeField(auto_now=True)
     modified_date = models.DateTimeField(auto_now=True)
