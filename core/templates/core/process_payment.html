@@ -1,16 +1,42 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <h4>Pay with Card</h4>
-    <form action="{% url 'core:charge' %}" method="post">
+    <h4>Pay with ${{ price }} Card</h4>
+    <form action="{% url 'core:charge' %}" method="post" id="paymentForm">
       {% csrf_token %}
-      <input value="{{ id }}" hidden name="order-id">
-      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-        data-key="{{ key }}"
-        data-description="A Django Charge"
-        data-amount="500"
-        data-locale="auto">
-      </script>
+      <input value="{{ id }}" type="hidden" name="order-id">
+      <input type="hidden" id="stripeAmount" value="{{ price }}" name="stripeAmount" />
+      <input type="hidden" id="stripeToken" name="stripeToken" />
+      <input type="hidden" id="stripeEmail" name="stripeEmail" />
+      <input type="hidden" id="amountInCents" name="amountInCents" />
     </form>
 
+    <input type="button" id="payWithCard" value="Pay" />
+
+
+{% endblock %}
+{% block scripts %}
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+  <script>
+    $("#payWithCard").on("click", function(e){
+      var token = function(res){
+        var $id = $('<input type="hidden" name="stripeToken" />').val(res.id);
+        var $email = $('<input type="hidden" name="stripeEmail" />').val(res.email);
+        $("form").append($id).append($email).submit();
+      }
+      var amount = parseFloat(Math.floor($("#stripeAmount").val() * 100));
+
+      StripeCheckout.open({
+            key: '{{ key }}',
+            amount: amount,
+            name: 'Demo payment',
+            description: 'Purchase Products',
+            panelLabel:  'Checkout',
+            token:       token
+      });
+      e.preventDefault();
+    })
+  </script>
 {% endblock %}

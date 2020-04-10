@@ -621,13 +621,14 @@ def place_order(request, *args, **kwargs):
 def process_payment(request, *args, **kwargs):
     key = settings.STRIPE_PUBLISHABLE_KEY
     _id = request.session.get('order_id')
-    return render(request, 'core/process_payment.html', {'key': key, 'id': _id})
+    price = Order.objects.get(id=_id).total_price
+    print(price)
+    return render(request, 'core/process_payment.html', {'key': key, 'id': _id, 'price': price})
 
 import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 def charge(request, *args, **kwargs):
     if request.method == "POST":
-        print(request.POST['order-id'])
         try:
             order = Order.objects.get(id=int(request.POST.get('order-id', '')))
             if order.payment == 1:
@@ -636,7 +637,7 @@ def charge(request, *args, **kwargs):
                 return render(request, 'core/payment_cancelled.html')
             else:
                 charge = stripe.Charge.create(
-                    amount=500,
+                    amount=request.POST['stripeAmount'],
                     currency='usd',
                     description='A django charge',
                     source=request.POST['stripeToken']
