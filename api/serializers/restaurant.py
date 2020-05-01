@@ -56,4 +56,6 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
             rest_cuisine = RestaurantCuisine.objects.get(restaurant=obj)
             for item in rest_cuisine.cuisine.all():
                 cuisine_list.append(item.name)
+        except RestaurantCuisine.DoesNotExist:
+            pass
         return cuisine_list
