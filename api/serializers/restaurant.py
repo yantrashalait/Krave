@@ -52,7 +52,8 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
     
     def get_cuisines(self, obj):
         cuisine_list = []
-        rest_cuisine = RestaurantCuisine.objects.get(restaurant=obj)
-        for item in rest_cuisine.cuisine.all():
-            cuisine_list.append(item.name)
+        try:
+            rest_cuisine = RestaurantCuisine.objects.get(restaurant=obj)
+            for item in rest_cuisine.cuisine.all():
+                cuisine_list.append(item.name)
         return cuisine_list
