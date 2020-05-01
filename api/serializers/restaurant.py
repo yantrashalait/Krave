@@ -2,8 +2,8 @@ from rest_framework import serializers
 from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, RestaurantImage
 
 
-BASE_URL = "http://localhost:8000/api/v1"
-# BASE_URL = "https://krave.yantrashala.com/api/v1"
+# BASE_URL = "http://localhost:8000/api/v1"
+BASE_URL = "https://krave.yantrashala.com/api/v1"
 
 
 class RestaurantImageSerializer(serializers.ModelSerializer):

@@ -2,8 +2,8 @@ from rest_framework import serializers
 from core.models import RestaurantFoodCategory, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle
 
 
-base_url = "http://localhost:8000/api/v1"
-# base_url = "http://krave.yantrashala.com/api/v1"
+# base_url = "http://localhost:8000/api/v1"
+base_url = "http://krave.yantrashala.com/api/v1"
 
 class CategoryListSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField(read_only=True)
