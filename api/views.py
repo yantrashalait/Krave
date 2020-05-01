@@ -3,8 +3,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import viewsets
-from .serializers import RestaurantListSerializer, RestaurantRequestSerializer, UserSerializer, \
-UserProfileSerializer, FoodMenuSerializer, RestaurantDetailSerializer, RestaurantFoodCategorySerializer, \
+from .serializers_old import RestaurantListSerializer, RestaurantRequestSerializer, FoodMenuSerializer, RestaurantDetailSerializer, RestaurantFoodCategorySerializer, \
 UserCartSerializer, CategorySerializer, CategorySingleSerializer, FoodMenuDetailSerializer
 from core.models import Restaurant, RestaurantRequest, FoodMenu, RestaurantFoodCategory, FoodCart
 from rest_framework.permissions import BasePermission, IsAuthenticated
@@ -18,36 +17,6 @@ from userrole.models import UserRole
 from django.db import transaction
 from user.models import UserProfile
 import django_filters.rest_framework
-
-
-class CustomAuthToken(ObtainAuthToken):
-    @transaction.atomic
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=False)
-        try:
-            user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({
-                'status': True,
-                'msg': 'Login Successful',
-                'data': {
-                    'token': token.key,
-                    'user_id': user.pk,
-                    'username': user.username,
-                    'email': user.email,
-                    'restaurant': user.is_restaurant,
-                    'customer': user.is_customer,
-                    'delivery': user.is_deliveryman,
-                }
-
-            })
-        except KeyError:
-            return Response({
-                'status': False,
-                'msg': 'Login Failed',
-            })
 
 
 class CategoryViewSet(ListAPIView):
@@ -283,40 +252,6 @@ class FoodSearch(ListAPIView):
 class RestaurantRequestViewSet(viewsets.ModelViewSet):
     queryset = RestaurantRequest.objects.all()
     serializer_class = RestaurantRequestSerializer
-
-
-class UserCreationViewSet(APIView):
-    def post(self, request, format=None):
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            user.is_customer = True
-            user.save()
-            group = Group.objects.get(name='customer')
-            userrole = UserRole.objects.get_or_create(user=user, group=group)
-            user.groups.add(group)
-            if user:
-                return Response(
-                    {
-                        'status': True,
-                        'msg': 'User Registration Success',
-                    }
-                )
-        else:
-            return Response({
-                'status': False,
-                'msg': serializer.errors,
-            })
-
-
-class UserProfileViewSet(viewsets.ModelViewSet):
-    serializer_class = UserProfileSerializer
-
-    def get_queryset(self, pk=None):
-        if not pk:
-            return UserProfile.objects.all()
-        else:
-            return UserProfile.objects.get(user__id=pk)
 
 
 class UserCartViewSet(ListCreateAPIView):

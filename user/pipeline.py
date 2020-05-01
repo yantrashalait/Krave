@@ -48,12 +48,16 @@ def create_role(backend, uid, user, response, social=None, *args, **kwargs):
             pass
         else:
             group = Group.objects.get(name="customer")
+            u.is_customer = True
+            u.save()
             userrole = UserRole.objects.filter(user=u)
             if not userrole:
                 UserRole.objects.create(user=u, group=group)
     except:
         group = Group.objects.get(name="customer")
         userrole = UserRole.objects.filter(user=u)
+        u.is_customer = True
+        u.save()
         if not userrole:
             UserRole.objects.create(user=u, group=group)
 

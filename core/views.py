@@ -50,6 +50,9 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+import stripe
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
 
 def randomString(stringLength=6):
     """Generate a random string of fixed length """
@@ -625,8 +628,7 @@ def process_payment(request, *args, **kwargs):
     print(price)
     return render(request, 'core/process_payment.html', {'key': key, 'id': _id, 'price': price})
 
-import stripe
-stripe.api_key = settings.STRIPE_SECRET_KEY
+
 def charge(request, *args, **kwargs):
     if request.method == "POST":
         try:
