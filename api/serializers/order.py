@@ -24,15 +24,32 @@ class CartListSerializer(serializers.ModelSerializer):
 
 
 class CartSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source="user.id")
+    added_on = serializers.ReadOnlyField()
+    checked_out = serializers.ReadOnlyField()
+    total_price = serializers.SerializerMethodField(read_only=True)
+    restaurant = serializers.ReadOnlyField(source="restaurant.id")
+
     class Meta:
         model = FoodCart
-        exclude = ("modified_on", "session_key", "food", "restaurant", "added_on", "checked_out", "style", "extras")
-        extra_kwargs = {"number_of_food": {"required": True}}
+        exclude = ("modified_on", "session_key")
+        extra_kwargs = {'number_of_food': {'required': True}, 'style': {'required': True}, 'extras': {'required': False}}
+    
+    def get_total_price(self, obj):
+        return obj.get_total
     
     def validate_number_of_food(self, value):
         if not isinstance(value, int) or value < 1:
             raise serializers.ValidationError("Please insert a valid quantity")
         return value
+    
+    def validate_restaurant(self, value):
+        try:
+            restaurant = Restaurant.objects.get(id=value)
+            if FoodCart.objects.filter(~Q(restaurant=restaurant), checked_out=False).exists():
+                raise serializers.ValidationError("You have already ordered food from another restaurant. To place order from another restaurant, you need to checkout the first order.")
+        except Restaurant.DoesNotExist:
+            raise serializers.ValidationError("This restaurant does not exist.")
 
 
 class OrderSerializer(serializers.ModelSerializer):
