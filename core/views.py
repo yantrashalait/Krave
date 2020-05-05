@@ -54,11 +54,14 @@ import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
-def randomString(stringLength=6):
+def randomString(stringLength=6, mobile=False):
     """Generate a random string of fixed length """
     letters = string.ascii_uppercase
     character = ''.join(random.choice(letters) for i in range(stringLength))
-    character = 'O' + character
+    if mobile:
+        character = 'OM' + character
+    else:
+        character = 'O' + character
     return character
 
 
