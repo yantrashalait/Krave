@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
@@ -8,9 +8,11 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpda
 from django.db import transaction
 from api.serializers.restaurant import RestaurantListSerializer, RestaurantDetailSerializer
 from core.models import Restaurant
+from rest_framework.decorators import api_view, permission_classes
 
 
 class RestaurantListViewSet(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = RestaurantListSerializer
     model = Restaurant
 
@@ -29,6 +31,7 @@ class RestaurantListViewSet(ListAPIView):
 
 
 class RestaurantDetailViewSet(RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = RestaurantDetailSerializer   
     model = Restaurant
 

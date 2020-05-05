@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
@@ -12,6 +12,8 @@ from django.contrib.auth.models import Group
 from api.serializers.user_auth import UserProfileSerializer, UserSerializer
 from userrole.models import UserRole
 from user.models import UserProfile
+from rest_framework.decorators import api_view, permission_classes
+from api.permissions import IsOwnerOrReadOnly, IsOwner
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -69,10 +71,13 @@ class UserCreationViewSet(APIView):
 
 
 class UserProfileViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsOwner]
     serializer_class = UserProfileSerializer
 
     def get_object(self, *args, **kwargs):
-        return get_object_or_404(UserProfile, user=self.request.user)
+        profile = get_object_or_404(UserProfile, user=self.request.user)
+        self.check_object_permissions(self.request, profile)
+        return profile
 
     # create user profile of user
     def post(self, *args, **kwargs):

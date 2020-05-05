@@ -5,6 +5,7 @@ from . import views
 from api.viewsets import user_auth as auth_views
 from api.viewsets import food as food_views
 from api.viewsets import restaurant as restaurant_views
+from api.viewsets import order as order_views
 
 router = SimpleRouter()
 router.register(r'restaurant_request', views.RestaurantRequestViewSet)
@@ -27,16 +28,16 @@ urlpatterns = [
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
     path('restaurant/<int:rest_id>/food/category/<int:category_id>', views.RestaurantFoodCategorySingleViewSet.as_view(), name='rest-food-cat-detail'),
 
-    # #apis for restaurant
+    # apis for restaurant
     path('restaurant/list', restaurant_views.RestaurantListViewSet.as_view(), name='restaurant-list'),
     path('restaurant/<int:rest_id>', restaurant_views.RestaurantDetailViewSet.as_view(), name='restaurant-single'),
 
     # apis for restaurant food
     path('restaurant/<int:rest_id>/food/list', views.RestaurantFoodListViewSet.as_view(), name="restaurant-food-list"),
-    
 
-    #apis for food cart
-    path('cart/<int:user_id>', views.UserCartViewSet.as_view(), name='add-to-cart'),
+    # cart and order
+    path('add-to-cart', order_views.AddToCartViewSet.as_view(), name="add-to-cart"),
+    path('cart/list', order_views.CartListViewSet.as_view(), name="cart-list"),
     path('cart/<int:user_id>/<int:cart_id>', views.UserCartSingleViewSet.as_view(), name='user-cart-single'),
 
 ]

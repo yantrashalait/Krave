@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
@@ -9,11 +9,13 @@ from django.db import transaction
 from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, FoodDetailSerializer
 from django.db.models import Q
+from rest_framework.decorators import api_view
 
 
 class AllCategoryListViewSet(ListAPIView):
     serializer_class = CategoryListSerializer
     model = RestaurantFoodCategory
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         if self.request.query_params.get('search'):
@@ -32,6 +34,7 @@ class AllCategoryListViewSet(ListAPIView):
 class CategoryDetailViewSet(RetrieveAPIView):
     serializer_class = CategoryDetailSerializer
     model = RestaurantFoodCategory
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(self.model, pk=self.kwargs.get('category_id'))
@@ -47,6 +50,7 @@ class CategoryDetailViewSet(RetrieveAPIView):
 class FoodListViewSet(ListAPIView):
     serializer_class = FoodMenuListSerializer
     model = FoodMenu
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         if "search" in self.request.query_params:
@@ -65,6 +69,7 @@ class FoodListViewSet(ListAPIView):
 class FoodDetailViewSet(RetrieveAPIView):
     serializer_class = FoodDetailSerializer
     model = FoodMenu
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(self.model, pk=self.kwargs.get('food_id'))
