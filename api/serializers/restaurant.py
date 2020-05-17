@@ -21,14 +21,14 @@ class RestaurantListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         exclude = ("location_point", "joined_date")
-    
+
     def get_detail_url(self, obj):
         return BASE_URL + "/restaurant/" + str(obj.pk)
-    
+
     def get_rating(self, obj):
         # static for now
         return 4.0
-    
+
     def get_review_count(self, obj):
         return obj.restaurant_review.count()
 
@@ -38,18 +38,20 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
     review_count = serializers.SerializerMethodField(read_only=True)
     images = RestaurantImageSerializer(many=True)
     cuisines = serializers.SerializerMethodField(read_only=True)
+    popular_dishes_url = serializers.SerializerMethodField(read_only=True)
+    menu_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Restaurant
         exclude = ("joined_date", )
-    
+
     def get_rating(self, obj):
         # static for now
         return 4.0
-    
+
     def get_review_count(self, obj):
         return obj.restaurant_review.count()
-    
+
     def get_cuisines(self, obj):
         cuisine_list = []
         try:
@@ -59,3 +61,9 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
         except RestaurantCuisine.DoesNotExist:
             pass
         return cuisine_list
+
+    def get_popular_dishes_url(self, obj):
+        return BASE_URL + '/restaurant/' + str(obj.pk) + '/popular-dishes'
+
+    def get_menu_url(self, obj):
+        return BASE_URL + '/restaurant/' + str(obj.pk) + '/food/list'

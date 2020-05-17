@@ -22,7 +22,7 @@ class AllCategoryListViewSet(ListAPIView):
             name = self.request.query_params.get('search', "")
             return self.model.objects.filter(category__icontains=name)
         return self.model.objects.all().distinct('category')
-    
+
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
@@ -38,7 +38,7 @@ class CategoryDetailViewSet(RetrieveAPIView):
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(self.model, pk=self.kwargs.get('category_id'))
-    
+
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         return Response({
@@ -57,7 +57,7 @@ class FoodListViewSet(ListAPIView):
             search = self.request.query_params.get("search", "")
             return self.model.objects.filter(Q(restaurant__name__icontains=search) | Q(category__category__icontains=search) | Q(name__icontains=search))
         return self.model.objects.all()
-    
+
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
@@ -73,9 +73,25 @@ class FoodDetailViewSet(RetrieveAPIView):
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(self.model, pk=self.kwargs.get('food_id'))
-    
+
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class TodaysDealViewSet(ListAPIView):
+    serializer_class = FoodMenuListSerializer
+    model = FoodMenu
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.all()
+
+    def get(self, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
             'status': True,
             'data': serializer.data
