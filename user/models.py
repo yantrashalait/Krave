@@ -8,6 +8,7 @@ class User(AbstractUser):
     is_restaurant = models.BooleanField(default=False)
     is_deliveryman = models.BooleanField(default=False)
     is_customer = models.BooleanField(default=False)
+    is_available = models.BooleanField(default=True, null=True, blank=True) # for delivery man
 
 
 class UserProfile(models.Model):
