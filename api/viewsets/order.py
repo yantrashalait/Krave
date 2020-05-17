@@ -12,6 +12,7 @@ from api.serializers.order import CartSerializer, OrderSerializer, CartListSeria
 from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from api.permissions import IsOwner, IsOwnerOrReadOnly
+from core.views import randomString
 
 
 class AddToCartViewSet(CreateAPIView):
@@ -25,7 +26,7 @@ class AddToCartViewSet(CreateAPIView):
                 'status': False,
                 'msg': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
-        
+
         validated_data = serializer.validated_data
         # get all extras
         extras = validated_data.pop('extras', [])
@@ -36,7 +37,7 @@ class AddToCartViewSet(CreateAPIView):
         cart = FoodCart.objects.create(user=user, restaurant=restaurant, **validated_data)
         for item in extras:
             cart.extras.add(item)
-        
+
         return Response({
             'status': True,
             'msg': 'Added to cart'
@@ -49,7 +50,7 @@ class CartListViewSet(ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         return FoodCart.objects.filter(user=self.request.user, checked_out=False)
-    
+
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         try:
@@ -67,7 +68,7 @@ class CartListViewSet(ListAPIView):
         return Response({
             'status': True,
             'data': {
-                'cart': serializer.data, 
+                'cart': serializer.data,
                 'delivery_charge': delivery_charge,
                 'sub_total': sub_total,
                 'total': total_price
@@ -83,7 +84,7 @@ class CartEditViewSet(RetrieveUpdateAPIView):
         cart = get_object_or_404(FoodCart, pk=self.kwargs.get("cart_id"))
         self.check_object_permissions(self.request, cart)
         return get_object_or_404(FoodCart, pk=self.kwargs.get("cart_id"))
-    
+
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_object())
         return Response({
@@ -105,4 +106,85 @@ class CartEditViewSet(RetrieveUpdateAPIView):
         return Response({
             'status': True,
             'msg': 'Updated successfully.'
+        }, status=status.HTTP_200_OK)
+
+
+class OrderPlaceViewSet(CreateAPIView):
+    serializer_class = OrderSerializer
+    model = Order
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                'status': False,
+                'msg': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+        validated_data = serializer.validated_data
+
+        order = Order()
+
+        # get logged in user
+        user = request.user
+        note = validated_data.get("note", "")
+        address_line1 = validated_data.get("address_line1", "")
+        address_line2 = validated_data.get("address_line2", "")
+        city = validated_data.get("city", "")
+        state = validated_data.get("state", "")
+        zip_code = validated_data.get("zip_code", "")
+        payment = validated_data.get("payment", 1)
+
+        # get total price from cart of user
+        if not FoodCart.objects.filter(user=user, checked_out=False).exists():
+            return Response({
+                "status": False,
+                "msg": "Order placement failed",
+                "errors": {
+                    "cart": ["Nothing in cart to place order."]
+                }
+            })
+        total = 0
+        for item in FoodCart.objects.filter(user=user, checked_out=False):
+            total += item.get_total
+            restaurant = item.restaurant
+        total += restaurant.delivery_charge
+
+        order.note = note
+        order.address_line1 = address_line1
+        order.address_line2 = address_line2
+        order.city = city
+        order.state = state
+        order.zip_code = zip_code
+        order.total_price = total
+        order.payment = payment
+        order.user = user
+
+        order.paid = False
+
+        last_order = Order.objects.last()
+        if last_order:
+            order_id = Order.objects.last().id
+            order_id = order_id + 1
+        else:
+            order_id = 1
+
+        id_string = randomString() + str(order_id)
+        if Order.objects.filter(id_string=id_string).exists():
+            id_string = randomString() + str(order_id)
+        order.id_string = id_string
+        order.status = 1
+        order._runsignal = False
+        order.save()
+
+        for item in FoodCart.objects.filter(user=user, checked_out=False):
+            order.cart.add(item)
+            item.checked_out = True
+            item.save()
+
+        order._runsignal = True
+        order.save()
+        return Response({
+            'status': True,
+            'msg': 'Order placed successfully.'
         }, status=status.HTTP_200_OK)

@@ -43,9 +43,7 @@ urlpatterns = [
     path('add-to-cart', order_views.AddToCartViewSet.as_view(), name="add-to-cart"),
     path('cart/list', order_views.CartListViewSet.as_view(), name="cart-list"),
     path('cart/edit/<int:cart_id>', order_views.CartEditViewSet.as_view(), name="cart-edit"),
-    path('cart/<int:user_id>/<int:cart_id>', views.UserCartSingleViewSet.as_view(), name='user-cart-single'),
-
-
+    path('place-order', order_views.OrderPlaceViewSet.as_view(), name="place-order"),
 
 ]
 

@@ -581,8 +581,8 @@ def place_order(request, *args, **kwargs):
             message = request.POST.get('comment', '')
             order.note = message
 
-        order.address1 = request.POST.get('address1', '')
-        order.address2 = request.POST.get('address2', '')
+        order.address_line1 = request.POST.get('address1', '')
+        order.address_line2 = request.POST.get('address2', '')
         order.city = request.POST.get('city', '')
         order.state = request.POST.get('state', '')
         order.zip_code = request.POST.get('zip', '')
@@ -602,7 +602,7 @@ def place_order(request, *args, **kwargs):
             order_id = 1
         id_string = randomString() + str(order_id)
         if Order.objects.filter(id_string=id_string).exists():
-            id_string = randomString + str(order_id)
+            id_string = randomString() + str(order_id)
             order.id_string = id_string
         else:
             order.id_string = id_string

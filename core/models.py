@@ -247,7 +247,6 @@ class Order(models.Model):
     id_string = models.CharField(unique=True, default='', max_length=255)
     added_date = models.DateTimeField(auto_now=True)
     total_price = models.FloatField(default=0)
-    delivery_person = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="deliveries", null=True, blank=True, on_delete=models.DO_NOTHING)
     paid = models.BooleanField(default=False)
 
     address_line1 = models.CharField(max_length=255, default='')

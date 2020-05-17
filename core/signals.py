@@ -12,6 +12,7 @@ User = get_user_model()
 def order_created_notification(sender, instance, created, **kwargs):
     try:
         if instance._runsignal:
+            print('yes order has been placed')
             user = instance.user
             noti = Notification(content_object=user, order=instance, title="Order Placed")
             for item in instance.cart.all():
@@ -23,8 +24,8 @@ def order_created_notification(sender, instance, created, **kwargs):
             noti.destination = destination
             noti.description = description
             noti.save()
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 
 @receiver(post_save, sender=Order)
