@@ -31,3 +31,23 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username + ' - ' + 'Profile'
+
+
+class UserLocationTrack(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="location")
+    last_location_point = PointField(geography=True, srid=4326, blank=True, null=True)
+    last_location_text = models.CharField(max_length=255, null=True, blank=True)
+    tracked_date = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def longitude(self):
+        if self.last_location_point:
+            return self.last_location_point.x
+
+    @property
+    def latitude(self):
+        if self.last_location_point:
+            return self.last_location_point.y
+
+    def __str__(self):
+        return "Last location of " + self.user.username
