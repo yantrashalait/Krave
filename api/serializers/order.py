@@ -69,18 +69,14 @@ class OrderListSerializer(serializers.ModelSerializer):
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
-    track_url = serializers.SerializerMethodField(read_only=True)
     foods = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Order
         fields = (
             'id', 'foods', 'status', 'id_string', 'total_price', 'note',
-            'address_line1', 'address_line2', 'city', 'state', 'zip_code', 'track_url'
+            'address_line1', 'address_line2', 'city', 'state', 'zip_code'
             )
-
-    def get_track_url(self, obj):
-        return BASE_URL + "order/" + str(obj.id_string) + "/track"
 
     def get_foods(self, obj):
         foods = []

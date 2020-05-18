@@ -197,7 +197,7 @@ class OrderListViewSet(ListAPIView):
     model = Order
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(user=self.request.user)
+        return self.model.objects.filter(~Q(status=5), user=self.request.user)
 
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
