@@ -23,7 +23,6 @@ class Delivery(models.Model):
 class DeliveryTrack(models.Model):
     delivery = models.OneToOneField(Delivery, on_delete=models.CASCADE, related_name="track")
     last_location_point = PointField(geography=True, srid=4326, null=True, blank=True)
-    last_location_text = models.CharField(max_length=255, null=True, blank=True)
     date_time = models.DateTimeField(auto_now_add=True)
 
     @property

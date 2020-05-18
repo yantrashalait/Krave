@@ -6,6 +6,7 @@ from api.viewsets import user_auth as auth_views
 from api.viewsets import food as food_views
 from api.viewsets import restaurant as restaurant_views
 from api.viewsets import order as order_views
+from api.viewsets import delivery_man as delivery_views
 
 router = SimpleRouter()
 router.register(r'restaurant_request', views.RestaurantRequestViewSet)
@@ -44,6 +45,11 @@ urlpatterns = [
     path('cart/list', order_views.CartListViewSet.as_view(), name="cart-list"),
     path('cart/edit/<int:cart_id>', order_views.CartEditViewSet.as_view(), name="cart-edit"),
     path('place-order', order_views.OrderPlaceViewSet.as_view(), name="place-order"),
+    path('order/list', order_views.OrderListViewSet.as_view(), name="order-list"),
+    path('order/<int:pk>/detail', order_views.OrderDetailViewSet.as_view(), name="order-detail"),
+
+    # urls for delivery person
+    path('set-location/', delivery_views.DeliveryManSetLocationViewSet.as_view(), name="set-location"),
 
 ]
 

@@ -8,7 +8,8 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpda
 from django.db import transaction
 from core.models import Restaurant, FoodStyle, FoodMenu, FoodExtra, FoodCart, Order
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer
-from api.serializers.order import CartSerializer, OrderSerializer, CartListSerializer
+from api.serializers.order import CartSerializer, OrderCreateSerializer, CartListSerializer,\
+    OrderListSerializer, OrderDetailSerializer
 from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from api.permissions import IsOwner, IsOwnerOrReadOnly
@@ -110,7 +111,7 @@ class CartEditViewSet(RetrieveUpdateAPIView):
 
 
 class OrderPlaceViewSet(CreateAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
     model = Order
     permission_classes = [permissions.IsAuthenticated]
 
@@ -187,4 +188,36 @@ class OrderPlaceViewSet(CreateAPIView):
         return Response({
             'status': True,
             'msg': 'Order placed successfully.'
+        }, status=status.HTTP_200_OK)
+
+
+class OrderListViewSet(ListAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Order
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class OrderDetailViewSet(RetrieveAPIView):
+    serializer_class = OrderDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Order
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(self.model, pk=self.kwargs.get('pk'))
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object())
+        return Response({
+            'status': True,
+            'data': serializer.data
         }, status=status.HTTP_200_OK)

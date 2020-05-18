@@ -3,6 +3,9 @@ from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, R
 from django.db.models import Q
 from api.serializers.food import FoodDetailSerializer, FoodExtraSerializer, FoodStyleSerializer
 
+# BASE_URL = "http://localhost:8000/api/v1"
+BASE_URL = "http://krave.yantrashala.com/api/v1"
+
 
 class CartListSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.id")
@@ -52,8 +55,44 @@ class CartSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("This restaurant does not exist.")
 
 
-class OrderSerializer(serializers.ModelSerializer):
+class OrderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
         fields = ("note", "address_line1", "address_line2", "city", "state", "zip_code", "payment")
+
+
+class OrderListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('id', 'status', 'id_string', 'total_price', 'note')
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    track_url = serializers.SerializerMethodField(read_only=True)
+    foods = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Order
+        fields = (
+            'id', 'foods', 'status', 'id_string', 'total_price', 'note',
+            'address_line1', 'address_line2', 'city', 'state', 'zip_code', 'track_url'
+            )
+
+    def get_track_url(self, obj):
+        return BASE_URL + "order/" + str(obj.id_string) + "/track"
+
+    def get_foods(self, obj):
+        foods = []
+        for item in obj.cart.all():
+            food = {}
+            food['food_name'] = item.food.name
+            food['price'] = item.food.new_price
+            food['image_url'] = item.food.image.url
+            food['number'] = item.number_of_food
+            if item.style:
+                food['style'] = item.style.name_of_style
+            if item.extras:
+                food['extras'] = [extra.name_of_extra for extra in item.extras.all()]
+            foods.append(food)
+        return foods

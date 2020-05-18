@@ -2,8 +2,8 @@ from rest_framework import serializers
 from core.models import RestaurantFoodCategory, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle
 
 
-# base_url = "http://localhost:8000/api/v1"
-base_url = "http://krave.yantrashala.com/api/v1"
+# BASE_URL = "http://localhost:8000/api/v1"
+BASE_URL = "http://krave.yantrashala.com/api/v1"
 
 class CategoryListSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField(read_only=True)
@@ -12,9 +12,9 @@ class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = RestaurantFoodCategory
         fields = "__all__"
-    
+
     def get_detail_url(self, obj):
-        return base_url + "/category/" + str(obj.id)
+        return basBASE_URLe_url + "/category/" + str(obj.id)
 
 
 class FoodFilteredListSerializer(serializers.ListSerializer):
@@ -33,7 +33,7 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
         exclude = ("created_date", "modified_date", "deleted", "category")
 
     def get_detail_url(self, obj):
-        return base_url + "/food/" + str(obj.id)
+        return BASE_URL + "/food/" + str(obj.id)
 
     def get_restaurant_name(self, obj):
         return obj.restaurant.name
@@ -69,9 +69,9 @@ class FoodDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodMenu
         exclude = ("created_date", "modified_date", "deleted")
-    
+
     def get_restaurant_name(self, obj):
         return obj.restaurant.name
-    
+
     def get_category_name(self, obj):
         return obj.category.category
