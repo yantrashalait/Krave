@@ -609,6 +609,8 @@ def place_order(request, *args, **kwargs):
 
         order.status = 1
         order._runsignal = False
+        order._prepared = False
+        order._approved = False
         order.save()
         for item in FoodCart.objects.filter(user=request.user, checked_out=False):
             order.cart.add(item)
@@ -620,6 +622,8 @@ def place_order(request, *args, **kwargs):
             return redirect('core:process-payment')
 
         order._runsignal = True
+        order._prepared = False
+        order._approved = False
         order.save()
     return HttpResponseRedirect('/')
 

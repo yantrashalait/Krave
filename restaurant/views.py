@@ -337,6 +337,8 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
 def accept_order(request, *args, **kwargs):
     order = Order.objects.get(id=kwargs.get('order_id'))
     order.status = 2
+    order._prepared = False
+    order._runsignal = False
     order._approved = True
     order.save()
 
