@@ -23,6 +23,7 @@ from django.http import JsonResponse
 
 from django.core import serializers
 from core.views import randomString
+from delivery.tasks import assign_delivery
 
 StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'cost',], extra=1, max_num=10)
 ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'cost'], extra=1, max_num=10)
@@ -346,8 +347,14 @@ def ready_order(request, *args, **kwargs):
     order = Order.objects.get(id=kwargs.get('order_id'))
     order.status = 4
     order._prepared = True
+    order._runsignal = False
+    order._approved = False
     order.save()
-
+    restaurant_found, delivery_assigned = assign_delivery(order.pk, order.cart.first().restaurant.pk)
+    if not restaurant_found:
+        print('No restaurant has been found')
+    if not delivery_assigned:
+        print('Delivery has not been assigned')
     return redirect(reverse_lazy('restaurant:accepted-order', kwargs={'rest_id': request.restaurant.id}))
 
 

@@ -8,16 +8,6 @@ from core.models import Order
 
 User = get_user_model()
 
-
-@receiver(post_save, sender=Order)
-def order_prepared_notification(sender, instance, created, **kwargs):
-    try:
-        if instance._prepared:
-            pass
-    except:
-        pass
-
-
 @receiver(post_save, sender=Delivery)
 def delivery_assigned_notification(sender, instance, created, **kwargs):
     pass

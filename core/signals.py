@@ -9,14 +9,12 @@ User = get_user_model()
 
 
 @receiver(post_save, sender=Order)
-def order_created_notification(sender, instance, created, **kwargs):
+def order_event_notification(sender, instance, created, **kwargs):
     try:
         if instance._runsignal:
-            print('yes order has been placed')
             user = instance.user
             noti = Notification(content_object=user, order=instance, title="Order Placed")
-            for item in instance.cart.all():
-                restaurant = item.restaurant
+            restaurant = instance.cart.first().restaurant
 
             userrole = UserRole.objects.filter(restaurant=restaurant)
             destination = userrole[0].user
@@ -27,25 +25,38 @@ def order_created_notification(sender, instance, created, **kwargs):
     except Exception as e:
         print(e)
 
-
-@receiver(post_save, sender=Order)
-def order_approved_notification(sender, instance, created, **kwargs):
     try:
         if instance._approved:
-            user = instance.user
-            for item in instance.cart.all():
-                restaurant = item.restaurant
+            restaurant = instance.cart.first().restaurant
             userrole = UserRole.objects.get(restaurant=restaurant)
             source_user = userrole.user
-            noti = Notification(content_object=source_user, order=instance, title="Order Approved")
-            destination = user
             description = "Your order '" + instance.id_string +"' has been accepted."
-            noti.description = description
-            noti.destination = destination
-            noti.save()
-    except:
-        pass
+            noti = Notification.objects.create(
+                content_object=source_user,
+                order=instance,
+                title="Order Approved",
+                destination=instance.user,
+                description=description
+                )
+    except Exception as e:
+        print(e)
+
+    try:
+        if instance._prepared:
+            restaurant = instance.cart.first().restaurant
+            userrole = UserRole.objects.get(restaurant=restaurant)
+            source_user = userrole.user
+            description = "Your order '" + instance.id_string + "' has been prepared.'"
+            noti = Notification.objects.create(
+                content_object=source_user,
+                order=instance,
+                title="Order Prepared",
+                destination_id=instance.user.pk,
+                description=description
+                )
+
+    except Exception as e:
+        print(e)
 
 
-post_save.connect(order_created_notification, sender=Order)
-post_save.connect(order_approved_notification, sender=Order)
+post_save.connect(order_event_notification, sender=Order)
