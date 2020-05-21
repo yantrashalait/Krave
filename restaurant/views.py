@@ -474,6 +474,8 @@ def add_to_order(request, *args, **kwargs):
 
         order.status = 1
         order._runsignal = False
+        order._approved = False
+        order._prepared = False
         order.save()
 
         for item in cart:
@@ -481,6 +483,8 @@ def add_to_order(request, *args, **kwargs):
             item.checked_out = True
             item.save()
         order._runsignal = False
+        order._approved = False
+        order._prepared = False
         order.save()
 
         return HttpResponseRedirect('/')
