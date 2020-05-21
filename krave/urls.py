@@ -23,6 +23,9 @@ from core import views
 from user.forms import ValidatingPasswordResetForm
 from core.forms import CustomPasswordResetForm
 
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('api.urls')),
@@ -39,6 +42,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='core/login.html'), name='logout'),
 
     path('oauth/', include('social_django.urls', namespace='social')),
+    path('firebase-messaging-sw.js', views.firebase_messaging_sw_js),
+    path('devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name="create_fcm_device"),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

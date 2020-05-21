@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'restaurant.apps.RestaurantConfig',
     'widget_tweaks',
+    'fcm_django',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Asia/Kathmandu'
 
+# FCM settings
+FCM_DJANGO_SETTINGS = {
+    # default: _('FCM Django')
+    "FCM_SERVER_KEY": ""
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
