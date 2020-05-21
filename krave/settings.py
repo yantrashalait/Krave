@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'delivery.apps.DeliveryConfig',
     'django_filters',
     'restaurant.apps.RestaurantConfig',
+    'eventlog.apps.EventlogConfig',
     'widget_tweaks',
     'fcm_django',
 ]
