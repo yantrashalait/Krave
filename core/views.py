@@ -54,6 +54,16 @@ import stripe
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
+@csrf_exempt
+def firebase_messaging_sw_js(request):
+    filename = "/static/js/firebase-messaging-sw.js"
+    jsFile = open(settings.BASE_DIR + filename, "rb")
+    response = HttpResponse(content=jsFile)
+    response['Content-Type'] = "text/javascript"
+    response['Content-Disposition'] = 'attachment; filename="%s"' % (settings.BASE_DIR + filename)
+    return response
+
+
 def randomString(stringLength=6, mobile=False):
     """Generate a random string of fixed length """
     letters = string.ascii_uppercase
