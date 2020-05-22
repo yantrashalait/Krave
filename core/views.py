@@ -641,18 +641,24 @@ def place_order(request, *args, **kwargs):
 def process_payment(request, *args, **kwargs):
     key = settings.STRIPE_PUBLISHABLE_KEY
     _id = request.session.get('order_id')
-    price = Order.objects.get(id=_id).total_price
-    return render(request, 'core/process_payment.html', {'key': key, 'id': _id, 'price': price})
+    try:
+        price = Order.objects.get(id=_id).total_price
+    except Order.DoesNotExist:
+        redirect_page = "/"
+        return render(request, 'core/card-detail.html', {'key': key, 'id': _id, 'price': 0, "error": 1, "msg": "Payment already processed.", "redirect": redirect_page})
+
+    return render(request, 'core/card-detail.html', {'key': key, 'id': _id, 'price': price, 'error': 1})
 
 
 def charge(request, *args, **kwargs):
     if request.method == "POST":
+        redirect_page = '/process-payment/'
         try:
             order = Order.objects.get(id=int(request.POST.get('order-id', '')))
             if order.payment == 1:
-                return render(request, 'core/payment_cancelled.html')
+                return render(request, 'core/card-detail.html', {'error': 1, 'msg': 'Unable to process this payment.', 'redirect': redirect_page})
             elif order.paid == True:
-                return render(request, 'core/payment_cancelled.html')
+                return render(request, 'core/card-detail.html', {'error': 1, 'msg': 'Unable to process this payment.', 'redirect': redirect_page})
             else:
                 charge = stripe.Charge.create(
                     amount=int(order.total_price * 100),
@@ -665,12 +671,15 @@ def charge(request, *args, **kwargs):
                 order._approved = False
                 order._prepared = False
                 order.save()
-
-                return render(request, 'core/payment_done.html')
+                del request.session['order_id']
+                request.session.modified = True
+                redirect_page = "/"
+                return render(request, 'core/card-detail.html', {'error': 0, 'msg': 'Payment successful.', 'redirect': redirect_page})
         except Order.DoesNotExist:
-            return render(request, 'core/payment_cancelled.html')
+            redirect_page = "/"
+            return render(request, 'core/card-detail.html', {'error': 1, 'msg': 'This order does not exist.', 'redirect': redirect_page})
         except Exception as e:
             print(e)
-            return render(request, 'core/payment_cancelled.html')
+            return render(request, 'core/card-detail.html', {'error': 1, 'msg': 'Unable to process this payment.', 'redirect': redirect_page})
     else:
-        return render(request, 'core/payment_done.html')
+        return render(request, 'core/card-detail.html', {'error': 1})

@@ -2066,6 +2066,54 @@ color: #6aca20;
 text-decoration: none;
 }
 
+/*LAST ADDED CARD-DETAILS KRAVE*/
+.card_payment_details{
+   margin-top: 6rem;
+}
+.crd__ifo__head{
+   background: #333e48;
+   color: #fff;
+   text-transform: uppercase;
+   text-align: center;
+   padding: 1rem;
+}
+.card__dtle__wrapper form{
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   padding: 2.5rem .5rem;
+}
+.card__dtle__wrapper {
+   background-color: #fff;
+}
+.payable_text .amt_pay{
+   font-size: 16px;
+}
+button.crds-info__btn {
+   width: 50%;
+   border: none;
+   background-color: #6aca20;
+   padding: .7rem;
+   color: #fff;
+   margin-top: 1rem;
+}
+.suces__thumb_img{
+   max-width: 20%;
+   margin-right: 1rem;
+}
+.suces__thumb_img img{
+   width: 100%;
+}
+.top__cont__model{
+   align-items: center;
+   justify-content: flex-start;
+}
+.linecolsr{
+   border: none;
+}
+
+/*End CSS*/
+
 /*LAST ADDED 3/20/2020*/
 /* .palce__order{
     margin: 3rem 0
