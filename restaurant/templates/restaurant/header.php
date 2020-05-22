@@ -61,6 +61,9 @@
                         <li>
                             <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
                         </li>
+                        <li>
+                            <a href="{% url 'restaurant:earnings' %}"><i class="fa fa-money" aria-hidden="true"></i> My Earnings</a>
+                        </li>
                     </ul>
                 </div>
                 {% endif %}

@@ -31,7 +31,6 @@ def order_event_notification(sender, instance, created, **kwargs):
 
     try:
         if instance._approved:
-            print('yeh kya ho raha CharField')
             restaurant = instance.cart.first().restaurant
             userrole = UserRole.objects.get(restaurant=restaurant)
             source_user = userrole.user
