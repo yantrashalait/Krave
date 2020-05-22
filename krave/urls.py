@@ -32,6 +32,7 @@ urlpatterns = [
     path('', include('core.urls')),
     path('restaurant/', include('restaurant.urls')),
     path('user/', include('user.urls')),
+    path('dashboard/', include('dashboard.urls')),
 
     path('login/', views.signin, name='login'),
 
