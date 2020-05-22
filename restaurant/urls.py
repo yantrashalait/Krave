@@ -32,4 +32,7 @@ urlpatterns = [
 
     path('add-order/', views.add_to_order, name='add-to-order'),
 
+    # restaurant earnings
+    path('earnings/', views.PaymentListView.as_view(), name="earnings"),
+
 ]

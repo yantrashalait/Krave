@@ -642,7 +642,6 @@ def process_payment(request, *args, **kwargs):
     key = settings.STRIPE_PUBLISHABLE_KEY
     _id = request.session.get('order_id')
     price = Order.objects.get(id=_id).total_price
-    print(price)
     return render(request, 'core/process_payment.html', {'key': key, 'id': _id, 'price': price})
 
 
@@ -663,7 +662,7 @@ def charge(request, *args, **kwargs):
                 )
                 order.paid = True
                 order._runsignal = True
-                order._approved = False,
+                order._approved = False
                 order._prepared = False
                 order.save()
 

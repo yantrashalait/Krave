@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from .models import Order, Notification, Restaurant
+from .models import Order, Notification, Restaurant, RestaurantPayment
 from django.dispatch import receiver
 from django.db.models.signals import post_save , m2m_changed
 from django.contrib.auth import get_user_model
@@ -22,6 +22,10 @@ def order_event_notification(sender, instance, created, **kwargs):
             noti.destination = destination
             noti.description = description
             noti.save()
+
+            if instance.payment == 2 and instance.paid == True:
+                RestaurantPayment.objects.create(restaurant=restaurant, order=instance, payment_amount=instance.total_price)
+
     except Exception as e:
         print(e)
 

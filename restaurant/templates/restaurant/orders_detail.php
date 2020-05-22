@@ -82,7 +82,9 @@
                                             <span class="inftxt-charge flt-rgt" id="total"></span>
                                         </div>
                                         <div class="acpt-ord-btn-hl">
+                                          {% if order.status == 0 %}
                                             <a href="{% url 'restaurant:accept-order' order.id %}" style="color:white;"><button class="acpt-ord-btn">Accept Order</button></a>
+                                          {% endif %}
                                         </div>
                                     </div>
                                 </div>
