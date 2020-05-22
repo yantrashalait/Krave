@@ -27,6 +27,7 @@
         $("form").append($id).append($email).submit();
       }
       var amount = parseFloat(Math.floor($("#stripeAmount").val() * 100));
+      console.log(amount);
 
       StripeCheckout.open({
             key: '{{ key }}',
