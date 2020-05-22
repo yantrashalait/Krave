@@ -656,20 +656,22 @@ def charge(request, *args, **kwargs):
                 return render(request, 'core/payment_cancelled.html')
             else:
                 charge = stripe.Charge.create(
-                    amount=request.POST['stripeAmount'],
+                    amount=int(order.total_price * 100),
                     currency='usd',
                     description='A django charge',
                     source=request.POST['stripeToken']
                 )
                 order.paid = True
                 order._runsignal = True
+                order._approved = False,
+                order._prepared = False
                 order.save()
 
                 return render(request, 'core/payment_done.html')
         except Order.DoesNotExist:
             return render(request, 'core/payment_cancelled.html')
-
-
-
+        except Exception as e:
+            print(e)
+            return render(request, 'core/payment_cancelled.html')
     else:
         return render(request, 'core/payment_done.html')
