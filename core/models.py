@@ -271,3 +271,10 @@ class Notification(models.Model):
     date_created = models.DateTimeField(auto_now=True)
     is_seen = models.BooleanField(default=False)
     description = models.TextField(null=True, blank=True)
+
+
+class RestaurantPayment(models.Model):
+    restaurant = models.ForeignKey(Restaurant, related_name="pay_info", on_delete=models.DO_NOTHING)
+    order = models.ForeignKey(Order, related_name="pay_info", on_delete=models.DO_NOTHING, null=True, blank=True)
+    payment_amount = models.FloatField()
+    date = models.DateField(auto_now_add=True)
