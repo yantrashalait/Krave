@@ -10,6 +10,7 @@ class Command(BaseCommand):
                       'customer',
                       'delivery',
                       'super-admin',
+                      'support',
                       ]
         for group in group_list:
             new_group, created = Group.objects.get_or_create(name=group)
