@@ -15,7 +15,7 @@ class LoginRequiredMixin(object):
 
 class SuperAdminMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
-        if not UserRole.objects.filter(user=request.user, group__name="super-admin"):
+        if not request.user.groups.filter(name="super-admin").exists():
             raise PermissionDenied()
         return super(SuperAdminMixin, self).dispatch(request, *args, **kwargs)
 

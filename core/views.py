@@ -310,6 +310,7 @@ def register(request):
             # save user role
             group = Group.objects.get(name='customer')
             UserRole.objects.get_or_create(user=user, group=group)
+            user.groups.add(group)
 
             # save user profile
             UserProfile.objects.get_or_create(user=user)

@@ -16,4 +16,5 @@ class Command(BaseCommand):
         user = User.objects.get(username=options.get('username'))
         group = Group.objects.get(name='super-admin')
         UserRole.objects.get_or_create(user=user, group=group)
+        user.groups.add(group)
         self.stdout.write('Successfully created super admin')
