@@ -34,22 +34,19 @@
                 <div class="left__menu__lists">
                     <ul>
                         <li>
-                            <a href="{% url 'dashboard:restaurant-list' %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant List</a>
+                            <a href="{% url 'dashboard:restaurant-list' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Restaurant List</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-cubes" aria-hidden="true"></i> User List</a>
+                            <a href="#"><i class="fa fa-users" aria-hidden="true"></i> User List</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
+                            <a href="{% url 'dashboard:request-list' %}"><i class="fa fa-inbox" aria-hidden="true"></i> Restaurant Requests</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-cutlery" aria-hidden="true"></i> Add Food Item</a>
+                            <a href="#"><i class="fa fa-user-secret" aria-hidden="true"></i> Staffs</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Orders</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-file" aria-hidden="true"></i> Accepted Orders</a>
+                            <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Delivery Person</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
