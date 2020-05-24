@@ -159,3 +159,10 @@ def decline_request(request, *args, **kwargs):
     req.rejected = True
     req.save()
     return HttpResponseRedirect('/dashboard/requests/')
+
+
+class ListSupportStaff(SuperAdminMixin, ListView):
+    model = User
+    template_name = "dashboard/staff-list.php"
+    queryset = User.objects.filter(user_roles__group__name="support")
+    context_object_name = "staffs"

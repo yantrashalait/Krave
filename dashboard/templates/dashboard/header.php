@@ -43,7 +43,7 @@
                             <a href="{% url 'dashboard:request-list' %}"><i class="fa fa-inbox" aria-hidden="true"></i> Restaurant Requests</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-user-secret" aria-hidden="true"></i> Staffs</a>
+                            <a href="{% url 'dashboard:support-staffs' %}"><i class="fa fa-user-secret" aria-hidden="true"></i> Staffs</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Delivery Person</a>

@@ -17,4 +17,7 @@ urlpatterns = [
     path('requests/<int:pk>/', views.RequestDetailView.as_view(), name="request-detail"),
     path('requests/<int:pk>/accept/', views.accept_request, name="accept-request"),
     path('requests/<int:pk>/decline/', views.decline_request, name="decline-request"),
+
+    # for support information
+    path('support/list/', views.ListSupportStaff.as_view(), name="support-staffs"),
 ]
