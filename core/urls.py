@@ -8,12 +8,6 @@ urlpatterns = [
 
     path('restaurant/register', views.restaurant_register, name="restaurant-register"),
 
-    # for restaurant requests
-    path('requests/', views.RequestList.as_view(), name='request-list'),
-    path('request-detail/<int:pk>', views.RequestDetail.as_view(), name='request-detail'),
-    path('requests/accept/<int:pk>', views.acceptRequest, name='accept-request'),
-    path('request/reject/<int:pk>', views.rejectRequest, name='reject-request'),
-
     # for user dashboard
     path('', views.DashboardView.as_view(), name='dashboard'),
 

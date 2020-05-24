@@ -58,6 +58,21 @@ class RequestDetailView(SuperAdminMixin, DetailView):
     context_object_name = 'req'
 
 
+def generate_username(name):
+    val = name.split(' ')[0].lower()
+    x = 0
+    while True:
+        if x == 0 and User.objects.filter(username=val).count() == 0:
+            return val
+        else:
+            new_val = "{0}{1}".format(val, x)
+            if User.objects.filter(username=new_val).count() == 0:
+                return new_val
+        x += 1
+        if x > 100000:
+            raise Exception("Name is super popular")
+
+
 @is_super_admin
 @transaction.atomic
 def accept_request(request, *args, **kwargs):
