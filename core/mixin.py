@@ -3,7 +3,12 @@ from userrole.models import UserRole
 from django.core.exceptions import PermissionDenied
 
 
-user_login_required = user_passes_test(lambda user: user.is_superuser, login_url='/')
+super_user_login_required = user_passes_test(lambda user: user.is_superuser, login_url='/')
+
+def support_or_admin_check(user):
+    return user.groups.filter(name="support").exists() or user.groups.filter(name="super-admin").exists()
+
+support_or_admin_login_required = user_passes_test(support_or_admin_check)
 
 
 class LoginRequiredMixin(object):
@@ -20,6 +25,18 @@ class SuperAdminMixin(LoginRequiredMixin):
         return super(SuperAdminMixin, self).dispatch(request, *args, **kwargs)
 
 
+class StaffMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.groups.filter(name="super-admin").exists() and not request.user.groups.filter(name="support").exists():
+            raise PermissionDenied()
+        return super(StaffMixin, self).dispatch(request, *args, **kwargs) 
+
+
 def is_super_admin(view_func):
-    decorated_view_func = login_required(user_login_required(view_func))
+    decorated_view_func = login_required(super_user_login_required(view_func))
+    return decorated_view_func
+
+
+def is_support_or_admin(view_func):
+    decorated_view_func = login_required(support_or_admin_login_required(view_func))
     return decorated_view_func

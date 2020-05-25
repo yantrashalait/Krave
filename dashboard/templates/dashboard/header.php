@@ -42,9 +42,11 @@
                         <li>
                             <a href="{% url 'dashboard:request-list' %}"><i class="fa fa-inbox" aria-hidden="true"></i> Restaurant Requests</a>
                         </li>
+                        {% if request.user.is_superuser %}
                         <li>
                             <a href="{% url 'dashboard:support-staffs' %}"><i class="fa fa-user-secret" aria-hidden="true"></i> Staffs</a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Delivery Person</a>
                         </li>

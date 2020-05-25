@@ -1,7 +1,7 @@
 import smtplib
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView, TemplateView, CreateView
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.conf import settings
@@ -12,8 +12,9 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 from core.models import Restaurant, RestaurantPayment, Order, RestaurantRequest
-from core.mixin import SuperAdminMixin, is_super_admin
+from core.mixin import SuperAdminMixin, is_super_admin, is_support_or_admin, StaffMixin
 from userrole.models import UserRole
+from user.models import UserProfile
 
 User = get_user_model()
 
@@ -22,19 +23,19 @@ class HomeView(SuperAdminMixin, TemplateView):
     template_name = "dashboard/index.php"
 
 
-class RestaurantListView(SuperAdminMixin, ListView):
+class RestaurantListView(StaffMixin, ListView):
     template_name = "dashboard/restaurant-list.php"
     queryset = Restaurant.objects.all()
     context_object_name = "restaurants"
 
 
-class RestaurantDetailView(SuperAdminMixin, DetailView):
+class RestaurantDetailView(StaffMixin, DetailView):
     template_name = "dashboard/restaurant-detail.php"
     context_object_name = "restaurant"
     model = Restaurant
 
 
-class RestaurantPaymentView(SuperAdminMixin, ListView):
+class RestaurantPaymentView(StaffMixin, ListView):
     template_name = "dashboard/restaurant-payment.php"
     model = RestaurantPayment
     context_object_name = "earnings"
@@ -43,7 +44,7 @@ class RestaurantPaymentView(SuperAdminMixin, ListView):
         return self.model.objects.filter(restaurant=self.kwargs.get('pk'))
 
 
-class RequestListView(SuperAdminMixin, ListView):
+class RequestListView(StaffMixin, ListView):
     template_name = 'dashboard/restaurantrequests.php'
     model = RestaurantRequest
     context_object_name = 'req'
@@ -52,7 +53,7 @@ class RequestListView(SuperAdminMixin, ListView):
         return RestaurantRequest.objects.filter(accepted=False, rejected=False)
 
 
-class RequestDetailView(SuperAdminMixin, DetailView):
+class RequestDetailView(StaffMixin, DetailView):
     template_name = 'dashboard/restaurantrequest_detail.php'
     model = RestaurantRequest
     context_object_name = 'req'
@@ -73,7 +74,7 @@ def generate_username(name):
             raise Exception("Name is super popular")
 
 
-@is_super_admin
+@is_support_or_admin
 @transaction.atomic
 def accept_request(request, *args, **kwargs):
     req = RestaurantRequest.objects.get(id=kwargs.get('pk'))
@@ -153,7 +154,7 @@ def accept_request(request, *args, **kwargs):
     return HttpResponseRedirect('/dashboard/requests/')
 
 
-@is_super_admin
+@is_support_or_admin
 def decline_request(request, *args, **kwargs):
     req = RestaurantRequest.objects.get(id=kwargs.get('pk'))
     req.rejected = True
@@ -161,8 +162,108 @@ def decline_request(request, *args, **kwargs):
     return HttpResponseRedirect('/dashboard/requests/')
 
 
-class ListSupportStaff(SuperAdminMixin, ListView):
+class SupportStaffListView(SuperAdminMixin, ListView):
     model = User
     template_name = "dashboard/staff-list.php"
     queryset = User.objects.filter(user_roles__group__name="support")
     context_object_name = "staffs"
+
+
+@is_super_admin
+@transaction.atomic
+def staff_create(request, *args, **kwargs):
+    if request.method == "POST":
+        username = request.POST.get("username", "")
+        email = request.POST.get("email", "")
+        contact = request.POST.get("contact", "")
+        address = request.POST.get("address", "")
+        first_name = request.POST.get("first_name", "")
+        last_name = request.POST.get("last_name", "")
+        image = request.FILES.get("image")
+
+        if User.objects.filter(username=username).exists():
+            context = {
+                "username_error": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if User.objects.filter(email=email).exists():
+            context = {
+                "email_error": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if not first_name or not last_name:
+            context = {
+                "name_empty": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if not email:
+            context = {
+                "email_empty": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if not username:
+            context = {
+                "username_empty": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        user = User.objects.create(
+            username=username,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        password = User.objects.make_random_password()
+        print(password)
+        user.set_password(password)
+        user.save()
+
+        UserProfile.objects.create(user=user, image=image, address=address, contact=contact)
+
+        group = Group.objects.get(name="support")
+        UserRole.objects.create(user=user, group=group)
+        user.groups.add(group)
+
+        return HttpResponseRedirect('/dashboard/support/list/')
+    else:
+        return render(request, 'dashboard/staff-form.php')
+
+
+class SupportStaffDetailView(SuperAdminMixin, DetailView):
+    template_name = "dashboard/staff-detail.php"
+    model = User
+    context_object_name = "staff"

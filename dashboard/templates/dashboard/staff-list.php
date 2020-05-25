@@ -5,6 +5,9 @@
                                 <div class="sc-hd">
                                     <h1>List of Support Staffs</h1>
                                 </div>
+                                <div class="ac-bt-hl">
+                                      <a href="{% url 'dashboard:staff-create' %}"><button class="ac-bt"><i class="fa fa-plus"></i> Add Staff</button></a>
+                                    </div>
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
@@ -29,7 +32,6 @@
                                             </td>
                                             <td class="ac-bt-hl-fd-ls">
                                                 <a href="{% url 'dashboard:support-detail' item.pk %}" class="btn btn-success">View detail</a>
-                                                <a href="{% url 'dashboard:support-delete' item.pk %}" class="btn btn-danger">Delete</a>
                                             </td>
                                         </tr>
                                         {% endfor %}
