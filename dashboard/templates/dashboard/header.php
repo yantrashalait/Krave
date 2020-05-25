@@ -64,29 +64,19 @@
             <div class="row">
                 <div class="right__body__sec">
                     <div class="pd-tb-md">
-                        {% if request.restaurant %}
                         <div class="rb-pd-rl rs-in-hl">
                             <div class="rs-in">
-                                <div class="rs-lg">
-                                    {% if request.restaurant.logo %}
-                                    <img src="{{ request.restaurant.logo.url }}" alt="">
-                                    {% else %}
-                                    <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="">
-                                    {% endif %}
-                                </div>
                                 <div class="rs-in-tx">
                                     <div class="rs-nm">
-                                        {{ request.restaurant.name }}
+                                        {{ request.user.username|title }}
                                     </div>
                                     <div class="rs-ad">
-                                        {{ request.restaurant.location_text }}
+                                        {{ request.user.first_name }} {{ request.user.last_name }}
                                     </div>
                                 </div>
                             </div>
                             <div class="ac-bt-hl">
-                                <!-- <a class="ac-bt" href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}">Edit</a> -->
                                 <a class="ac-bt" href="{% url 'logout' %}">Logout</a>
                             </div>
                         </div>
-                        {% endif %}
                     </div>
