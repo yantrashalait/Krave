@@ -18,6 +18,8 @@ urlpatterns = [
     path('requests/<int:pk>/accept/', views.accept_request, name="accept-request"),
     path('requests/<int:pk>/decline/', views.decline_request, name="decline-request"),
 
+    path('change-password/', views.change_password, name="change-password"),
+
     # for support information
     path('support/list/', views.SupportStaffListView.as_view(), name="support-staffs"),
     path('support/create/', views.staff_create, name="staff-create"),

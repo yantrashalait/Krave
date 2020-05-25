@@ -51,7 +51,7 @@
                             <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Delivery Person</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
+                            <a href="{% url 'dashboard:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-money" aria-hidden="true"></i> My Earnings</a>

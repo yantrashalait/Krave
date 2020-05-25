@@ -1,8 +1,10 @@
 import smtplib
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, TemplateView, CreateView
-from django.contrib.auth import get_user_model
+from django.contrib import messages
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.contrib.auth.models import Group
 from django.conf import settings
 from django.db import transaction
@@ -15,11 +17,12 @@ from core.models import Restaurant, RestaurantPayment, Order, RestaurantRequest
 from core.mixin import SuperAdminMixin, is_super_admin, is_support_or_admin, StaffMixin
 from userrole.models import UserRole
 from user.models import UserProfile
+from restaurant.forms import ValidatingPasswordChangeForm
 
 User = get_user_model()
 
 
-class HomeView(SuperAdminMixin, TemplateView):
+class HomeView(StaffMixin, TemplateView):
     template_name = "dashboard/index.php"
 
 
@@ -160,6 +163,22 @@ def decline_request(request, *args, **kwargs):
     req.rejected = True
     req.save()
     return HttpResponseRedirect('/dashboard/requests/')
+
+
+@is_support_or_admin
+def change_password(request, *args, **kwargs):
+    if request.method == "POST":
+        form = ValidatingPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect(reverse_lazy('dashboard:restaurant-list'))
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = ValidatingPasswordChangeForm(request.user)
+    return render(request, 'dashboard/change_password.php',{'form': form})
 
 
 class SupportStaffListView(SuperAdminMixin, ListView):
