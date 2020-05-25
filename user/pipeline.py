@@ -44,7 +44,10 @@ def create_role(backend, uid, user, response, social=None, *args, **kwargs):
     u = User.objects.get(email=email)
 
     try:
-        if u.user_roles.group.name == 'restaurant-owner':
+        if u.groups.filter(name="support").exists() \
+            or u.groups.filter(name="restaurant-owner").exists() \
+            or u.groups.filter(name="delivery") \
+            or u.groups.filter(name="super-admin").exists():
             pass
         else:
             group = Group.objects.get(name="customer")

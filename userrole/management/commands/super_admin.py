@@ -7,7 +7,7 @@ User = get_user_model()
 
 
 class Command(BaseCommand):
-    help = 'Create default groups'
+    help = 'Assign user to super admin'
 
     def add_arguments(self, parser):
         parser.add_argument('username', type=str)
