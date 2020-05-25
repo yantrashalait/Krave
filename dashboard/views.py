@@ -248,7 +248,6 @@ def staff_create(request, *args, **kwargs):
             last_name=last_name
         )
         password = User.objects.make_random_password()
-        print(password)
         user.set_password(password)
         user.save()
 
@@ -257,6 +256,44 @@ def staff_create(request, *args, **kwargs):
         group = Group.objects.get(name="support")
         UserRole.objects.create(user=user, group=group)
         user.groups.add(group)
+
+        domain = settings.SITE_URL
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = "Login credentials for Mitho"
+        msg['From'] = settings.EMAIL_HOST_USER
+        msg['To'] = email
+
+        html = """
+            <html>
+                <head></head>
+                <body>
+                    <p>Hi """ + first_name + """ """ + last_name + """,</p>
+                    <p>
+                        You have been registered into Mitho as a support user.
+
+                        Your login credentials are:
+                        <ul>
+                            <li>username: """+ username + """</li>
+                            <li>email: """+ email +"""</li>
+                            <li>password: """+ password + """</li>
+                        </ul>
+
+                        <b>Please change the password after logging into your account for security purposes.</b>
+                    </p>
+
+                    <p>Kindly login to the system by clicking the following link:</p>
+                    """+ domain + """/login/.
+                </body>
+            </html>
+        """
+
+        html_part = MIMEText(html, 'html')
+        msg.attach(html_part)
+
+        server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+        server.quit()
 
         return HttpResponseRedirect('/dashboard/support/list/')
     else:
