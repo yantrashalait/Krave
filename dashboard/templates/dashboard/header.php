@@ -48,7 +48,7 @@
                         </li>
                         {% endif %}
                         <li>
-                            <a href="#"><i class="fa fa-truck" aria-hidden="true"></i> Delivery Person</a>
+                            <a href="{% url 'dashboard:delivery-person-list' %}"><i class="fa fa-truck" aria-hidden="true"></i> Delivery Person</a>
                         </li>
                         <li>
                             <a href="{% url 'dashboard:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>

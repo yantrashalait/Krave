@@ -323,3 +323,141 @@ class SupportStaffDetailView(SuperAdminMixin, DetailView):
     template_name = "dashboard/staff-detail.php"
     model = User
     context_object_name = "staff"
+
+
+class DeliveryPersonListView(StaffMixin, ListView):
+    template_name = "dashboard/staff-list.php"
+    model = User
+    context_object_name = "staffs"
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(user_roles__group__name="delivery")
+
+
+@is_support_or_admin
+def delivery_person_create(request):
+    if request.method == "POST":
+        username = request.POST.get("username", "")
+        email = request.POST.get("email", "")
+        contact = request.POST.get("contact", "")
+        address = request.POST.get("address", "")
+        first_name = request.POST.get("first_name", "")
+        last_name = request.POST.get("last_name", "")
+        image = request.FILES.get("image")
+
+        if User.objects.filter(username=username).exists():
+            context = {
+                "username_error": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if User.objects.filter(email=email).exists():
+            context = {
+                "email_error": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if not first_name or not last_name:
+            context = {
+                "name_empty": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if not email:
+            context = {
+                "email_empty": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        if not username:
+            context = {
+                "username_empty": True,
+                "username": username,
+                "email": email,
+                "contact": contact,
+                "address": address,
+                "first_name": first_name,
+                "last_name": last_name
+            }
+            return render(request, 'dashboard/staff-form.php', context)
+
+        user = User.objects.create(
+            username=username,
+            email=email,
+            first_name=first_name,
+            last_name=last_name
+        )
+        password = User.objects.make_random_password()
+        user.set_password(password)
+        user.is_deliveryman = True
+        user.is_available = True
+        user.save()
+
+        UserProfile.objects.create(user=user, image=image, address=address, contact=contact)
+
+        group = Group.objects.get(name="delivery")
+        UserRole.objects.create(user=user, group=group)
+        user.groups.add(group)
+
+        domain = settings.SITE_URL
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = "Login credentials for Mitho"
+        msg['From'] = settings.EMAIL_HOST_USER
+        msg['To'] = email
+
+        html = """
+            <html>
+                <head></head>
+                <body>
+                    <p>Hi """ + first_name + """ """ + last_name + """,</p>
+                    <p>
+                        You have been registered into Mitho as a delivery person.
+
+                        Your login credentials are:
+                        <ul>
+                            <li>username: """+ username + """</li>
+                            <li>email: """+ email +"""</li>
+                            <li>password: """+ password + """</li>
+                        </ul>
+
+                        <b>Please change the password after logging into your account for security purposes.</b>
+                    </p>
+                </body>
+            </html>
+        """
+
+        html_part = MIMEText(html, 'html')
+        msg.attach(html_part)
+
+        server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+        server.quit()
+
+        return HttpResponseRedirect('/dashboard/delivery-person/list/')
+    else:
+        return render(request, 'dashboard/staff-form.php')

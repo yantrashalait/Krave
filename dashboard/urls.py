@@ -23,5 +23,9 @@ urlpatterns = [
     # for support information
     path('support/list/', views.SupportStaffListView.as_view(), name="support-staffs"),
     path('support/create/', views.staff_create, name="staff-create"),
-    path('support/<int:pk>/detail/', views.SupportStaffDetailView.as_view(), name="support-detail")
+    path('support/<int:pk>/detail/', views.SupportStaffDetailView.as_view(), name="support-detail"),
+
+    # for delivery person information
+    path('delivery-person/list/', views.DeliveryPersonListView.as_view(), name="delivery-person-list"),
+    path('delivery-person/create/', views.delivery_person_create, name="delivery-person-create"),
 ]
