@@ -151,7 +151,7 @@ def accept_request(request, *args, **kwargs):
 
     server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
     server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-    server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+    server.sendmail(settings.EMAIL_HOST_USER, [email, ], msg.as_string())
     server.quit()
 
     return HttpResponseRedirect('/dashboard/requests/')
@@ -311,7 +311,7 @@ def staff_create(request, *args, **kwargs):
 
         server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
         server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-        server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+        server.sendmail(settings.EMAIL_HOST_USER, [email, ], msg.as_string())
         server.quit()
 
         return HttpResponseRedirect('/dashboard/support/list/')
@@ -455,7 +455,7 @@ def delivery_person_create(request):
 
         server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
         server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
-        server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+        server.sendmail(settings.EMAIL_HOST_USER, [email, ], msg.as_string())
         server.quit()
 
         return HttpResponseRedirect('/dashboard/delivery-person/list/')
