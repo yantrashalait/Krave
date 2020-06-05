@@ -28,4 +28,5 @@ urlpatterns = [
     # for delivery person information
     path('delivery-person/list/', views.DeliveryPersonListView.as_view(), name="delivery-person-list"),
     path('delivery-person/create/', views.delivery_person_create, name="delivery-person-create"),
+    path('delivery-person/<int:pk>/detail/', views.DeliveryPersonDetailView.as_view(), name="delivery-person-detail"),
 ]

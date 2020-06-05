@@ -326,7 +326,7 @@ class SupportStaffDetailView(SuperAdminMixin, DetailView):
 
 
 class DeliveryPersonListView(StaffMixin, ListView):
-    template_name = "dashboard/staff-list.php"
+    template_name = "dashboard/delivery-person-list.php"
     model = User
     context_object_name = "staffs"
 
@@ -461,3 +461,9 @@ def delivery_person_create(request):
         return HttpResponseRedirect('/dashboard/delivery-person/list/')
     else:
         return render(request, 'dashboard/staff-form.php')
+
+
+class DeliveryPersonDetailView(SuperAdminMixin, DetailView):
+    template_name = "dashboard/delivery-person-detail.php"
+    model = User
+    context_object_name = "staff"
