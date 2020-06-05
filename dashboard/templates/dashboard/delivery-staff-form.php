@@ -26,7 +26,7 @@
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
-                                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:staff-create' %}">
+                                <form method="post" enctype="multipart/form-data" action="{% url 'dashboard:delivery-person-create' %}">
                                     {% csrf_token %}
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">

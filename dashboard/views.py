@@ -268,6 +268,7 @@ def staff_create(request, *args, **kwargs):
         )
         password = User.objects.make_random_password()
         user.set_password(password)
+        user.is_staff = True
         user.save()
 
         UserProfile.objects.create(user=user, image=image, address=address, contact=contact)
@@ -355,7 +356,7 @@ def delivery_person_create(request):
                 "first_name": first_name,
                 "last_name": last_name
             }
-            return render(request, 'dashboard/staff-form.php', context)
+            return render(request, 'dashboard/delivery-staff-form.php', context)
 
         if User.objects.filter(email=email).exists():
             context = {
@@ -367,7 +368,7 @@ def delivery_person_create(request):
                 "first_name": first_name,
                 "last_name": last_name
             }
-            return render(request, 'dashboard/staff-form.php', context)
+            return render(request, 'dashboard/delivery-staff-form.php', context)
 
         if not first_name or not last_name:
             context = {
@@ -379,7 +380,7 @@ def delivery_person_create(request):
                 "first_name": first_name,
                 "last_name": last_name
             }
-            return render(request, 'dashboard/staff-form.php', context)
+            return render(request, 'dashboard/delivery-staff-form.php', context)
 
         if not email:
             context = {
@@ -391,7 +392,7 @@ def delivery_person_create(request):
                 "first_name": first_name,
                 "last_name": last_name
             }
-            return render(request, 'dashboard/staff-form.php', context)
+            return render(request, 'dashboard/delivery-staff-form.php', context)
 
         if not username:
             context = {
@@ -403,7 +404,7 @@ def delivery_person_create(request):
                 "first_name": first_name,
                 "last_name": last_name
             }
-            return render(request, 'dashboard/staff-form.php', context)
+            return render(request, 'dashboard/delivery-staff-form.php', context)
 
         user = User.objects.create(
             username=username,
@@ -460,7 +461,7 @@ def delivery_person_create(request):
 
         return HttpResponseRedirect('/dashboard/delivery-person/list/')
     else:
-        return render(request, 'dashboard/staff-form.php')
+        return render(request, 'dashboard/delivery-staff-form.php')
 
 
 class DeliveryPersonDetailView(SuperAdminMixin, DetailView):
