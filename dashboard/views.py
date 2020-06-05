@@ -444,8 +444,6 @@ def delivery_person_create(request):
                             <li>email: """+ email +"""</li>
                             <li>password: """+ password + """</li>
                         </ul>
-
-                        <b>Please change the password after logging into your account for security purposes.</b>
                     </p>
                 </body>
             </html>

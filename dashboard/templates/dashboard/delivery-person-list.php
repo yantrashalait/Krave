@@ -6,7 +6,7 @@
                                     <h1>List of Delivery Persons</h1>
                                 </div>
                                 <div class="ac-bt-hl">
-                                      <a href="{% url 'dashboard:staff-create' %}"><button class="ac-bt"><i class="fa fa-plus"></i> Add Delivery Person</button></a>
+                                      <a href="{% url 'dashboard:delivery-person-create' %}"><button class="ac-bt"><i class="fa fa-plus"></i> Add Delivery Person</button></a>
                                     </div>
                             </div>
                             <!-- heading -->
