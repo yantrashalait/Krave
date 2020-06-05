@@ -51,7 +51,7 @@
     {% include 'dashboard/footer.php' %}
     <script>
         $(document).ready(function(){
-            if('{{ staff.location }}' === 'None'){
+            if('{{ staff.location }}' === ''){
               var x = 0;
               var y = 0;
               console.log('no location');
