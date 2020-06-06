@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
+from django.db.models import Manager as GeoManager
 
 
 class User(AbstractUser):
@@ -34,6 +35,8 @@ class UserProfile(models.Model):
 
 
 class UserLocationTrack(models.Model):
+    geo_objects = GeoManager()
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="location")
     last_location_point = PointField(geography=True, srid=4326, blank=True, null=True)
     tracked_date = models.DateTimeField(auto_now_add=True)
