@@ -7,7 +7,7 @@ from geopy import units, distance
 
 class LocationManager(models.Manager):
     def near(self, latitude=None, longitude=None, distance_range=10):
-        queryset = super(LocationManager, self).get_query_set()
+        queryset = super(LocationManager, self).get_queryset()
         if not (latitude and longitude and distance_range):
             return queryset.none()
 
