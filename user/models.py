@@ -18,11 +18,11 @@ class LocationManager(models.Manager):
         rough_distance = units.degrees(arcminutes=units.nautical(kilometers=distance_range)) * 2
 
         queryset = queryset.filter(
-            last_location_point__y__range=(
+            latitude__range=(
                 latitude - rough_distance,
                 latitude + rough_distance
             ),
-            last_location_point__x__range=(
+            longitude__range=(
                 longitude - rough_distance,
                 latitude + rough_distance
             )
@@ -76,17 +76,9 @@ class UserLocationTrack(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="location")
     last_location_point = PointField(geography=True, srid=4326, blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
     tracked_date = models.DateTimeField(auto_now_add=True)
-
-    @property
-    def longitude(self):
-        if self.last_location_point:
-            return self.last_location_point.x
-
-    @property
-    def latitude(self):
-        if self.last_location_point:
-            return self.last_location_point.y
 
     def __str__(self):
         return "Last location of " + self.user.username

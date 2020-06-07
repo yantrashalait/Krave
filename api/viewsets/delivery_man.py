@@ -51,6 +51,8 @@ class DeliveryManSetLocationViewSet(CreateAPIView):
             tracked_date = datetime.now()
             user_location, created = UserLocationTrack.objects.get_or_create(user=request.user)
             user_location.last_location_point = location
+            user_location.longitude = longitude
+            user_location.latitude = latitude
             user_location.tracked_date = tracked_date
             user_location.save()
             return Response({
