@@ -73,6 +73,7 @@ class UserProfile(models.Model):
 
 class UserLocationTrack(models.Model):
     location_manager = LocationManager()
+    objects = models.Manager()
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="location")
     last_location_point = PointField(geography=True, srid=4326, blank=True, null=True)
