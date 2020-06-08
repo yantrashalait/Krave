@@ -11,8 +11,8 @@ class LocationManager(models.Manager):
         if not (latitude and longitude and distance_range):
             return queryset.none()
 
-        latitude       = float(latitude)
-        longitude      = float(longitude)
+        latitude = float(latitude)
+        longitude = float(longitude)
         distance_range = float(distance_range)
 
         rough_distance = units.degrees(arcminutes=units.nautical(kilometers=distance_range)) * 2
@@ -24,7 +24,7 @@ class LocationManager(models.Manager):
             ),
             longitude__range=(
                 longitude - rough_distance,
-                latitude + rough_distance
+                longitude + rough_distance
             )
         )
 
