@@ -13,7 +13,7 @@ from datetime import datetime
 
 from delivery.models import DeliveryTrack, Delivery
 from user.models import UserLocationTrack
-from api.serializers.delivery_man import DeliveryManLocationSerializer
+from api.serializers.delivery_man import DeliveryManLocationSerializer, DeliveryManOrderSerializer
 
 
 class DeliveryManSetLocationViewSet(CreateAPIView):
@@ -34,7 +34,7 @@ class DeliveryManSetLocationViewSet(CreateAPIView):
                 'msg': {
                     'latitude': ['Latitude not valid.']
                 }
-            })
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         if 'longitude' not in validated_data or validated_data.get('longitude') == 0:
             return Response({
@@ -42,7 +42,7 @@ class DeliveryManSetLocationViewSet(CreateAPIView):
                 'msg': {
                     'longitude': ['Longitude not valid.']
                 }
-            })
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         if isinstance(validated_data.get('latitude'), float) and isinstance(validated_data.get('longitude'), float):
             latitude = validated_data.get('latitude', 0.0)
@@ -58,11 +58,27 @@ class DeliveryManSetLocationViewSet(CreateAPIView):
             return Response({
                 'status': True,
                 'msg': 'Successfully added'
-            })
+            }, status=status.HTTP_200_OK)
         else:
             return Response({
                 'status': False,
                 'msg': {
                     'points': ['Latitude and longitude should be of float type.']
                 }
-            })
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DMAssignedOrders(ListAPIView):
+    serializer_class = DeliveryManOrderSerializer
+    permission_classes = [permissions.IsAuthenticated, ]
+    model = Delivery
+
+    def get_queryset(self, *args, **kwargs):
+        return Delivery.objects.filter(delivery_man=self.request.user)
+
+    def get(self, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)

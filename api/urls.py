@@ -49,7 +49,7 @@ urlpatterns = [
 
     # urls for delivery person
     path('set-location/', delivery_views.DeliveryManSetLocationViewSet.as_view(), name="set-location"),
-
+    path('assigned-orders/', delivery_views.DMAssignedOrders, name="dm-assigned-orders"),
 ]
 
 urlpatterns += router.urls
