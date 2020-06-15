@@ -128,7 +128,7 @@ class OrderView(RestaurantAdminMixin, ListView):
     context_object_name = 'orders'
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1)
+        return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1).order_by('-added_date')
 
 
 class AcceptedOrderView(RestaurantAdminMixin, ListView):

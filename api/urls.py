@@ -32,7 +32,6 @@ urlpatterns = [
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
     path('restaurant/<int:rest_id>/food/category/<int:category_id>', views.RestaurantFoodCategorySingleViewSet.as_view(), name='rest-food-cat-detail'),
 
-
     # apis for restaurant
     path('restaurant/list', restaurant_views.RestaurantListViewSet.as_view(), name='restaurant-list'),
     path('restaurant/popular', restaurant_views.RestaurantListViewSet.as_view(), name='popular-restaurant'),
