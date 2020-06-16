@@ -19,4 +19,4 @@ class DeliveryManOrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Delivery
-        fields = ('order')
+        fields = ('order', 'tracking_code', 'status')
