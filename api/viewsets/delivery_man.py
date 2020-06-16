@@ -97,7 +97,7 @@ class UserDeliveryTrack(APIView):
             data = {
                 'longitude': longitude,
                 'latitude': latitude,
-                'status': delivery.status.get_status_display()
+                'status': delivery.status
             }
             return Response({
                 'status': True,
@@ -105,7 +105,7 @@ class UserDeliveryTrack(APIView):
             })
         else:
             data = {
-                "status": delivery.status.get_status_display()
+                "status": delivery.status
             }
             return Response({
                 "status": True,
