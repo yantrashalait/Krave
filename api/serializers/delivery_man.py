@@ -20,3 +20,9 @@ class DeliveryManOrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Delivery
         fields = ('order', 'tracking_code', 'status')
+
+
+class DeliveryLocationSerializer(serializers.Serializer):
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+    

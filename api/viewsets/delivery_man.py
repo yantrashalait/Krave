@@ -82,3 +82,30 @@ class DMAssignedOrders(ListAPIView):
             'status': True,
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class UserDeliveryTrack(APIView):
+    def get(self, *args, **kwargs):
+        id_string = self.request.GET.get("id_string")
+        delivery = get_object_or_404(Delivery, tracking_code=id_string)
+        last_location = delivery.delivery_man.location
+        if last_location:
+            longitude = last_location.longitude
+            latitude = last_location.latitude
+            data = {
+                'longitude': longitude,
+                'latitude': latitude,
+                'status': delivery.status
+            }
+            return Response({
+                'status': True,
+                'data': data
+            })
+        else:
+            data = {
+                "status": delivery.status
+            }
+            return Response({
+                "status": True,
+                'data': data,
+            })
