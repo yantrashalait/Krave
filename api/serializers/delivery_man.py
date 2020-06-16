@@ -15,7 +15,7 @@ class DeliveryManLocationSerializer(serializers.Serializer):
 
 
 class DeliveryManOrderSerializer(serializers.ModelSerializer):
-    order = OrderListSerializer(many=True)
+    order = OrderListSerializer()
 
     class Meta:
         model = Delivery
