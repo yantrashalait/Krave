@@ -10,7 +10,7 @@ from django.db.models import Q
 from rest_framework.decorators import api_view
 from django.contrib.gis.geos import Point
 from datetime import datetime
-
+from api.permissions import IsUserOrder
 from delivery.models import DeliveryTrack, Delivery
 from user.models import UserLocationTrack
 from api.serializers.delivery_man import DeliveryManLocationSerializer, DeliveryManOrderSerializer
@@ -85,9 +85,11 @@ class DMAssignedOrders(ListAPIView):
 
 
 class UserDeliveryTrack(APIView):
+    permission_classes = [permissions.IsAuthenticated, IsUserOrder]
     def get(self, *args, **kwargs):
         id_string = self.request.GET.get("id_string")
         delivery = get_object_or_404(Delivery, tracking_code=id_string)
+        self.check_object_permissions(self.request, delivery)
         last_location = delivery.delivery_man.location
         if last_location:
             longitude = last_location.longitude
@@ -95,7 +97,7 @@ class UserDeliveryTrack(APIView):
             data = {
                 'longitude': longitude,
                 'latitude': latitude,
-                'status': delivery.status
+                'status': delivery.status.get_status_display()
             }
             return Response({
                 'status': True,
@@ -103,7 +105,7 @@ class UserDeliveryTrack(APIView):
             })
         else:
             data = {
-                "status": delivery.status
+                "status": delivery.status.get_status_display()
             }
             return Response({
                 "status": True,
