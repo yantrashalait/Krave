@@ -4,6 +4,7 @@ from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, R
 
 # BASE_URL = "http://localhost:8000/api/v1"
 BASE_URL = "https://krave.yantrashala.com/api/v1"
+MEDIA_URL = "https://krave.yantrashala.com"
 
 
 class RestaurantImageSerializer(serializers.ModelSerializer):
@@ -16,7 +17,7 @@ class RestaurantListSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
     review_count = serializers.SerializerMethodField(read_only=True)
-    images = RestaurantImageSerializer(many=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Restaurant
@@ -32,14 +33,23 @@ class RestaurantListSerializer(serializers.ModelSerializer):
     def get_review_count(self, obj):
         return obj.restaurant_review.count()
 
+    def get_image(self, obj):
+        if obj.images.last():
+            if obj.images.last().image:
+                return MEDIA_URL + obj.images.last().image.url
+            else:
+                return ""
+        else:
+            return ""
+
 
 class RestaurantDetailSerializer(serializers.ModelSerializer):
     rating = serializers.SerializerMethodField(read_only=True)
     review_count = serializers.SerializerMethodField(read_only=True)
-    images = RestaurantImageSerializer(many=True)
     cuisines = serializers.SerializerMethodField(read_only=True)
     popular_dishes_url = serializers.SerializerMethodField(read_only=True)
     menu_url = serializers.SerializerMethodField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Restaurant
@@ -67,3 +77,12 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
 
     def get_menu_url(self, obj):
         return BASE_URL + '/restaurant/' + str(obj.pk) + '/food/list'
+
+    def get_image(self, obj):
+        if obj.images.last():
+            if obj.images.last().image:
+                return MEDIA_URL + obj.images.last().image.url
+            else:
+                return ""
+        else:
+            return ""

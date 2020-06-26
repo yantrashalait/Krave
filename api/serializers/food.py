@@ -3,11 +3,14 @@ from core.models import RestaurantFoodCategory, RestaurantCuisine, FoodMenu, Foo
 
 
 # BASE_URL = "http://localhost:8000/api/v1"
-BASE_URL = "http://krave.yantrashala.com/api/v1"
+BASE_URL = "https://krave.yantrashala.com/api/v1"
+
+MEDIA_URL = "https://krave.yantrashala.com"
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
     id = serializers.ReadOnlyField()
 
     class Meta:
@@ -16,6 +19,12 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     def get_detail_url(self, obj):
         return BASE_URL + "/category/" + str(obj.id)
+
+    def get_image(self, obj):
+        if obj.image:
+            return MEDIA_URL + obj.image.url
+        else:
+            return ""
 
 
 class FoodFilteredListSerializer(serializers.ListSerializer):
@@ -43,10 +52,17 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
 class CategoryDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     food = FoodMenuListSerializer(many=True)
+    iamge = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = RestaurantFoodCategory
         fields = "__all__"
+
+    def get_image(self, obj):
+        if obj.image:
+            return MEDIA_URL + obj.image.url
+        else:
+            return ""
 
 
 class FoodExtraSerializer(serializers.ModelSerializer):
