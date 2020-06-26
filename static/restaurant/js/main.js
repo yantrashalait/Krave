@@ -38,17 +38,34 @@ function readFoodURL(input) {
   }
 }
 
+function readCatURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#cat_image_blah').attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 $("#id_logo").change(function() {
   readURL(this);
 });
 
 $('#id_img').change(function(){
   readFoodURL(this);
-})
+});
 
 $("#id_image").change(function(){
   readImageURL(this);
-})
+});
+
+$("#id_cat_image").change(function(){
+  readCatURL(this);
+});
+
 $('.fd-ct').select2({
     placeholder: "Select a Category"
 });

@@ -56,6 +56,7 @@ class Cuisine(models.Model):
     def __str__(self):
         return self.name
 
+
 class RestaurantCuisine(models.Model):
     restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE, related_name="cuisines")
     cuisine = models.ManyToManyField(Cuisine)
@@ -67,9 +68,12 @@ class RestaurantCuisine(models.Model):
 """
     This model stores the food categories
 """
+
+
 class RestaurantFoodCategory(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='food_category')
     category = models.CharField(max_length=500, default="")
+    image = models.ImageField(upload_to="restaurant/category/", null=True, blank=True)
 
     def __str__(self):
         return self.category

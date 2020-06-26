@@ -30,6 +30,7 @@ default_token_generator = PasswordResetTokenGenerator()
 
 User = get_user_model()
 
+
 class RestaurantRequestForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'class': 'text__field__f', 'placeholder': 'Restaurant Name'}))
     name_of_owner = forms.CharField(widget=forms.TextInput(attrs={'class': 'half_ _width__textform min__input__divider__first', 'placeholder': 'Name of Owner'}))
@@ -55,6 +56,7 @@ class RestaurantRequestForm(forms.ModelForm):
         if User.objects.filter(email=email_of_owner, is_restaurant=True).exists():
             raise ValidationError('Restaurant with this email already exists')
         return email_of_owner
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Your Email/Username', max_length=100)
@@ -129,7 +131,7 @@ class FoodMenuForm(forms.ModelForm):
         fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'image')
 
 
-class  FoodMenuStyleForm(forms.ModelForm):
+class FoodMenuStyleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FoodMenuStyleForm, self).__init__(*args, **kwargs)
@@ -181,7 +183,7 @@ class RestaurantForm(forms.ModelForm):
 class RestaurantCategoryForm(forms.ModelForm):
     class Meta:
         model = RestaurantFoodCategory
-        fields = ('category', )
+        fields = ('category', 'image')
 
 
 class CustomPasswordResetForm(PasswordResetForm):
