@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
@@ -5,29 +7,29 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .forms import ValidatingPasswordChangeForm
 from django.urls import reverse_lazy, reverse
-from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, \
-Cuisine, RestaurantFoodCategory, FoodCart, RestaurantPayment
-from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm, \
-RestaurantCategoryForm
 from django.forms import formset_factory
 from django.forms.models import inlineformset_factory
 from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponse
 from .permissions import RestaurantAdminMixin
 from django.contrib.gis.geos import Point
-import json
 from django.contrib.gis.geos import GEOSGeometry
 from django.db.models import Q
 from django.http import JsonResponse
-
 from django.core import serializers
+
 from core.views import randomString
 from delivery.tasks import assign_delivery
+from .forms import ValidatingPasswordChangeForm
+from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, \
+Cuisine, RestaurantFoodCategory, FoodCart, RestaurantPayment, RestaurantImage
+from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm, \
+RestaurantCategoryForm
 
 StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'cost',], extra=1, max_num=10)
 ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'cost'], extra=1, max_num=10)
+
 
 class DashboardView(RestaurantAdminMixin, CreateView):
     model = FoodMenu
@@ -114,6 +116,15 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
                 if not cuisine in rest_cuisine.cuisine.all():
                     rest_cuisine.cuisine.add(cuisine)
             rest_cuisine.save()
+
+        if 'image' in self.request.FILES:
+            restaurant_image = self.request.FILES['image']
+            if not RestaurantImage.objects.filter(restaurant=self.object):
+                RestaurantImage.objects.create(restaurant=self.object, image=restaurant_image, main_image=True)
+            else:
+                rest_img = RestaurantImage.objects.get(restaurant=self.object)
+                rest_img.image = restaurant_image
+                rest_img.save()
 
         return super().form_valid(form)
 

@@ -49,6 +49,37 @@
                                         </div>
                                     </div>
                                     <!-- form list -->
+                                    <!-- form list -->
+                                    <div class="fm-ls sm-mb">
+                                        <div class="fm-ls-td">
+                                            <div class="up-im">
+                                                <input type='file' name="image" id="id_image" />
+                                                <div class="up-im-bt">
+                                                    <div class="up-im-cn">
+                                                        <div class="up-im-bt-tl">
+                                                            <p>Drop image here to upload</p>
+                                                        </div>
+                                                        <div class="up-im-bt-dv">
+                                                            <p>or</p>
+                                                        </div>
+                                                        <div class="up-im-bt-bw">
+                                                            Browse File
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="pv-im-hl">
+                                            {% if request.restaurant.images.last %}
+                                                <img id="image_blah" src="{{ request.restaurant.images.last.image.url }}" alt="your image" />
+
+                                            {% else %}
+                                                <img id="image_blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
+                                            {% endif  %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <label>Street</label>
                                         {{ form.street }}

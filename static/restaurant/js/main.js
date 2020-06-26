@@ -14,6 +14,18 @@ function readURL(input) {
   }
 }
 
+function readImageURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      $('#image_blah').attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
 function readFoodURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
@@ -34,6 +46,9 @@ $('#id_img').change(function(){
   readFoodURL(this);
 })
 
+$("#id_image").change(function(){
+  readImageURL(this);
+})
 $('.fd-ct').select2({
     placeholder: "Select a Category"
 });

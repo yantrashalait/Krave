@@ -9,6 +9,8 @@ from django.contrib.contenttypes import fields
 """
     Restaurant model stores the details about restaurant profile that is visible to the public.
 """
+
+
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     location_point = PointField(geography=True, srid=4326, blank=True, null=True)
@@ -46,6 +48,7 @@ class RestaurantImage(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="images")
     image = models.ImageField(upload_to="restaurant/")
     main_image = models.BooleanField(help_text="Make this your main image to be displayed?", default=False)
+
 
 class Cuisine(models.Model):
     name = models.CharField(max_length=100)
