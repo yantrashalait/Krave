@@ -5,6 +5,7 @@ from core.models import RestaurantFoodCategory, RestaurantCuisine, FoodMenu, Foo
 # BASE_URL = "http://localhost:8000/api/v1"
 BASE_URL = "http://krave.yantrashala.com/api/v1"
 
+
 class CategoryListSerializer(serializers.ModelSerializer):
     detail_url = serializers.SerializerMethodField(read_only=True)
     id = serializers.ReadOnlyField()
@@ -14,7 +15,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_detail_url(self, obj):
-        return basBASE_URLe_url + "/category/" + str(obj.id)
+        return BASE_URL + "/category/" + str(obj.id)
 
 
 class FoodFilteredListSerializer(serializers.ListSerializer):
