@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 from __future__ import absolute_import
 import os
 
-from .celery import app as celery_app
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

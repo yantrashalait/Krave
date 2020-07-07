@@ -17,7 +17,7 @@ urlpatterns = [
     path('users/add', auth_views.UserCreationViewSet.as_view(), name='add-user'),
     path('user/profile', auth_views.UserProfileViewSet.as_view(), name="user-profile"),
 
-    #apis for categories
+    # apis for categories
     path('category/list', food_views.AllCategoryListViewSet.as_view(), name='category-list'),
     path('category/<int:category_id>', food_views.CategoryDetailViewSet.as_view(), name='category-single'),
 
@@ -28,7 +28,7 @@ urlpatterns = [
 
     path('food/<int:food_id>', food_views.FoodDetailViewSet.as_view(), name='food-single'),
 
-    #apis for restaurant food category
+    # apis for restaurant food category
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
     path('restaurant/<int:rest_id>/food/category/<int:category_id>', views.RestaurantFoodCategorySingleViewSet.as_view(), name='rest-food-cat-detail'),
 
