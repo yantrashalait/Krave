@@ -64,6 +64,7 @@ section.editing__notice__holder {
     background-image: linear-gradient(90deg,#f1eff1,#f1eff1 96%,#e9e7e9 100%);
     position: fixed;
     z-index: 8;
+    overflow-y: scroll;
 
 }
 
