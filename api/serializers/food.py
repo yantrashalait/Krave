@@ -52,7 +52,7 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
 class CategoryDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     food = FoodMenuListSerializer(many=True)
-    iamge = serializers.SerializerMethodField(read_only=True)
+    image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = RestaurantFoodCategory
