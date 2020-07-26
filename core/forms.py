@@ -53,7 +53,7 @@ class RestaurantRequestForm(forms.ModelForm):
         if validate_email(email_of_owner) == False:
             raise ValidationError('Enter a valid Email address')
 
-        if User.objects.filter(email=email_of_owner, is_restaurant=True).exists():
+        if User.objects.filter(email=email_of_owner).exists():
             raise ValidationError('Restaurant with this email already exists')
         return email_of_owner
 
