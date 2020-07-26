@@ -33,7 +33,7 @@
                                             </td>
                                             <td class="ac-bt-hl-fd-ls">
                                                 <a href="{% url 'restaurant:accept-order' order.id %}" class="btn btn-success">Accept</a>
-                                                <a href="{% url 'restaurant:decline-order' order.id %}" class="btn btn-success">Decline</a>
+                                                <a href="{% url 'restaurant:decline-order' order.id %}" class="btn btn-danger">Decline</a>
                                             </td>
                                         </tr>
                                         {% endfor %}
