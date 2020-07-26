@@ -539,7 +539,7 @@ def place_order(request, *args, **kwargs):
                         <p>
                             <ul>
                                 <li><b>Order ID</b>: """ + order.id_string + """"</li>
-                                <li><b>Ordered Date</b>: """ + order.created_at + """</li>
+                                <li><b>Ordered Date</b>: """ + order.created_at.strftime("%m/%d/%Y, %H:%M:%S") + """</li>
                             </ul>
                         </p>
                     </body>
