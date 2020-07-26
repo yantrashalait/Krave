@@ -62,5 +62,21 @@ def order_event_notification(sender, instance, created, **kwargs):
     except Exception as e:
         print(e)
 
+    try:
+        if instance._declined:
+            restaurant = instance.cart.first().restaurant
+            userrole = UserRole.objects.get(restaurant=restaurant)
+            source_user = userrole.user
+            description = "Your order '" + instance.id_string + "' has been declined."
+            noti = Notification.objects.create(
+                content_object=source_user,
+                order=instance,
+                title="Order Declined",
+                destination_id=instance.user.pk,
+                description=description
+            )
+    except Exception as e:
+        pass
+
 
 post_save.connect(order_event_notification, sender=Order)

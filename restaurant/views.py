@@ -347,13 +347,30 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
 
 
 def accept_order(request, *args, **kwargs):
-    order = Order.objects.get(id=kwargs.get('order_id'))
-    order.status = 2
-    order._prepared = False
-    order._runsignal = False
-    order._approved = True
-    order.save()
+    try:
+        order = Order.objects.get(id=kwargs.get('order_id'))
+        order.status = 2
+        order._prepared = False
+        order._runsignal = False
+        order._approved = True
+        order.save()
+    except Order.DoesNotExist:
+        pass
 
+    return redirect(reverse_lazy('restaurant:order', kwargs={'rest_id': request.restaurant.id}))
+
+
+def decline_order(request, *args, **kwargs):
+    try:
+        order = Order.objects.get(id=kwargs.get('order_id'))
+        order.status = 3
+        order._prepared = False
+        order._runsignal = False
+        order._approved = False
+        order._declined = True
+        order.save()
+    except Order.DoesNotExist:
+        pass
     return redirect(reverse_lazy('restaurant:order', kwargs={'rest_id': request.restaurant.id}))
 
 
