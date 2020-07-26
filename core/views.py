@@ -559,7 +559,7 @@ def charge(request, *args, **kwargs):
                 order._approved = False
                 order._prepared = False
                 order.save()
-                restaurant = order.cart.first.restaurant
+                restaurant = order.cart.first().restaurant
 
                 msg = MIMEMultipart('alternative')
                 msg['Subject'] = "Order Placed"
