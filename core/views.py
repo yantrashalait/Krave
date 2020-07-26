@@ -389,6 +389,8 @@ def activate(request, uidb64, token):
 """
     View to add foods to order then proceed to cart
 """
+
+
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
     if request.method == 'POST':
@@ -455,6 +457,8 @@ def add_to_order(request, *args, **kwargs):
 """
 place order
 """
+
+
 @login_required(login_url='/login/')
 @transaction.atomic
 def place_order(request, *args, **kwargs):
@@ -518,6 +522,38 @@ def place_order(request, *args, **kwargs):
         order._prepared = False
         order._approved = False
         order.save()
+
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = "Order Placed"
+        msg['From'] = settings.EMAIL_HOST_USER
+        msg['To'] = restaurant.email
+        to_email = restaurant.email
+
+        html = """
+                <html>
+                    <head></head>
+                    <body>
+                        Greetings,
+                        An order has been placed by user """ + request.user.username + """.
+                        <p><b>Order Details</b></p>
+                        <p>
+                            <ul>
+                                <li><b>Order ID</b>: """ + order.id_string + """"</li>
+                                <li><b>Ordered Date</b>: """ + order.created_at + """</li>
+                            </ul>
+                        </p>
+                    </body>
+                </html>
+            """
+
+        html_part = MIMEText(html, 'html')
+        msg.attach(html_part)
+
+        server = smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT)
+        server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
+        server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
+        server.quit()
+
     return HttpResponseRedirect('/')
 
 
