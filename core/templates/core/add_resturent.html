@@ -99,7 +99,7 @@
                             <!-- <input class="half_ _width__textform min__input__divider__sec" type="text" name="" placeholder="Last Name"> -->
                             {{ form.email_of_owner }}
                             {% if form.email_of_owner.errors %}
-                              <span>{{ form.email_of_owner.errors }}</span>
+                              <span style="color:red;">{{ form.email_of_owner.errors }}</span>
                             {% endif %}
                           </div>
                       </div>
@@ -115,14 +115,14 @@
                       <div class="full__width__textform">
                         {{ form.does_your_restaurant_staff_deliver_order }}
                         {% if form.does_your_restaurant_staff_deliver_order.errors %}
-                          {{ form.does_your_restaurant_staff_deliver_order.errors }}
+                          <span style="color:red;">{{ form.does_your_restaurant_staff_deliver_order.errors }}</span>
                         {% endif %}
                       </div>
                   </div>
                   <div>
                     {{ form.message }}
                     {% if form.message.errors %}
-                      {{ form.message.errors }}
+                      <span style="color:red;">{{ form.message.errors }}</span>
                     {% endif %}
                   </div>
                   <div class="submit__term__conditons">
