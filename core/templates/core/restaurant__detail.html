@@ -52,15 +52,23 @@
 
                         </div>
                         <div class="details__review___and__address">
-                            <span class="resturent_address">{{ restaurant.street }}, {{ restaurant.town }}, {{ restaurant.state }} - {{ restaurant.zip_code }}</span>
+                            <span class="resturent_address">
+                                {% if restaurant.street %}{{ restaurant.street }},{% endif %}
+                                {% if restaurant.town %} {{ restaurant.town }}, {% endif %}
+                                {% if restaurant.state %} {{ restaurant.state }} {% endif %}
+                                {% if restaurant.zip_code %}- {{ restaurant.zip_code }}{% endif %}</span>
                         </div>
                     </div>
                     <div class="delivery__info__fees">
-                     <span class="food_delivery_fee btns__fees">${{ restaurant.delivery_charge }} delivery fee</span>
-                      <span class="food_delivery_time btns__fees">{{ restaurant.delivery_time }} min</span>
-                      {% if restaurant.location_point %}
-                      <button id="more__info" class="resturent_more_info btns__fees">more info</button>
-                      {% endif %}
+                     {% if resturant.delivery_charge %}
+                        <span class="food_delivery_fee btns__fees">${{ restaurant.delivery_charge }} delivery fee</span>
+                    {% endif %}
+                    {% if restaurant.delivery_time %}
+                        <span class="food_delivery_time btns__fees">{{ restaurant.delivery_time }} min</span>
+                    {% endif %}
+                    {% if restaurant.location_point %}
+                        <button id="more__info" class="resturent_more_info btns__fees">more info</button>
+                    {% endif %}
                     </div>
                   </div>
                   </div>
