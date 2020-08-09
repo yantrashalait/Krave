@@ -190,9 +190,9 @@
             var points = [{{ request.restaurant.latitude }}, {{ request.restaurant.longitude }}];
         }
         else{
-            var points = [40.730610, -73.935242];
+            var points = [42.730610, -73.935242];
         }
-        map = L.map('map', {doubleClickZoom: false}).locate({setView: true, maxZoom: 16});
+        map = L.map('map', {doubleClickZoom: false}).locate({setView: true, maxZoom: 15});
 
         var osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
