@@ -78,7 +78,7 @@
             <div class="col-lg-4">
               <div class="resturent__opening__time">
                 <h2>Opens at {{ restaurant.opening_time }}</h2>
-                {% if restaurant.opening_time|is_past_time %}
+                {% if restaurant.opening_time|is_past_time:restaurant.closing_time %}
                 <span class="t_c">Closed</span>
                 {% else %}
                 <span class="t_open">Open</span>
