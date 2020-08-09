@@ -26,9 +26,6 @@ def get_total_price(obj):
 @register.filter
 def is_past_time(opening_time, closing_time):
     current_time = datetime.now().time()
-    print(current_time)
-    print(opening_time)
-    print(closing_time)
     if current_time < opening_time or current_time > closing_time:
         return True
     else:
