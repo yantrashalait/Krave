@@ -94,7 +94,7 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        context['foods'] = FoodMenu.objects.order_by('-created_date')[:10]
+        context['foods'] = FoodMenu.objects.filter(restaurant__hidden=False).order_by('-created_date')[:10]
         return context
 
     def get(self, *args, **kwargs):
@@ -116,9 +116,12 @@ class RestaurantDetail(TemplateView):
         context = super(RestaurantDetail, self).get_context_data(**kwargs)
         name = self.kwargs.get('rest_name').replace('_', ' ')
         restaurant = Restaurant.objects.get(name=name)
-        context['restaurant'] = restaurant
-        context['main_image'] = RestaurantImage.objects.filter(restaurant=restaurant, main_image=True)[0:1]
-        return context
+        if not restaurant.hidden:
+            context['restaurant'] = restaurant
+            context['main_image'] = RestaurantImage.objects.filter(restaurant=restaurant, main_image=True)[0:1]
+            return context
+        else:
+            return HttpResponse('This restaurant is hidden.')
 
 
 class RestaurantListView(ListView):
@@ -129,32 +132,34 @@ class RestaurantListView(ListView):
     def get_queryset(self):
         try:
             name = self.request.GET['name']
-        except:
+        except KeyError:
             name = ''
         if name != '':
-            object_list = self.model.objects.filter(name__icontains=name)
+            object_list = self.model.objects.filter(name__icontains=name, hidden=False)
         else:
-            object_list = self.model.objects.all()
+            object_list = self.model.objects.filter(hidden=False)
 
         return object_list
 
 
-"""
-    The search view
-"""
 def search(request, *args, **kwargs):
+    """
+        The search view
+    """
     if request.method == 'POST':
-        food_menu = FoodMenu.objects.filter(Q(name__icontains=request.POST.get('search', '')) | Q(category__category__icontains=request.POST.get('search', '')))
+        food_menu = FoodMenu.objects.filter(
+            Q(name__icontains=request.POST.get('search', '')) |
+            Q(category__category__icontains=request.POST.get('search', '')))
         return render(request, 'core/search.html', {'foods': food_menu})
 
     else:
         return render(request, 'core/search.html')
 
 
-"""
-    This view is called by ajax request to get the detail of a food item
-"""
 def get_food_detail(request, *args, **kwargs):
+    """
+        This view is called by ajax request to get the detail of a food item
+    """
     if request.method == 'GET':
         food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
         restaurant = food.restaurant
@@ -168,10 +173,10 @@ def get_food_detail(request, *args, **kwargs):
         return JsonResponse(data, safe=False)
 
 
-"""
-    This view is to display all the foods in a page
-"""
 class FoodListView(ListView):
+    """
+        This view is to display all the foods in a page
+    """
     template_name = 'core/food_listing.html'
     model = FoodMenu
     context_object_name = 'foods'
@@ -179,12 +184,12 @@ class FoodListView(ListView):
     def get_queryset(self):
         try:
             name = self.request.GET['name']
-        except:
+        except KeyError:
             name = ""
         if name != "":
-            object_list = self.model.objects.filter(name__icontains=name)
+            object_list = self.model.objects.filter(name__icontains=name, restaurant__hidden=False)
         else:
-            object_list = self.model.objects.all()
+            object_list = self.model.objects.filter(restaurant__hidden=False)
 
         return object_list
 
@@ -208,6 +213,7 @@ class FoodCartListView(ListView):
             context['total_time'] = max_time['max_time'] + delivery_time
         return context
 
+
 class FoodCartDeleteView(DeleteView):
     model = FoodCart
 
@@ -220,6 +226,7 @@ class FoodCartDeleteView(DeleteView):
             return reverse('core:food-cart')
         else:
             return reverse('core:food-cart', kwargs={'username': self.request.user.username})
+
 
 def web_authenticate(username=None, password=None):
     try:
@@ -386,13 +393,11 @@ def activate(request, uidb64, token):
         return HttpResponse('Activation link is invalid!')
 
 
-"""
-    View to add foods to order then proceed to cart
-"""
-
-
 @transaction.atomic
 def add_to_order(request, *args, **kwargs):
+    """
+        View to add foods to order then proceed to cart
+    """
     if request.method == 'POST':
         if not request.user.is_authenticated:
             if 'food_identifier' in request.POST:
@@ -454,14 +459,12 @@ def add_to_order(request, *args, **kwargs):
         return HttpResponseRedirect(reverse('core:food-cart'))
 
 
-"""
-place order
-"""
-
-
 @login_required(login_url='/login/')
 @transaction.atomic
 def place_order(request, *args, **kwargs):
+    """
+    place order
+    """
     if request.method == "POST":
         order = Order()
         order.user = request.user

@@ -107,12 +107,18 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
 
         location = Point(longitude, latitude)
         self.object.location_point = location
+
+        # un-hide the restaurant if restaurant email is inserted.
+        if self.object.email != "" or self.object.email != " " or self.object.email is not None:
+            self.object.hidden = False
+        else:
+            self.object.hidden = True
         self.object.save()
         if 'cuisines[]' in self.request.POST:
             rest_cuisine, created = RestaurantCuisine.objects.get_or_create(restaurant=self.object)
             for item in self.request.POST.getlist('cuisines[]'):
                 id_ = int(item)
-                cuisine =  Cuisine.objects.get(id=id_)
+                cuisine = Cuisine.objects.get(id=id_)
                 if not cuisine in rest_cuisine.cuisine.all():
                     rest_cuisine.cuisine.add(cuisine)
             rest_cuisine.save()

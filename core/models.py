@@ -29,6 +29,7 @@ class Restaurant(models.Model):
     email = models.CharField(max_length=500, default="")
     joined_date = models.DateTimeField(default=datetime.now)
     delivery_time = models.IntegerField(default=0)
+    hidden = models.BooleanField(default=True)
 
     @property
     def longitude(self):
