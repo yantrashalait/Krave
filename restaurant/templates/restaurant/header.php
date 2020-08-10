@@ -35,35 +35,37 @@
                 <div class="left__menu__lists">
                     <ul>
                         <li>
-                          <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Order</a>
-                        </li>
-                        <li>
-                          <a href="{% url 'restaurant:food-cart' %}"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> View Orders Cart</a>
-                        </li>
-                        <li>
                             <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Restaurant Detail</a>
                         </li>
-                        <li>
-                            <a href="{% url 'restaurant:category-list' request.restaurant.id %}"><i class="fa fa-cubes" aria-hidden="true"></i> Restaurant Food Categories</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'restaurant:dashboard' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Add Food Item</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'restaurant:order' request.restaurant.id %}"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Orders</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'restaurant:accepted-order' request.restaurant.id %}"><i class="fa fa-file" aria-hidden="true"></i> Accepted Orders</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'restaurant:earnings' %}"><i class="fa fa-money" aria-hidden="true"></i> My Earnings</a>
-                        </li>
+                        {% if request.restaurant.email %}
+                            <li>
+                              <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Order</a>
+                            </li>
+                            <li>
+                              <a href="{% url 'restaurant:food-cart' %}"><i class="fa fa-cart-arrow-down" aria-hidden="true"></i> View Orders Cart</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:category-list' request.restaurant.id %}"><i class="fa fa-cubes" aria-hidden="true"></i> Restaurant Food Categories</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:dashboard' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Add Food Item</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:order' request.restaurant.id %}"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Orders</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:accepted-order' request.restaurant.id %}"><i class="fa fa-file" aria-hidden="true"></i> Accepted Orders</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:earnings' %}"><i class="fa fa-money" aria-hidden="true"></i> My Earnings</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
                 {% endif %}
@@ -87,15 +89,22 @@
                                     <div class="rs-nm">
                                         {{ request.restaurant.name }}
                                     </div>
-                                    <div class="rs-ad">
-                                        {{ request.restaurant.location_text }}
-                                    </div>
                                 </div>
                             </div>
                             <div class="ac-bt-hl">
                                 <!-- <a class="ac-bt" href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}">Edit</a> -->
                                 <a class="ac-bt" href="{% url 'logout' %}">Logout</a>
                             </div>
-                        </div>
+                            </div>
+                            <div class="t_note rb-pd-rl ">
+                            {% if not request.restaurant.email %}
+                            <p class="note_cont">
+                                <span>
+                                    <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                </span>
+                                Please make sure that you enter your restaurant details properly to view all menus and make your restaurant visible.
+                            </p>
+                            {% endif %}
+                            </div>
                         {% endif %}
                     </div>
