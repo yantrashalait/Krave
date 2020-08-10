@@ -1707,6 +1707,7 @@ p.caution__contion {
      min-height: 250px;
     object-fit: cover;
     width: 100%;
+    overflow: hidden;
 }
 .detail__descpt__restaurant {
   padding: .5rem;
