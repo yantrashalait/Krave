@@ -21,7 +21,7 @@
 	  			<div class="col-md-6 mb-4">
 	  				<div class="content__available__restaurant">
 	  					<div class="restaurant__thumb__img">
-	  						<a href="{% url 'core:restaurant-detail' item.name|space_to_underscore %}">
+	  						<a class="link_rest"	href="{% url 'core:restaurant-detail' item.name|space_to_underscore %}">
                   {% if item.logo %}
                     <img src="{{ item.logo.url }}" alt="">
                   {% else %}
@@ -34,21 +34,23 @@
 	  						<h4>{{ item.name }}</h4>
 	  						</a>
 	  						<div class="restaurent__location">
-	  							<div class="icon__restaurant__locat">
+	  							<div class="icon__restaurant__locat rest_icon">
 	  								<i class="fa fa-map-marker" aria-hidden="true"></i>
 	  							</div>
 	  							<span>{{ item.street }}, {{ item.town }}, {{ item.state }} - {{ item.zip_code }}</span>
 	  						</div>
-	  						<div class="restaut__serve__food">
-	  							<div class="food__serve__icon__restaut">
+	  						<div class="restaut__serve__food line_d">
+	  							<div class="food__serve__icon__restaut rest_icon">
 	  								<i class="fa fa-stumbleupon-circle" aria-hidden="true"></i>
 								</div>
+								<span>
 								{% for cuisine in item.cuisines.cuisine.all %}
-										<span>{{ cuisine.name }}, </span>
+										{{ cuisine.name }},
 								{% endfor %}
+									</span>
 	  						</div>
 	  						<div class="restaut__serve__food">
-	  							<div class="food__serve__icon__restaut">
+	  							<div class="food__serve__icon__restaut rest_icon">
 	  								<i class="fa fa-envelope-o" aria-hidden="true"></i>
 	  							</div>
 	  							<span> {{ item.email }}</span>
