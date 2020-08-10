@@ -86,7 +86,11 @@ def restaurant_register(request, *args, **kwargs):
             form.save()
         else:
             return render(request, 'core/add_resturent.html', {'form': form})
-        return HttpResponseRedirect('/')
+        form = RestaurantRequestForm()
+        return render(
+            request,
+            'core/add_resturent.html',
+            {'success': 1, 'msg': 'Form submitted!', 'form': form})
 
 
 class DashboardView(TemplateView):
