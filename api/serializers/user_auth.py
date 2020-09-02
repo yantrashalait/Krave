@@ -40,12 +40,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    user = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        fields = '__all__'
+        fields = ('image', 'address', 'contact', 'location', 'zip_code')
     
     def create(self, validated_data):
         user = validated_data.pop('user')
-        UserProfile.objects.create(user=user, **validated_data)
-        return super(UserProfileSerializer, self).create(validated_data)
+        user_profile = UserProfile.objects.create(user_id=user.id, **validated_data)
+        return user_profile
