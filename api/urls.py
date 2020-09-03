@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import url
 from rest_framework.authtoken import views as restviews
 from rest_framework.routers import SimpleRouter
 from . import views
@@ -14,6 +15,7 @@ router.register(r'restaurant_request', views.RestaurantRequestViewSet)
 
 urlpatterns = [
     path('api-auth-token', auth_views.CustomAuthToken.as_view()),
+    url(r'^exchange-token/(?P<backend>[^/]+)$', auth_views.exchange_token, name="social-login"),
     path('users/add', auth_views.UserCreationViewSet.as_view(), name='add-user'),
     path('user/profile', auth_views.UserProfileViewSet.as_view(), name="user-profile"),
 
