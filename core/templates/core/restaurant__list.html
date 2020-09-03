@@ -10,10 +10,10 @@
             {% for item in restaurants %}
             <div class="res_d_itm">
               <div class="res_img__thub">
-                {% if not item.images.last %}
+                {% if not item.images.first %}
                 <img src="{% static 'images/rest.jpg' %}" alt="Restaurant Image" />
                 {% else %}
-                <img src="{{ item.images.last.image.url }}">
+                <img src="{{ item.images.first.image.url }}">
                 {% endif %}
               </div>
               <div class="res_det_ifo">
