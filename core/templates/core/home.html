@@ -22,32 +22,69 @@
 		</div>
 	  </div>
   </section>
-  <section class="category__item__details">
-	  <div class="container">
-		<div class="category_main_head">
-			<span>Recently Added Food Items</span>
-		</div>
-		<div class="row">
-		  {% for item in foods %}
-		  <div class="col-md-6 mb-4">
-			<div class="categ__info" data-id="{{ item.id }}">
-			  <div class="categ__head">
-				<span class="food_item__name">{{ item.name }}</span>
-				<p class="food__detail__contain">{{ item.description }}</p>
-				<span class="food__item__price">${{ item.new_price }}</span>
-			  </div>
 
-			  <div class="food__item_image">
-				{% if item.image %}
-					<img src="{{ item.image.url }}">
-				{% endif %}
-			  </div>
-			</div>
-		  </div>
-		  {% endfor %}
-		  </div>
-		</div>
-	</section>
+	<section class="sec__food__items">
+      <div class="container">
+        <div class="row">
+          <div class="t__head__sec">
+            <h6>recently added food items</h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="wr_r_add_fo">
+			  {% for item in foods %}
+            <div class="itm__rec__add" data-id="{{ item.id }}">
+              <div class="i_re__ad_thub">
+				  {% if not item.image %}
+                <img src="{% static 'images/recent-fod-item.jpg' %}" alt="" />
+				  {% else %}
+				  <img src="{{ item.image.url }}" alt="food" />
+				  {% endif %}
+              </div>
+              <div class="i_re_cont">
+                <div class="top_i_nam_pr">
+                  <a href="#" class="i__nme">{{ item.name }}</a>
+                  <span class="i__prc">${{ item.new_price }}</span>
+                </div>
+                <div class="i_rec_ad_cont">
+                  <p class="i__cont__det">
+					  {{ item.description }}
+                  </p>
+                </div>
+              </div>
+            </div>
+			  {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!--  <section class="category__item__details">-->
+<!--	  <div class="container">-->
+<!--		<div class="category_main_head">-->
+<!--			<span>Recently Added Food Items</span>-->
+<!--		</div>-->
+<!--		<div class="row">-->
+<!--		  {% for item in foods %}-->
+<!--		  <div class="col-md-6 mb-4">-->
+<!--			<div class="categ__info" data-id="{{ item.id }}">-->
+<!--			  <div class="categ__head">-->
+<!--				<span class="food_item__name">{{ item.name }}</span>-->
+<!--				<p class="food__detail__contain">{{ item.description }}</p>-->
+<!--				<span class="food__item__price">${{ item.new_price }}</span>-->
+<!--			  </div>-->
+
+<!--			  <div class="food__item_image">-->
+<!--				{% if item.image %}-->
+<!--					<img src="{{ item.image.url }}">-->
+<!--				{% endif %}-->
+<!--			  </div>-->
+<!--			</div>-->
+<!--		  </div>-->
+<!--		  {% endfor %}-->
+<!--		  </div>-->
+<!--		</div>-->
+<!--	</section>-->
 	{% endblock %}
 	{% block popup %}
 	<div id="food__decspt__handler">
@@ -118,7 +155,7 @@
   {% block scripts %}
   <script>
 	  $(document).ready(function(){
-		  $(".categ__info").click(function(){
+		  $(".itm__rec__add").click(function(){
 			  var food_id = $(this).attr('data-id');
 			  $.ajax({
 				  url: "{% url 'core:get-food-detail' %}",

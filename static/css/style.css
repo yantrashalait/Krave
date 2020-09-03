@@ -25,10 +25,12 @@ h5 {
   font-family: "FuturaPTMedium";
 }
 
-body {
-  box-sizing: border-box;
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+body {
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   color: #333e48;
@@ -2222,3 +2224,149 @@ span.rad__typ__wrap {
     bottom: 0;
     top: 3px;
 } */
+
+
+/* RESTAURANTS LIST  */
+.res_ifo_d .wrp_res_d {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 48.33%);
+  grid-gap: 2rem;
+}
+.res_d_itm {
+  background-color: #fff;
+  display: grid;
+  grid-template-rows: 185px min-content;
+  box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.12);
+}
+.res_d_itm .res_img__thub {
+  max-height: 185px;
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+  overflow: hidden;
+}
+.res_d_itm .res_img__thub img {
+  width: 100%;
+  object-fit: cover;
+}
+.res_d_itm .res_det_ifo {
+  margin: 0.7rem 0.5rem;
+}
+.res_det_ifo .res_hed_nm {
+  text-transform: capitalize;
+  color: #333e48;
+  position: relative;
+  padding-bottom: 0.7rem;
+  display: block;
+}
+.res_det_ifo .res_hed_nm h4 {
+  font-size: 1.1rem;
+  margin: 0;
+}
+.res_det_ifo .res_hed_nm:hover {
+  text-decoration: none;
+}
+.res_det_ifo .res_hed_nm::after {
+  content: "";
+  background-color: #eeee;
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.res_det_ifo .ad_ifo_res {
+  margin-top: 0.4rem;
+}
+.ad_ifo_res .det_res_c {
+  list-style-type: none;
+  word-spacing: 0.1rem;
+  margin: 0;
+}
+.det_res_c li {
+  margin-bottom: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+.det_res_c li i {
+  font-size: 0.9rem;
+  flex: 0 0 5%;
+  color: #6aca20;
+}
+
+.sec__food__items .t__head__sec {
+  margin-bottom: 0.5rem;
+}
+.t__head__sec h6 {
+  text-transform: capitalize;
+  color: #333e48;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+.wr_r_add_fo {
+  width: 100%;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, 32.33%);
+}
+.itm__rec__add {
+  background-color: #fff;
+  box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0px 2px 7px 2px rgba(0, 0, 0, 0.12);
+}
+.i_re__ad_thub {
+  /* cursor: pointer; */
+  max-height: 240px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.i_re__ad_thub img {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+}
+
+.i_re_cont {
+  margin: 0.7rem 0.5rem;
+}
+.top_i_nam_pr {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.top_i_nam_pr .i__nme {
+  color: #333e48;
+  text-decoration: none;
+}
+.i_re_cont .top_i_nam_pr {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.7rem;
+}
+.top_i_nam_pr .i__prc {
+  display: flex;
+  color: #6aca20;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.top_i_nam_pr:after {
+  content: "";
+  position: absolute;
+  background-color: #eeee;
+  height: 1px;
+  width: 100%;
+  bottom: 0;
+}
+.i_re_cont .i_rec_ad_cont {
+  padding: 0.5rem 0;
+}
+.i_rec_ad_cont .i__cont__det {
+  margin: 0;
+}

@@ -2,65 +2,49 @@
 {% load static %}
 {% load filters %}
 {% block content %}
-   <section class="avail__restaurant__list">
-	  	<div class="container">
-	  			<div class="restaurant__head__section">
-	  				<h5>Available Restaurants</h5>
-	  			</div>
-	  		<div class="row pb-4">
-		          <div class="col-lg-6 col-sm-6">
-		            <form class="search-box" method="get">
-		              <input class="search-input" type="text" placeholder="Search restaurant here.." name="name">
-		              
-		              <button type="submit" class="search-smt"><i class="fa fa-check" aria-hidden="true"></i>ok</button>
-		            </form>
-		          </div>
-	      </div>
-	  		<div class="row">
-          {% for item in restaurants %}
-	  			<div class="col-md-6 mb-4">
-	  				<div class="content__available__restaurant">
-	  					<div class="restaurant__thumb__img">
-	  						<a class="link_rest"	href="{% url 'core:restaurant-detail' item.name|space_to_underscore %}">
-                  {% if item.logo %}
-                    <img src="{{ item.logo.url }}" alt="">
-                  {% else %}
-                    <img src="{% static 'images/rest_logo.jpg' %}" alt="">
-                  {% endif %}
-	  						</a>
-	  					</div>
-	  					<div class="detail__descpt__restaurant">
-	  						<a href="{% url 'core:restaurant-detail' item.name|space_to_underscore %}">
-	  						<h4>{{ item.name }}</h4>
-	  						</a>
-	  						<div class="restaurent__location">
-	  							<div class="icon__restaurant__locat rest_icon">
-	  								<i class="fa fa-map-marker" aria-hidden="true"></i>
-	  							</div>
-	  							<span>{{ item.street }}, {{ item.town }}, {{ item.state }} - {{ item.zip_code }}</span>
-	  						</div>
-	  						<div class="restaut__serve__food line_d">
-	  							<div class="food__serve__icon__restaut rest_icon">
-	  								<i class="fa fa-stumbleupon-circle" aria-hidden="true"></i>
-								</div>
-								<span>
-								{% for cuisine in item.cuisines.cuisine.all %}
-										{{ cuisine.name }},
-								{% endfor %}
-									</span>
-	  						</div>
-	  						<div class="restaut__serve__food">
-	  							<div class="food__serve__icon__restaut rest_icon">
-	  								<i class="fa fa-envelope-o" aria-hidden="true"></i>
-	  							</div>
-	  							<span> {{ item.email }}</span>
-	  						</div>
-	  					</div>
-	  				</div>
+
+	<section class="res_ifo_d" style="margin-top: 5rem; margin-bottom: 5rem">
+      <div class="container">
+        <div class="row">
+          <div class="wrp_res_d">
+            {% for item in restaurants %}
+            <div class="res_d_itm">
+              <div class="res_img__thub">
+                {% if not item.logo %}
+                <img src="{% static 'images/rest.jpg' %}" alt="Restaurant Image" />
+                {% else %}
+                <img src="{{ item.logo.url }}">
+                {% endif %}
+              </div>
+              <div class="res_det_ifo">
+                <a class="res_hed_nm" href="{% url 'core:restaurant-detail' item.name|space_to_underscore %}">
+                  <h4>{{ item.name }}</h4></a>
+                <div class="ad_ifo_res">
+                  <ul class="det_res_c">
+                    <li>
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>{{ item.street }}, {{ item.town }},
+                      {{ item.state }} - {{ item.zip_code }}
+                    </li>
+                    <li>
+                      <i class="fa fa-cutlery" aria-hidden="true"></i>
+                      {% for cuisine in item.cuisines.cuisine.all %}
+  	    				  {{ cuisine.name }},
+      				  {% endfor %}
+                    </li>
+                    <li>
+                      <i class="fa fa-envelope-o" aria-hidden="true"></i>{{ item.email }}
+                    </li>
+                    <li>
+                      <i class="fa fa-phone" aria-hidden="true"></i>{{ item.contact }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
           </div>
-          {% endfor %}
-	  		</div>
-	  	</div>
-  </section>
+        </div>
+      </div>
+    </section>
   {% include 'core/footer.html' %}
   {% endblock %}

@@ -108,3 +108,91 @@
     	width: 50px;
     }
 }
+
+/* RESTAURANTS LIST MEDIA QUARIES */
+@media only screen and (max-width: 991px) {
+  .res_ifo_d .wrp_res_d {
+    grid-template-columns: repeat(auto-fit, 47.66%);
+  }
+  .res_det_ifo .res_hed_nm h4 {
+    font-size: 1rem;
+  }
+  .det_res_c li i {
+    flex: 0 0 6%;
+  }
+  .det_res_c li {
+    font-size: 13px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .res_ifo_d .wrp_res_d {
+    grid-template-columns: repeat(auto-fit, 48.4%);
+    grid-gap: 1rem;
+  }
+  .det_res_c li i {
+    flex: 0 0 7%;
+  }
+  .res_det_ifo .res_hed_nm {
+    padding-bottom: 0.3rem;
+  }
+  .res_d_itm .res_det_ifo {
+    margin: 0.3rem 0.5rem;
+  }
+  .res_d_itm {
+    grid-template-rows: 150px min-content;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .res_ifo_d .wrp_res_d {
+    grid-template-columns: repeat(auto-fit, 100%);
+    grid-gap: 2rem;
+  }
+  .res_ifo_d .row {
+    margin: 0;
+  }
+}
+
+/* MEDIA QUERY FOR RECENTLY ADDED FOOD ITEM */
+@media only screen and (max-width: 1200px) {
+  .wr_r_add_fo {
+    grid-template-columns: repeat(auto-fit, 32.2%);
+  }
+  .i_re__ad_thub img {
+    height: 220px;
+  }
+}
+@media only screen and (max-width: 991px) {
+  .wr_r_add_fo {
+    grid-template-columns: repeat(auto-fit, 31.8%);
+  }
+  .i_re__ad_thub img {
+    height: 150px;
+  }
+  .i_re_cont .i_rec_ad_cont {
+    padding: 0;
+    padding-top: 0.5rem;
+  }
+  .i__cont__det {
+    font-size: 13px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .wr_r_add_fo {
+    grid-template-columns: repeat(auto-fit, 48.4%);
+  }
+}
+@media only screen and (max-width: 575px) {
+  .sec__food__items .row {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 529px) {
+  .wr_r_add_fo {
+    grid-template-columns: repeat(auto-fit, 100%);
+  }
+  .i_re__ad_thub img {
+    height: 200px;
+  }
+}
