@@ -40,7 +40,7 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = FoodFilteredListSerializer
         model = FoodMenu
-        exclude = ("created_date", "modified_date", "deleted", "category")
+        exclude = ("created_date", "modified_date", "deleted", "main_category")
 
     def get_detail_url(self, obj):
         return BASE_URL + "/food/" + str(obj.id)

@@ -7,7 +7,7 @@ from django.forms import widgets
 from django.db.models import Sum
 from django.core.validators import validate_email
 import re
-from .models import RestaurantRequest, FoodMenu, FoodStyle, FoodExtra, RestaurantFoodCategory, Restaurant
+from .models import RestaurantRequest, FoodMenu, FoodStyle, FoodExtra, RestaurantFoodCategory, Restaurant, Category
 
 from django.contrib.gis.geos import Point
 
@@ -118,17 +118,28 @@ class FoodMenuForm(forms.ModelForm):
     old_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Old Price'}))
     new_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
-    category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all())
+    main_category = forms.ModelChoiceField(queryset=Category.objects.all())
+    rest_category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all())
 
     def __init__(self, *args, **kwargs):
         restaurant = kwargs.pop('restaurant')
         super(FoodMenuForm, self).__init__(*args, **kwargs)
-        self.fields['category'].widget.attrs.update({'class': 'fd-ct'})
-        self.fields['category'].queryset = RestaurantFoodCategory.objects.filter(restaurant=restaurant)
+        self.fields['main_category'].widget.attrs.update({'class': 'fd-ct'})
+        self.fields['rest_category'].widget.attrs.update({'class': 'fd-ct'})
+        self.fields['rest_category'].queryset = RestaurantFoodCategory.objects.filter(restaurant=restaurant)
 
     class Meta:
         model = FoodMenu
-        fields = ('category', 'name', 'description', 'ingredients', 'old_price', 'new_price', 'preparation_time', 'image', 'image')
+        fields = (
+            'main_category',
+            'rest_category',
+            'name',
+            'description',
+            'ingredients',
+            'old_price',
+            'new_price',
+            'preparation_time',
+            'image')
 
 
 class FoodMenuStyleForm(forms.ModelForm):
