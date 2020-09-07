@@ -53,6 +53,8 @@ urlpatterns = [
     path('set-location', delivery_views.DeliveryManSetLocationViewSet.as_view(), name="set-location"),
     path('assigned-orders', delivery_views.DMAssignedOrders.as_view(), name="dm-assigned-orders"),
     path('delivery/track', delivery_views.UserDeliveryTrack.as_view(), name="delivery-track"),
+
+    path('user/<int:pk>/info', delivery_views.UserInfoVS.as_view(), name="user-info"),
 ]
 
 urlpatterns += router.urls

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import RestaurantFoodCategory, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle
+from core.models import Category, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle
 
 
 # BASE_URL = "http://localhost:8000/api/v1"
@@ -14,8 +14,8 @@ class CategoryListSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
 
     class Meta:
-        model = RestaurantFoodCategory
-        fields = "__all__"
+        model = Category
+        fields = ('name', 'image', 'detail_url', 'id')
 
     def get_detail_url(self, obj):
         return BASE_URL + "/category/" + str(obj.id)
@@ -55,8 +55,8 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = RestaurantFoodCategory
-        fields = "__all__"
+        model = Category
+        fields = ('id', 'food', 'image')
 
     def get_image(self, obj):
         if obj.image:

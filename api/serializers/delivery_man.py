@@ -26,3 +26,16 @@ class DeliveryLocationSerializer(serializers.Serializer):
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
     
+
+class UserInfoSerializer(serializers.Serializer):
+    contact = serializers.SerializerMethodField(read_only=True)
+    username = serializers.ReadOnlyField()
+    first_name = serializers.ReadOnlyField()
+    last_name = serializers.ReadOnlyField()
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'contact')
+
+    def get_contact(self, obj):
+        return obj.profile.contact

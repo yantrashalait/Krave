@@ -36,4 +36,8 @@ urlpatterns = [
     # restaurant earnings
     path('earnings/', views.PaymentListView.as_view(), name="earnings"),
 
+    path('chef-special/list/', views.list_chef_special, name="chef-special"),
+    path('chef-special/<int:pk>/delete/', views.delete_chef_special, name="chef-special-delete"),
+    path('chef-special/add/', views.add_chef_special, name="chef-special-add"),
+
 ]
