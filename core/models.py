@@ -6,6 +6,20 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    modified_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="modified_categories")
+    image = models.ImageField(upload_to="category/image", null=True, blank=True)
+
+
 """
     Restaurant model stores the details about restaurant profile that is visible to the public.
 """
@@ -98,12 +112,24 @@ class RestaurantRating(models.Model):
         return self.restaurant.name + ' ' + self.user.username
 
 
-"""
-    It stores the detail about the food served by a specific restaurant.
-"""
 class FoodMenu(models.Model):
+    """
+        It stores the detail about the food served by a specific restaurant.
+    """
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="menu")
-    category = models.ForeignKey(RestaurantFoodCategory, on_delete=models.CASCADE, related_name="food")
+    rest_category = models.ForeignKey(
+        RestaurantFoodCategory,
+        on_delete=models.CASCADE,
+        related_name="food",
+        null=True,
+        blank=True)
+    category = models.ForeignKey(
+        Category,
+        related_name="food",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True
+    )
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     ingredients = models.TextField(null=True, blank=True)
@@ -115,6 +141,7 @@ class FoodMenu(models.Model):
     created_date = models.DateTimeField(auto_now=True)
     modified_date = models.DateTimeField(auto_now=True)
     deleted = models.BooleanField(default=False)
+    chef_special = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -129,6 +156,7 @@ CUSTOMIZE_TYPE = (
     (1, 'optional'),
     (2, 'required')
 )
+
 
 class FoodStyle(models.Model):
     food = models.ForeignKey(FoodMenu, on_delete=models.CASCADE, related_name="styles")
