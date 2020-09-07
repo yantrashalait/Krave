@@ -123,7 +123,7 @@ class FoodMenu(models.Model):
         related_name="food",
         null=True,
         blank=True)
-    category = models.ForeignKey(
+    main_category = models.ForeignKey(
         Category,
         related_name="food",
         on_delete=models.CASCADE,
