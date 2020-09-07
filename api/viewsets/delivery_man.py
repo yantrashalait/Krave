@@ -86,6 +86,7 @@ class DMAssignedOrders(ListAPIView):
 
 class UserDeliveryTrack(APIView):
     permission_classes = [permissions.IsAuthenticated, IsUserOrder]
+
     def get(self, *args, **kwargs):
         id_string = self.request.GET.get("id_string")
         delivery = get_object_or_404(Delivery, tracking_code=id_string)
@@ -111,3 +112,6 @@ class UserDeliveryTrack(APIView):
                 "status": True,
                 'data': data,
             })
+
+
+class USerInfoVS(DetailAPIView):
