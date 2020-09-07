@@ -532,3 +532,24 @@ class PaymentListView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         return RestaurantPayment.objects.filter(restaurant=self.request.restaurant)
+
+
+def list_chef_special(request):
+    object_list = FoodMenu.objects.get(chef_special=True, restaurant=request.restaurant)
+    return render(request, 'restaurant/chef_special_list.php', {'object_list': object_list})
+
+
+def add_chef_special(request):
+    if request.method == "POST":
+        food_id = request.POST.get('food_id')
+        food = FoodMenu.objects.filter(id=food_id).update(chef_special=True)
+        return HttpResponseRedirect('chef-special/list/')
+    else:
+        return render(request, 'restaurant/chef_special_add.php')
+
+
+def delete_chef_special(request, pk):
+    food = FoodMenu.objects.get(id=pk)
+    food.chef_special = False
+    food.save()
+    return HttpResponseRedirect('chef-special/list/')
