@@ -1,19 +1,25 @@
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import get_user_model
+from django.contrib.gis.geos import Point
+from django.db import transaction
+from django.db.models import Q
+
 from rest_framework.response import Response
 from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
     RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
-from django.db import transaction
-from django.db.models import Q
 from rest_framework.decorators import api_view
-from django.contrib.gis.geos import Point
-from datetime import datetime
+
 from api.permissions import IsUserOrder
 from delivery.models import DeliveryTrack, Delivery
 from user.models import UserLocationTrack
-from api.serializers.delivery_man import DeliveryManLocationSerializer, DeliveryManOrderSerializer
+from api.serializers.delivery_man import DeliveryManLocationSerializer, DeliveryManOrderSerializer, UserInfoSerializer
+
+User = get_user_model()
 
 
 class DeliveryManSetLocationViewSet(CreateAPIView):
@@ -114,4 +120,16 @@ class UserDeliveryTrack(APIView):
             })
 
 
-class USerInfoVS(DetailAPIView):
+class UserInfoVS(RetrieveAPIView):
+    serializer_class = UserInfoSerializer
+    model = User
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(self.model, id=self.kwargs.get('pk'))
+
+    def get(self, *args, **kwargs):
+        serializer = self.get_serializer(self.get_object())
+        return Response({
+            "status": True,
+            "data": serializer.data
+        })
