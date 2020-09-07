@@ -2243,7 +2243,7 @@ span.rad__typ__wrap {
 .res_d_itm .res_img__thub {
   max-height: 185px;
   display: flex;
-  /* align-items: center; */
+  align-items: center;
   justify-content: center;
   overflow: hidden;
 }
