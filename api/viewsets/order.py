@@ -7,6 +7,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpda
     RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.db import transaction
 from core.models import Restaurant, FoodStyle, FoodMenu, FoodExtra, FoodCart, Order
+from delivery.models import Delivery
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer
 from api.serializers.order import CartSerializer, OrderCreateSerializer, CartListSerializer,\
     OrderListSerializer, OrderDetailSerializer
@@ -15,6 +16,7 @@ from rest_framework.decorators import api_view, permission_classes
 from api.permissions import IsOwner, IsOwnerOrReadOnly
 from core.views import randomString
 
+from user.models import User
 
 class AddToCartViewSet(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -226,10 +228,15 @@ class OrderDetailViewSet(RetrieveAPIView):
 class OrderHistoryViewSet(ListAPIView):
     serializer_class = OrderListSerializer
     permission_classes = [permissions.IsAuthenticated]
-    model = Order
+    model = Delivery
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(Q(status=5), user=self.request.user)
+        assigned_orders = self.request.user.delivery.all()
+        order_list = []
+        for item in assigned_orders:
+            if self.model.status == 2:
+                order_list.append(item.order)
+        return order_list
 
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
@@ -242,10 +249,10 @@ class OrderHistoryViewSet(ListAPIView):
 class EditOrderStatusViewSet(RetrieveUpdateAPIView):
     serializer_class = OrderListSerializer
     permission_classes = [permissions.IsAuthenticated]
-    model = Order
+    model = Delivery
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.get(id=self.kwargs.get("order_id"))
+        return self.model.objects.get(order=self.kwargs.get("order_id"))
 
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset())
@@ -263,7 +270,8 @@ class EditOrderStatusViewSet(RetrieveUpdateAPIView):
             }, status=status.HTTP_400_BAD_REQUEST)
 
         status =  serializer.validated_data.get('status')
-        order = self.get_queryset()
+        delivery = self.get_queryset()
+        order = delivery.order
         order.status = status
         order.save()
 
