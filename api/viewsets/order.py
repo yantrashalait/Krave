@@ -228,13 +228,13 @@ class OrderDetailViewSet(RetrieveAPIView):
 class OrderHistoryViewSet(ListAPIView):
     serializer_class = OrderListSerializer
     permission_classes = [permissions.IsAuthenticated]
-    model = Delivery
+    model = Order
 
     def get_queryset(self, *args, **kwargs):
-        assigned_orders = self.request.user.delivery.order.all()
+        assigned_orders = self.request.user.delivery.all()
         order_list = []
         for item in assigned_orders:
-            if self.model.status == 2:
+            if item.status == 2:
                 order_list.append(item.order)
         return order_list
 
