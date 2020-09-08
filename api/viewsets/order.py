@@ -221,3 +221,53 @@ class OrderDetailViewSet(RetrieveAPIView):
             'status': True,
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class OrderHistoryViewSet(ListAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Order
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(Q(status=5), user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class EditOrderStatusViewSet(RetrieveUpdateAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Order
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.get(id=self.kwargs.get("order_id"))
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset())
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                'status': False,
+                'msg': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        status =  serializer.validated_data.get('status')
+        order = self.get_queryset()
+        order.status = status
+        order.save()
+
+        return Response({
+            'status': True,
+            'msg': 'Updated successfully.'
+        }, status=status.HTTP_200_OK)

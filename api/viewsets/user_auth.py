@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.http import HttpResponse
 from django.contrib.auth.models import Group
+from django.contrib.auth import logout
 
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -231,3 +232,11 @@ def exchange_token(request, *args, **kwargs):
             content_type="application/json"
         )
 
+
+class UserProfileLogoutViewSet(APIView):
+    def get(self, request):
+        logout(request)
+        return Response({
+                'msg': 'Logged out.'
+            }, status=status.HTTP_200_OK
+        )
