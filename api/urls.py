@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^exchange-token/(?P<backend>[^/]+)$', auth_views.exchange_token, name="social-login"),
     path('users/add', auth_views.UserCreationViewSet.as_view(), name='add-user'),
     path('user/profile', auth_views.UserProfileViewSet.as_view(), name="user-profile"),
+    path('logout/', auth_views.UserProfileLogoutViewSet.as_view(), name='user-logout'),
 
     # apis for categories
     path('category/list', food_views.AllCategoryListViewSet.as_view(), name='category-list'),
@@ -48,6 +49,8 @@ urlpatterns = [
     path('place-order', order_views.OrderPlaceViewSet.as_view(), name="place-order"),
     path('order/list', order_views.OrderListViewSet.as_view(), name="order-list"),
     path('order/<int:pk>/detail', order_views.OrderDetailViewSet.as_view(), name="order-detail"),
+    path('order/history', order_views.OrderHistoryViewSet.as_view(), name="order-history"),
+    path('order/<int:order_id>/status/edit', order_views.EditOrderStatusViewSet.as_view(), name="edit-order-status"),
 
     # urls for delivery person
     path('set-location', delivery_views.DeliveryManSetLocationViewSet.as_view(), name="set-location"),

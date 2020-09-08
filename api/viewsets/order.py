@@ -7,6 +7,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpda
     RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.db import transaction
 from core.models import Restaurant, FoodStyle, FoodMenu, FoodExtra, FoodCart, Order
+from delivery.models import Delivery
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer
 from api.serializers.order import CartSerializer, OrderCreateSerializer, CartListSerializer,\
     OrderListSerializer, OrderDetailSerializer
@@ -15,6 +16,7 @@ from rest_framework.decorators import api_view, permission_classes
 from api.permissions import IsOwner, IsOwnerOrReadOnly
 from core.views import randomString
 
+from user.models import User
 
 class AddToCartViewSet(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -220,4 +222,60 @@ class OrderDetailViewSet(RetrieveAPIView):
         return Response({
             'status': True,
             'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class OrderHistoryViewSet(ListAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Order
+
+    def get_queryset(self, *args, **kwargs):
+        assigned_orders = self.request.user.delivery.all()
+        order_list = []
+        for item in assigned_orders:
+            if item.status == 2:
+                order_list.append(item.order)
+        return order_list
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class EditOrderStatusViewSet(RetrieveUpdateAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Delivery
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.get(order=self.kwargs.get("order_id"))
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset())
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+    def put(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), data=request.data)
+        if not serializer.is_valid():
+            return Response({
+                'status': False,
+                'msg': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        status =  serializer.validated_data.get('status')
+        delivery = self.get_queryset()
+        order = delivery.order
+        order.status = status
+        order.save()
+
+        return Response({
+            'status': True,
+            'msg': 'Updated successfully.'
         }, status=status.HTTP_200_OK)
