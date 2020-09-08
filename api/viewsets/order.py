@@ -231,7 +231,7 @@ class OrderHistoryViewSet(ListAPIView):
     model = Delivery
 
     def get_queryset(self, *args, **kwargs):
-        assigned_orders = self.request.user.delivery.all()
+        assigned_orders = self.request.user.delivery.order.all()
         order_list = []
         for item in assigned_orders:
             if self.model.status == 2:
