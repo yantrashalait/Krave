@@ -161,11 +161,10 @@
                                                 <option value="{{ item.id }}">{{ item.name }}</option>
                                                 {% endfor %}
                                             </select>
-
                                     </div>
                                     {{ form.media }}
                                     <div class="fm-ls sm-mb">
-                                        <div id="map" style="height: 500px; width: 100%;"></div>
+                                        <div id="map" style="height: 500px; width: 100%; z-index: 0;"></div>
                                     </div>
                                     <input type="text" id="lat" name="lat" hidden value="{{ request.restaurant.latitude }}" />
                                     <input type="text" id="lon" name="lon" hidden value="{{ request.restaurant.longitude }}" />

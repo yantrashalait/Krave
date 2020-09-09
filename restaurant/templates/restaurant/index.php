@@ -86,9 +86,19 @@
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
-                                                <label>Choose Category</label>
-                                                {{ form.category }}
+                                                <label>Choose Category (can be blank)</label>
+                                                {{ form.main_category }}
+                                                <span>If no suitable category is found, create a restaurant category.</span>
                                             </div>
+                                            <div class="fm-hf-ls">
+                                                <label>Choose Restaurant Category</label>
+                                                {{ form.rest_category }}
+                                                <span>Will be seen inside restaurant detail page.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="fm-ls sm-mb">
+                                        <div class="fm-ls-td js-sb">
                                             <div class="fm-hf-ls">
                                                 <label>Preparation Time</label>
                                                 {{ form.preparation_time }}

@@ -8,7 +8,7 @@
             </div>
             <!-- heading -->
             <div class="ad-fd-fm pd-tb-md">
-                <form method="post" action=".">
+                <form method="post" action="{% url 'restaurant:chef-special-add' %}">
                     {% csrf_token %}
                     <div class="fm-ls sm-mb" id="foods">
                         <label>Select Food</label>

@@ -7,14 +7,18 @@ from django.contrib.gis.db.models import PointField
 
 
 DELIVERY_CHOICES = (
-    (0, 'Assigned'),
-    (1, 'Ongoing'),
-    (2, 'Received')
+    (0, 'Picked'),
+    (1, 'Delivered')
 )
 
+
 class Delivery(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="delivery")
-    delivery_man = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="delivery", on_delete=models.SET_NULL, null=True)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name="delivery")
+    delivery_man = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="delivery",
+        on_delete=models.SET_NULL,
+        null=True)
     tracking_code = models.CharField(max_length=100)
     status = models.IntegerField()
 
