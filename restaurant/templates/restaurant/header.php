@@ -52,9 +52,6 @@
                                 <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menu</a>
                             </li>
                             <li>
-                                <a href="{% url 'restaurant:dashboard' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Add Food Item</a>
-                            </li>
-                            <li>
                                 <a href="{% url 'restaurant:order' request.restaurant.id %}"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Orders</a>
                             </li>
                             <li>

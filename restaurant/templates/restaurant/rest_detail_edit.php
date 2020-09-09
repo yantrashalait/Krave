@@ -4,13 +4,11 @@
                         <div class="rb-pd-rl">
                             <div class="it-ac-hd">
                                 <div class="sc-hd">
-                                    <h1>Your Restaurant Details</h1>
+                                    <h1>Edit Your Restaurant Details</h1>
                                 </div>
-                                <div class="ac-bt-hl">
-                                    <a href="{% url 'restaurant:restaurant-detail-edit' request.restaurant.id %}">
-                                        <button class="ac-bt">Edit</button>
-                                    </a>
-                                </div>
+                                <!-- <div class="ac-bt-hl">
+                                      <button class="ac-bt">Save</button>
+                                    </div> -->
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">
@@ -23,6 +21,22 @@
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">
+                                            <div class="up-im">
+                                                <input type='file' name="logo" id="id_logo" />
+                                                <div class="up-im-bt">
+                                                    <div class="up-im-cn">
+                                                        <div class="up-im-bt-tl">
+                                                            <p>Drop image here to upload</p>
+                                                        </div>
+                                                        <div class="up-im-bt-dv">
+                                                            <p>or</p>
+                                                        </div>
+                                                        <div class="up-im-bt-bw">
+                                                            Browse File
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="pv-im-hl">
                                             {% if request.restaurant.logo %}
                                                 <img id="blah" src="{{ request.restaurant.logo.url }}" alt="your image" />
@@ -38,6 +52,22 @@
                                     <!-- form list -->
                                     <div class="fm-ls sm-mb">
                                         <div class="fm-ls-td">
+                                            <div class="up-im">
+                                                <input type='file' name="image" id="id_image" />
+                                                <div class="up-im-bt">
+                                                    <div class="up-im-cn">
+                                                        <div class="up-im-bt-tl">
+                                                            <p>Drop image here to upload</p>
+                                                        </div>
+                                                        <div class="up-im-bt-dv">
+                                                            <p>or</p>
+                                                        </div>
+                                                        <div class="up-im-bt-bw">
+                                                            Browse File
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="pv-im-hl">
                                             {% if request.restaurant.images.last %}
                                                 <img id="image_blah" src="{{ request.restaurant.images.last.image.url }}" alt="your image" />
@@ -139,9 +169,9 @@
                                     <input type="text" id="lat" name="lat" hidden value="{{ request.restaurant.latitude }}" />
                                     <input type="text" id="lon" name="lon" hidden value="{{ request.restaurant.longitude }}" />
                                     <!-- form list -->
-                                    <!-- <div class="fm-ls sm-mb">
+                                    <div class="fm-ls sm-mb">
                                       <button type="submit" class="sb-bt mx-auto d-flex">Update Restaurant Details</button>
-                                    </div> -->
+                                    </div>
                             </form>
                         </div>
                     </div>

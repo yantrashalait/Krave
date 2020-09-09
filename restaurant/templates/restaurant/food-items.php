@@ -6,9 +6,11 @@
                                 <div class="sc-hd">
                                     <h1>Items</h1>
                                 </div>
-                                <!-- <div class="ac-bt-hl">
-                                      <button class="ac-bt">Save</button>
-                                    </div> -->
+                                <div class="ac-bt-hl">
+                                    <a href="{% url 'restaurant:dashboard' request.restaurant.id %}">
+                                        <button class="ac-bt">Add Food Item</button>
+                                    </a>
+                                </div>
                             </div>
                             <!-- heading -->
                             <div class="ad-fd-fm pd-tb-md">

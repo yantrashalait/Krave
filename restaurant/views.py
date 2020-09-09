@@ -25,7 +25,7 @@ from .forms import ValidatingPasswordChangeForm
 from core.models import Order, FoodMenu, FoodStyle, FoodExtra, Restaurant, RestaurantCuisine, \
 Cuisine, RestaurantFoodCategory, FoodCart, RestaurantPayment, RestaurantImage
 from core.forms import FoodMenuForm, FoodMenuStyleForm, FoodMenuExtraForm, RestaurantForm, \
-RestaurantCategoryForm
+RestaurantCategoryForm, RestaurantEditForm
 
 StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm, fields=['name_of_style', 'cost',], extra=1, max_num=10)
 ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'cost'], extra=1, max_num=10)
@@ -93,6 +93,25 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(RestaurantDetailView, self).get_context_data(*args, **kwargs)
+        context['cuisine'] = Cuisine.objects.all()
+        try:
+            context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
+        except RestaurantCuisine.DoesNotExist:
+            pass
+        return context
+
+
+class RestaurantEditDetailView(RestaurantAdminMixin, UpdateView):
+    template_name = 'restaurant/rest_detail_edit.php'
+    form_class = RestaurantEditForm
+    model = Restaurant
+
+    def get_object(self):
+        id_ = self.kwargs.get('rest_id')
+        return get_object_or_404(Restaurant, pk=id_)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(RestaurantEditDetailView, self).get_context_data(*args, **kwargs)
         context['cuisine'] = Cuisine.objects.all()
         try:
             context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
