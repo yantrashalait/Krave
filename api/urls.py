@@ -50,6 +50,7 @@ urlpatterns = [
     path('order/list', order_views.OrderListViewSet.as_view(), name="order-list"),
     path('order/<int:pk>/detail', order_views.OrderDetailViewSet.as_view(), name="order-detail"),
     path('order/history', order_views.OrderHistoryViewSet.as_view(), name="order-history"),
+    path('order/ongoing/history', order_views.OrderOngoingHistoryViewSet.as_view(), name="order-ongoing-history"),
     path('order/<int:order_id>/status/edit', order_views.EditOrderStatusViewSet.as_view(), name="edit-order-status"),
 
     # urls for delivery person
