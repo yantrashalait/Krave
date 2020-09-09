@@ -178,6 +178,33 @@ class RestaurantForm(forms.ModelForm):
         super(RestaurantForm, self).__init__(*args, **kwargs)
         if not self.fields['location_point'].initial:
             self.fields['location_point'].initial = Point(-73.935242, 40.730610, srid=4326)
+        self.fields['name'].widget.attrs['disabled'] = 'disabled'
+        self.fields['street'].widget.attrs['disabled'] = 'disabled'
+        self.fields['town'].widget.attrs['disabled'] = 'disabled'
+        self.fields['state'].widget.attrs['disabled'] = 'disabled'
+        self.fields['zip_code'].widget.attrs['disabled'] = 'disabled'
+        self.fields['contact'].widget.attrs['disabled'] = 'disabled'
+        self.fields['delivery_upto'].widget.attrs['disabled'] = 'disabled'
+        self.fields['delivery_charge'].widget.attrs['disabled'] = 'disabled'
+        self.fields['registration_number'].widget.attrs['disabled'] = 'disabled'
+        self.fields['email'].widget.attrs['disabled'] = 'disabled'
+        self.fields['delivery_time'].widget.attrs['disabled'] = 'disabled'
+        self.fields['opening_time'].widget.attrs['disabled'] = 'disabled'
+        self.fields['closing_time'].widget.attrs['disabled'] = 'disabled'
+
+
+class RestaurantEditForm(forms.ModelForm):
+    opening_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+    closing_time = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time'}))
+
+    class Meta:
+        model = Restaurant
+        fields = ('name', 'location_point', 'street', 'town', 'state', 'zip_code', 'contact', 'opening_time', 'closing_time', 'delivery_upto', 'delivery_charge', 'logo', 'registration_number', 'email', 'delivery_time')
+
+    def __init__(self, *args, **kwargs):
+        super(RestaurantEditForm, self).__init__(*args, **kwargs)
+        if not self.fields['location_point'].initial:
+            self.fields['location_point'].initial = Point(-73.935242, 40.730610, srid=4326)
         self.fields['name'].widget.attrs.update({'placeholder': 'Name of restaurant'})
         self.fields['street'].widget.attrs.update({'placeholder': 'Street'})
         self.fields['town'].widget.attrs.update({'placeholder': 'Town'})
