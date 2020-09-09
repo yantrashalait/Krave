@@ -246,6 +246,27 @@ class OrderHistoryViewSet(ListAPIView):
         }, status=status.HTTP_200_OK)
 
 
+class OrderOngoingHistoryViewSet(ListAPIView):
+    serializer_class = OrderListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    model = Order
+
+    def get_queryset(self, *args, **kwargs):
+        assigned_orders = self.request.user.delivery.all()
+        order_list = []
+        for item in assigned_orders:
+            if item.status == 1:
+                order_list.append(item.order)
+        return order_list
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
 class EditOrderStatusViewSet(RetrieveUpdateAPIView):
     serializer_class = OrderListSerializer
     permission_classes = [permissions.IsAuthenticated]
