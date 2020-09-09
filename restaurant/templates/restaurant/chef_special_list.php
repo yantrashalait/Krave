@@ -5,7 +5,7 @@
                             <div class="it-ac-hd">
                                 <div class="sc-hd">
                                     <h1>Categories</h1>
-                                    <a class="btn btn-success" href="{% url 'restaurant:chef-special-add' request.restaurant.id %}"><i class="fa fa-plus"></i> Add Category</a>
+                                    <a class="btn btn-success" href="{% url 'restaurant:chef-special-add' %}"><i class="fa fa-plus"></i> Add Chef Special</a>
                                 </div>
                                 <!-- <div class="ac-bt-hl">
                                       <button class="ac-bt">Save</button>
@@ -25,7 +25,7 @@
                                         <tr>
                                             <td>{{ item.name }}</td>
                                             <td class="ac-bt-hl-fd-ls">
-                                              <a href="{% url 'restaurant:chef-special-delete' object.id  %}" class="btn btn-danger">Delete</a>
+                                              <a href="{% url 'restaurant:chef-special-delete' item.id  %}" class="btn btn-danger">Delete</a>
                                             </td>
                                         </tr>
                                         {% endfor %}

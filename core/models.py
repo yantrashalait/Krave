@@ -19,6 +19,9 @@ class Category(models.Model):
         related_name="modified_categories")
     image = models.ImageField(upload_to="category/image", null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 """
     Restaurant model stores the details about restaurant profile that is visible to the public.
@@ -122,13 +125,16 @@ class FoodMenu(models.Model):
         on_delete=models.CASCADE,
         related_name="food",
         null=True,
-        blank=True)
+        blank=True,
+        help_text='Will be seen inside restaurant detail page.'
+    )
     main_category = models.ForeignKey(
         Category,
         related_name="food",
         on_delete=models.CASCADE,
         null=True,
-        blank=True
+        blank=True,
+        help_text='If no suitable category is found, create a restaurant category.'
     )
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
@@ -256,8 +262,6 @@ class Order(models.Model):
         (2, 'Approved'),
         (3, 'Rejected'),
         (4, 'Prepared'),
-        (5, 'Delivered'),
-        (6, 'Picked')
     )
 
     PAYMENT_TYPE = (

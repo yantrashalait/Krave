@@ -18,6 +18,7 @@
                                             <th>Display Name</th>
                                             <th>Price</th>
                                             <th>Category</th>
+                                            <th>Restaurant Category</th>
                                             <th>Edit/Delete</th>
                                         </tr>
                                     </thead>
@@ -26,7 +27,8 @@
                                         <tr>
                                             <td>{{ item.name }}</td>
                                             <td>${{ item.new_price }}</td>
-                                            <td>{{ item.category }}</td>
+                                            <td>{{ item.main_category }}</td>
+                                            <td>{{ item.rest_category }}</td>
                                             <td class="ac-bt-hl-fd-ls">
                                                 <a class="btn btn-primary" href="{% url 'restaurant:menu-edit' request.restaurant.id item.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                 <a class="btn btn-danger" href="{% url 'restaurant:menu-delete' request.restaurant.id item.id %}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>

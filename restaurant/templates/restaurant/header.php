@@ -64,7 +64,7 @@
                                 <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
                             </li>
                             <li>
-                                <a href="{% url 'restaurant:chef-special' %}"><i class="fa fa-plus-square" aria-hidden="true"></i> Add Chef Special </a>
+                                <a href="{% url 'restaurant:chef-special' %}"><i class="fa fa-plus-square" aria-hidden="true"></i> Chef Specials </a>
                             </li>
                             <li>
                                 <a href="{% url 'restaurant:earnings' %}"><i class="fa fa-money" aria-hidden="true"></i> My Earnings</a>
