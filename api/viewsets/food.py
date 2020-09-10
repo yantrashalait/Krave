@@ -96,3 +96,25 @@ class TodaysDealViewSet(ListAPIView):
             'status': True,
             'data': serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class CategoryFoodListViewSet(ListAPIView):
+    serializer_class = FoodMenuListSerializer
+    model = FoodMenu
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer(self, *args, **kwargs):
+        serializer_class = FoodMenuListSerializer
+        kwargs['many'] = True
+        return serializer_class(*args, **kwargs)
+
+    def get_queryset(self, *args, **kwargs):
+        category = Category.objects.get(id=self.kwargs.get('category_id'))
+        return self.model.objects.filter(main_category=category)
+
+    def get(self, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
