@@ -21,7 +21,7 @@ class AllCategoryListViewSet(ListAPIView):
         if self.request.query_params.get('search'):
             name = self.request.query_params.get('search', "")
             return self.model.objects.filter(name__icontains=name)
-        return self.model.objects.all().distinct('category')
+        return self.model.objects.all().distinct('name')
 
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
