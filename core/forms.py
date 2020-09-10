@@ -266,3 +266,22 @@ class CustomPasswordResetForm(PasswordResetForm):
         server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
         server.sendmail(settings.EMAIL_HOST_USER, [to_email, ], msg.as_string())
         server.quit()
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ('name', 'image')
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['image'].widget.attrs.update({'class': 'form-control'})
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not self.instance:
+            if Category.objects.filter(name__icontains=name).exists():
+                raise ValidationError("Category with this name already exists.")
+        else:
+            return name

@@ -1,4 +1,5 @@
 import smtplib
+import datetime
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -13,8 +14,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-from core.models import Restaurant, RestaurantPayment, Order, RestaurantRequest
+from core.models import Restaurant, RestaurantPayment, Order, RestaurantRequest, Category
 from core.mixin import SuperAdminMixin, is_super_admin, is_support_or_admin, StaffMixin
+from core.forms import CategoryForm
 from userrole.models import UserRole
 from user.models import UserProfile
 from restaurant.forms import ValidatingPasswordChangeForm
@@ -466,3 +468,38 @@ class DeliveryPersonDetailView(SuperAdminMixin, DetailView):
     template_name = "dashboard/delivery-person-detail.php"
     model = User
     context_object_name = "staff"
+
+
+class CategoryListView(SuperAdminMixin, ListView):
+    template_name = "dashboard/categories-list.php"
+    model = Category
+    context_object_name = "categories"
+
+
+class CategoryEditView(SuperAdminMixin, UpdateView):
+    template_name = "dashboard/category-form.php"
+    model = Category
+    form_class = CategoryForm
+    success_url = "/dashboard/category/list"
+
+    def form_valid(self, form):
+        form.instance.modified_by = self.request.user
+        form.instance.updated_at = datetime.datetime.now()
+        return super().form_valid(form)
+
+
+class CategoryDeleteView(SuperAdminMixin, DeleteView):
+    template_name = "dashboard/category_delete_confirm.php"
+    model = Category
+    success_url = "/dashboard/category/list"
+
+
+class CategoryCreateView(SuperAdminMixin, CreateView):
+    template_name = "dashboard/category-form.php"
+    model = Category
+    form_class = CategoryForm
+    success_url = "/dashboard/category/list"
+
+    def form_valid(self, form):
+        form.instance.created_by = self.request.user
+        return super().form_valid(form)

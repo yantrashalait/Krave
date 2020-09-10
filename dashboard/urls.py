@@ -29,4 +29,9 @@ urlpatterns = [
     path('delivery-person/list/', views.DeliveryPersonListView.as_view(), name="delivery-person-list"),
     path('delivery-person/create/', views.delivery_person_create, name="delivery-person-create"),
     path('delivery-person/<int:pk>/detail/', views.DeliveryPersonDetailView.as_view(), name="delivery-person-detail"),
+
+    path('category/list', views.CategoryListView.as_view(), name="category-list"),
+    path('category/<int:pk>/edit', views.CategoryEditView.as_view(), name="category-edit"),
+    path('category/<int:pk>/delete', views.CategoryDeleteView.as_view(), name="category-delete"),
+    path('category/create', views.CategoryCreateView.as_view(), name="category-create"),
 ]
