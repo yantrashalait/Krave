@@ -37,6 +37,9 @@
                             <a href="{% url 'dashboard:restaurant-list' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Restaurant List</a>
                         </li>
                         <li>
+                            <a href="{% url 'dashboard:category-list' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Category List</a>
+                        </li>
+                        <li>
                             <a href="#"><i class="fa fa-users" aria-hidden="true"></i> User List</a>
                         </li>
                         <li>

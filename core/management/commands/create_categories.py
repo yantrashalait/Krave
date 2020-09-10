@@ -17,5 +17,7 @@ class Command(BaseCommand):
         ]
         for category in categories:
             user = User.objects.filter(is_superuser=True)[0]
-            Category.objects.get_or_create(created_by=user, name=category)
+            category, _created = Category.objects.get_or_create(created_by=user, name=category)
+            category.created_by = user
+            category.save()
             self.stdout.write(self.style.SUCCESS('Category {} created'.format(category)))
