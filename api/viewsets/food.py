@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
     RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from django.db import transaction
-from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra
+from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra, Category
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, FoodDetailSerializer
 from django.db.models import Q
 from rest_framework.decorators import api_view
@@ -14,13 +14,13 @@ from rest_framework.decorators import api_view
 
 class AllCategoryListViewSet(ListAPIView):
     serializer_class = CategoryListSerializer
-    model = RestaurantFoodCategory
+    model = Category
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self, *args, **kwargs):
         if self.request.query_params.get('search'):
             name = self.request.query_params.get('search', "")
-            return self.model.objects.filter(category__icontains=name)
+            return self.model.objects.filter(name__icontains=name)
         return self.model.objects.all().distinct('category')
 
     def get(self, *args, **kwargs):
@@ -33,7 +33,7 @@ class AllCategoryListViewSet(ListAPIView):
 
 class CategoryDetailViewSet(RetrieveAPIView):
     serializer_class = CategoryDetailSerializer
-    model = RestaurantFoodCategory
+    model = Category
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
