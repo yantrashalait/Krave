@@ -23,6 +23,7 @@ urlpatterns = [
     # apis for categories
     path('category/list', food_views.AllCategoryListViewSet.as_view(), name='category-list'),
     path('category/<int:category_id>', food_views.CategoryDetailViewSet.as_view(), name='category-single'),
+    path('category/<int:category_id>/foods', food_views.CategoryFoodListViewSet.as_view(), name='category-food-list'),
 
     # today's deals
     path('today-deals', food_views.TodaysDealViewSet.as_view(), name="today-deals"),
