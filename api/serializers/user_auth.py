@@ -53,6 +53,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
         user = validated_data.pop('user')
+        first_name = validated_data.pop('first_name')
+        last_name = validated_data.pop('last_name')
+        User.objects.filter(id=user.id).update(first_name=first_name, last_name=last_name)
         user_profile = UserProfile.objects.create(user_id=user.id, **validated_data)
         return user_profile
 
