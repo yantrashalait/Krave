@@ -1,12 +1,14 @@
-from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from rest_framework.validators import UniqueValidator
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from rest_framework.validators import UniqueValidator
+
 from user.models import UserProfile
 
-
-
 User = get_user_model()
+
 
 class UserSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(max_length=500, required=True)
@@ -40,12 +42,29 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    email = serializers.SerializerMethodField(read_only=True)
+    username = serializers.SerializerMethodField(read_only=True)
+    token = serializers.SerializerMethodField(read_only=True)
+    id = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ('image', 'address', 'contact', 'location', 'zip_code')
+        fields = ('id', 'email', 'username', 'token', 'image', 'address', 'contact', 'location')
     
     def create(self, validated_data):
         user = validated_data.pop('user')
         user_profile = UserProfile.objects.create(user_id=user.id, **validated_data)
         return user_profile
+
+    def get_id(self, obj):
+        return obj.user.id
+
+    def get_username(self, obj):
+        return obj.user.username
+
+    def get_token(self, obj):
+        token, created = Token.objects.get_or_create(user=obj.user)
+        return token.key
+
+    def get_email(self, obj):
+        return obj.user.email

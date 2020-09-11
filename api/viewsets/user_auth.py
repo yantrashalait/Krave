@@ -40,12 +40,8 @@ class CustomAuthToken(ObtainAuthToken):
                 'msg': 'Login Successful',
                 'data': {
                     'token': token.key,
-                    'user_id': user.pk,
                     'username': user.username,
                     'email': user.email,
-                    'restaurant': user.is_restaurant,
-                    'customer': user.is_customer,
-                    'delivery': user.is_deliveryman,
                 }
 
             }, status=status.HTTP_200_OK)
@@ -96,6 +92,11 @@ class UserProfileViewSet(APIView):
             return Response({
                 'status': False,
                 'msg': serializer.errors
+            }, status=status.HTTP_400_BAD_REQUEST)
+        if UserProfile.objects.filter(user=self.request.user).exists():
+            return Response({
+                'status': False,
+                'msg': 'User profile for this user already exists.'
             }, status=status.HTTP_400_BAD_REQUEST)
         serializer.validated_data['user'] = self.request.user
         serializer.save()
