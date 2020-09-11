@@ -50,12 +50,18 @@ class User(AbstractUser):
 
 
 class UserProfile(models.Model):
+    GENDER_CHOICES = (
+        ('male', 'male'),
+        ('female', 'female'),
+        ('other', 'other')
+    )
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
     location = PointField(geography=True, srid=4326, blank=True, null=True)
     image = models.ImageField(upload_to='profile_pics/')
     address = models.CharField(max_length=255)
     contact = models.CharField(max_length=255)
     zip_code = models.CharField(max_length=255, null=True, blank=True)
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, null=True, blank=True)
 
     @property
     def longitude(self):

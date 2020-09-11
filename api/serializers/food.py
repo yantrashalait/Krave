@@ -80,15 +80,13 @@ class FoodStyleSerializer(serializers.ModelSerializer):
 class FoodDetailSerializer(serializers.ModelSerializer):
     restaurant_name = serializers.SerializerMethodField(read_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
-    styles = FoodStyleSerializer(many=True)
-    extras = FoodExtraSerializer(many=True)
 
     class Meta:
         model = FoodMenu
-        exclude = ("created_date", "modified_date", "deleted")
+        exclude = ("created_date", "modified_date", "deleted", "chef_special", "rest_category", )
 
     def get_restaurant_name(self, obj):
         return obj.restaurant.name
 
     def get_category_name(self, obj):
-        return obj.category.category
+        return obj.main_category.name
