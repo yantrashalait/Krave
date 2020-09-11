@@ -45,19 +45,16 @@ class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField(read_only=True)
     username = serializers.SerializerMethodField(read_only=True)
     token = serializers.SerializerMethodField(read_only=True)
-    id = serializers.SerializerMethodField(read_only=True)
+    name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'email', 'username', 'token', 'image', 'address', 'contact', 'location')
+        fields = ('id', 'email', 'username', 'token', 'image', 'address', 'contact', 'location', 'gender')
     
     def create(self, validated_data):
         user = validated_data.pop('user')
         user_profile = UserProfile.objects.create(user_id=user.id, **validated_data)
         return user_profile
-
-    def get_id(self, obj):
-        return obj.user.id
 
     def get_username(self, obj):
         return obj.user.username
@@ -68,3 +65,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_email(self, obj):
         return obj.user.email
+
+    def get_name(self, obj):
+        return obj.user.first_name + " " + obj.user.last_name
+

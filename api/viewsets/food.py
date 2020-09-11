@@ -55,7 +55,10 @@ class FoodListViewSet(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         if "search" in self.request.query_params:
             search = self.request.query_params.get("search", "")
-            return self.model.objects.filter(Q(restaurant__name__icontains=search) | Q(category__category__icontains=search) | Q(name__icontains=search))
+            return self.model.objects.filter(
+                Q(restaurant__name__icontains=search) |
+                Q(main_category__name__icontains=search) |
+                Q(name__icontains=search))
         return self.model.objects.all()
 
     def get(self, *args, **kwargs):

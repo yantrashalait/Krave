@@ -40,7 +40,7 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = FoodFilteredListSerializer
         model = FoodMenu
-        exclude = ("created_date", "modified_date", "deleted", "main_category")
+        exclude = ("created_date", "modified_date", "deleted", "rest_category", "chef_special",)
 
     def get_detail_url(self, obj):
         return BASE_URL + "/food/" + str(obj.id)
@@ -52,10 +52,11 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
 class CategoryDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     image = serializers.SerializerMethodField(read_only=True)
+    name = serializers.ReadOnlyField()
 
     class Meta:
         model = Category
-        fields = ('id', 'image')
+        fields = ('id', 'image', 'name')
 
     def get_image(self, obj):
         if obj.image:
@@ -79,15 +80,13 @@ class FoodStyleSerializer(serializers.ModelSerializer):
 class FoodDetailSerializer(serializers.ModelSerializer):
     restaurant_name = serializers.SerializerMethodField(read_only=True)
     category_name = serializers.SerializerMethodField(read_only=True)
-    styles = FoodStyleSerializer(many=True)
-    extras = FoodExtraSerializer(many=True)
 
     class Meta:
         model = FoodMenu
-        exclude = ("created_date", "modified_date", "deleted")
+        exclude = ("created_date", "modified_date", "deleted", "chef_special", "rest_category", )
 
     def get_restaurant_name(self, obj):
         return obj.restaurant.name
 
     def get_category_name(self, obj):
-        return obj.category.category
+        return obj.main_category.name
