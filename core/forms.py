@@ -119,7 +119,7 @@ class FoodMenuForm(forms.ModelForm):
     new_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
     main_category = forms.ModelChoiceField(queryset=Category.objects.all())
-    rest_category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all())
+    rest_category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all(), required=False)
 
     def __init__(self, *args, **kwargs):
         restaurant = kwargs.pop('restaurant')

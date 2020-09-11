@@ -45,7 +45,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     email = serializers.SerializerMethodField(read_only=True)
     username = serializers.SerializerMethodField(read_only=True)
     token = serializers.SerializerMethodField(read_only=True)
-    id = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = UserProfile
@@ -55,9 +54,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
         user = validated_data.pop('user')
         user_profile = UserProfile.objects.create(user_id=user.id, **validated_data)
         return user_profile
-
-    def get_id(self, obj):
-        return obj.user.id
 
     def get_username(self, obj):
         return obj.user.username

@@ -40,7 +40,7 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
     class Meta:
         list_serializer_class = FoodFilteredListSerializer
         model = FoodMenu
-        exclude = ("created_date", "modified_date", "deleted", "main_category")
+        exclude = ("created_date", "modified_date", "deleted", "rest_category", "chef_special",)
 
     def get_detail_url(self, obj):
         return BASE_URL + "/food/" + str(obj.id)
@@ -52,10 +52,11 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
 class CategoryDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     image = serializers.SerializerMethodField(read_only=True)
+    name = serializers.ReadOnlyField()
 
     class Meta:
         model = Category
-        fields = ('id', 'image')
+        fields = ('id', 'image', 'name')
 
     def get_image(self, obj):
         if obj.image:
