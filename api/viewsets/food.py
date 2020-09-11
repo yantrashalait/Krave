@@ -7,7 +7,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpda
     RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from django.db import transaction
 from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra, Category
-from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, FoodDetailSerializer
+from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, FoodDetailSerializer, FoodExtraSerializer, FoodStyleSerializer
 from django.db.models import Q
 from rest_framework.decorators import api_view
 
@@ -108,13 +108,53 @@ class CategoryFoodListViewSet(ListAPIView):
         kwargs['many'] = True
         return serializer_class(*args, **kwargs)
 
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(Category, id=self.kwargs.get('category_id'))
+
     def get_queryset(self, *args, **kwargs):
-        category = Category.objects.get(id=self.kwargs.get('category_id'))
-        return self.model.objects.filter(main_category=category)
+        return self.model.objects.filter(main_category=self.get_object())
 
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
             'status': True,
             'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class FoodExtraDetailViewSet(ListAPIView):
+    serializer_class = FoodExtraSerializer
+    model = FoodExtra
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(FoodMenu, pk=self.kwargs.get('food_id'))
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(food=self.get_object())
+
+    def get(self, *args, **kwargs):
+        serializer = self.serializer_class(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data,
+        }, status=status.HTTP_200_OK)
+
+
+class FoodStyleDetailViewSet(ListAPIView):
+    serializer_class = FoodStyleSerializer
+    model = FoodStyle
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(FoodMenu, pk=self.kwargs.get('food_id'))
+
+    def get_queryset(self, *args, **kwargs):
+        return self.model.objects.filter(food=self.get_object())
+
+    def get(self, *args, **kwargs):
+        serializer = self.serializer_class(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data,
         }, status=status.HTTP_200_OK)

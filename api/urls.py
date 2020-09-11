@@ -31,6 +31,8 @@ urlpatterns = [
     path('food/list', food_views.FoodListViewSet.as_view(), name='food-search'),
 
     path('food/<int:food_id>', food_views.FoodDetailViewSet.as_view(), name='food-single'),
+    path('food/<int:food_id>/extras', food_views.FoodExtraDetailViewSet.as_view(), name='food-single-extras'),
+    path('food/<int:food_id>/style', food_views.FoodStyleDetailViewSet.as_view(), name='food-single-style'),
 
     # apis for restaurant food category
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
