@@ -51,12 +51,11 @@ class FoodMenuListSerializer(serializers.ModelSerializer):
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
-    food = FoodMenuListSerializer(many=True)
     image = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Category
-        fields = ('id', 'food', 'image')
+        fields = ('id', 'image')
 
     def get_image(self, obj):
         if obj.image:
