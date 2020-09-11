@@ -49,7 +49,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'email', 'username', 'token', 'image', 'address', 'contact', 'location', 'gender')
+        fields = ('id', 'email', 'username', 'token', 'image', 'address', 'contact', 'location', 'gender', 'name')
     
     def create(self, validated_data):
         user = validated_data.pop('user')
