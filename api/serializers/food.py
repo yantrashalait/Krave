@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Category, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle
+from core.models import Category, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle, FoodReview, FoodRating
 
 
 # BASE_URL = "http://localhost:8000/api/v1"
@@ -90,3 +90,15 @@ class FoodDetailSerializer(serializers.ModelSerializer):
 
     def get_category_name(self, obj):
         return obj.main_category.name
+
+
+class FoodReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodReview
+        fields = ['review']
+
+
+class FoodRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodRating
+        fields = ['rating']
