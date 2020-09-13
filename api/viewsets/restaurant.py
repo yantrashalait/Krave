@@ -4,7 +4,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
-    RetrieveUpdateDestroyAPIView, RetrieveAPIView
+    RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.db import transaction
 from api.serializers.restaurant import RestaurantListSerializer, RestaurantDetailSerializer, RestaurantReviewSerializer, RestaurantRatingSerializer
 from api.serializers.food import FoodMenuListSerializer
@@ -86,10 +86,9 @@ class RestaurantPopularDishesViewSet(ListAPIView):
         }, status=status.HTTP_200_OK)
 
 
-class RestaurantReviewViewSet(ListCreateAPIView):
+class RestaurantReviewViewSet(ListAPIView):
     serializer_class = RestaurantReviewSerializer
     model = RestaurantReview
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(Restaurant, pk=self.kwargs.get('restaurant_id'))
@@ -103,6 +102,15 @@ class RestaurantReviewViewSet(ListCreateAPIView):
             'status': True,
             'data': serializer.data,
         }, status=status.HTTP_200_OK)
+
+
+class RestaurantReviewPostViewSet(CreateAPIView):
+    serializer_class = RestaurantReviewSerializer
+    model = RestaurantReview
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(Restaurant, pk=self.kwargs.get('restaurant_id'))
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})
@@ -123,10 +131,9 @@ class RestaurantReviewViewSet(ListCreateAPIView):
         }, status=status.HTTP_200_OK)
 
 
-class RestaurantRatingViewSet(ListCreateAPIView):
+class RestaurantRatingViewSet(ListAPIView):
     serializer_class = RestaurantRatingSerializer
     model = RestaurantRating
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(Restaurant, pk=self.kwargs.get('restaurant_id'))
@@ -140,6 +147,15 @@ class RestaurantRatingViewSet(ListCreateAPIView):
             'status': True,
             'data': serializer.data,
         }, status=status.HTTP_200_OK)
+
+
+class RestaurantRatingPostViewSet(CreateAPIView):
+    serializer_class = RestaurantRatingSerializer
+    model = RestaurantRating
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(Restaurant, pk=self.kwargs.get('restaurant_id'))
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})

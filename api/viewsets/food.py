@@ -4,7 +4,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
-    RetrieveUpdateDestroyAPIView, RetrieveAPIView
+    RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.db import transaction
 from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra, Category, FoodReview, FoodRating
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, FoodDetailSerializer, FoodExtraSerializer, FoodStyleSerializer, FoodReviewSerializer, FoodRatingSerializer
@@ -163,10 +163,9 @@ class FoodStyleDetailViewSet(ListAPIView):
         }, status=status.HTTP_200_OK)
 
 
-class FoodReviewViewSet(ListCreateAPIView):
+class FoodReviewViewSet(ListAPIView):
     serializer_class = FoodReviewSerializer
     model = FoodReview
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(FoodMenu, pk=self.kwargs.get('food_id'))
@@ -180,6 +179,15 @@ class FoodReviewViewSet(ListCreateAPIView):
             'status': True,
             'data': serializer.data,
         }, status=status.HTTP_200_OK)
+
+
+class FoodReviewPostViewSet(CreateAPIView):
+    serializer_class = FoodReviewSerializer
+    model = FoodReview
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(FoodMenu, pk=self.kwargs.get('food_id'))
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})
@@ -200,10 +208,9 @@ class FoodReviewViewSet(ListCreateAPIView):
         }, status=status.HTTP_200_OK)
 
 
-class FoodRatingViewSet(ListCreateAPIView):
+class FoodRatingViewSet(ListAPIView):
     serializer_class = FoodRatingSerializer
     model = FoodRating
-    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(FoodMenu, pk=self.kwargs.get('food_id'))
@@ -217,6 +224,15 @@ class FoodRatingViewSet(ListCreateAPIView):
             'status': True,
             'data': serializer.data,
         }, status=status.HTTP_200_OK)
+
+
+class FoodRatingPostViewSet(CreateAPIView):
+    serializer_class = FoodRatingSerializer
+    model = FoodRating
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(FoodMenu, pk=self.kwargs.get('food_id'))
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data, context={'request': request})
