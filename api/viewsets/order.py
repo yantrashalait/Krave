@@ -18,6 +18,7 @@ from core.views import randomString
 
 from user.models import User
 
+
 class AddToCartViewSet(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CartSerializer
@@ -199,7 +200,7 @@ class OrderListViewSet(ListAPIView):
     model = Order
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(~Q(status=5), user=self.request.user)
+        return self.model.objects.filter(~Q(status=6), user=self.request.user)
 
     def get(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
@@ -234,7 +235,7 @@ class OrderHistoryViewSet(ListAPIView):
         assigned_orders = self.request.user.delivery.all()
         order_list = []
         for item in assigned_orders:
-            if item.status == 2:
+            if item.status == 1:
                 order_list.append(item.order)
         return order_list
 
@@ -255,7 +256,7 @@ class OrderOngoingHistoryViewSet(ListAPIView):
         assigned_orders = self.request.user.delivery.all()
         order_list = []
         for item in assigned_orders:
-            if item.status == 1:
+            if item.status == 0:
                 order_list.append(item.order)
         return order_list
 
@@ -290,7 +291,7 @@ class EditOrderStatusViewSet(RetrieveUpdateAPIView):
                 'msg': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        status =  serializer.validated_data.get('status')
+        status = serializer.validated_data.get('status')
         delivery = self.get_queryset()
         order = delivery.order
         order.status = status
