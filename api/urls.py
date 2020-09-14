@@ -33,6 +33,10 @@ urlpatterns = [
     path('food/<int:food_id>', food_views.FoodDetailViewSet.as_view(), name='food-single'),
     path('food/<int:food_id>/extras', food_views.FoodExtraDetailViewSet.as_view(), name='food-single-extras'),
     path('food/<int:food_id>/style', food_views.FoodStyleDetailViewSet.as_view(), name='food-single-style'),
+    path('food/<int:food_id>/get/review', food_views.FoodReviewViewSet.as_view(), name='food-review'),
+    path('food/<int:food_id>/get/rating', food_views.FoodRatingViewSet.as_view(), name='food-rating'),
+    path('food/<int:food_id>/post/review', food_views.FoodReviewPostViewSet.as_view(), name='food-review-post'),
+    path('food/<int:food_id>/post/rating', food_views.FoodRatingPostViewSet.as_view(), name='food-rating-post'),
 
     # apis for restaurant food category
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
@@ -44,6 +48,10 @@ urlpatterns = [
     path('restaurant/<int:rest_id>', restaurant_views.RestaurantDetailViewSet.as_view(), name='restaurant-single'),
     path('restaurant/<int:rest_id>/popular-dishes', restaurant_views.RestaurantPopularDishesViewSet.as_view(), name="restaurant-popular-dishes"),
     path('restaurant/<int:rest_id>/food/list', restaurant_views.RestaurantFoodListViewSet.as_view(), name="restaurant-food-list"),
+    path('restaurant/<int:restaurant_id>/get/review', restaurant_views.RestaurantReviewViewSet.as_view(), name='restaurant-review'),
+    path('restaurant/<int:restaurant_id>/get/rating', restaurant_views.RestaurantRatingViewSet.as_view(), name='restaurant-rating'),
+    path('restaurant/<int:restaurant_id>/post/review', restaurant_views.RestaurantReviewPostViewSet.as_view(), name='restaurant-review-post'),
+    path('restaurant/<int:restaurant_id>/post/rating', restaurant_views.RestaurantRatingPostViewSet.as_view(), name='restaurant-rating-post'),
 
     # cart and order
     path('add-to-cart', order_views.AddToCartViewSet.as_view(), name="add-to-cart"),
