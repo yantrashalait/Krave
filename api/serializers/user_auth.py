@@ -49,7 +49,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'email', 'username', 'token', 'image', 'address', 'contact', 'location', 'gender', 'name')
+        fields = (
+            'id', 'email', 'username', 'token', 'image', 'address', 'contact', 'gender', 'name', 'latitude', 'longitude'
+        )
     
     def create(self, validated_data):
         user = validated_data.pop('user')
@@ -71,4 +73,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.user.first_name + " " + obj.user.last_name
+
+    def get_longitude(self, obj):
+        return obj.longitude
+
+    def get_latitude(self, obj):
+        return obj.latitude
 

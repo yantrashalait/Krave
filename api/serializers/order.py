@@ -69,7 +69,7 @@ class OrderListSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('id', 'status', 'id_string', 'total_price', 'note', 'user_id')
 
-    def get_user(self, obj):
+    def get_user_id(self, obj):
         return obj.foods.last().user.id
 
 

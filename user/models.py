@@ -67,11 +67,15 @@ class UserProfile(models.Model):
     def longitude(self):
         if self.location:
             return self.location.x
+        else:
+            return 0
 
     @property
     def latitude(self):
         if self.location:
             return self.location.y
+        else:
+            return 0
 
     def __str__(self):
         return self.user.username + ' - ' + 'Profile'
