@@ -1,7 +1,7 @@
 from rest_framework import serializers
+from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, RestaurantImage, RestaurantReview, RestaurantRating
 
 from ..utils import get_restaurant_rating
-from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, RestaurantImage
 
 # BASE_URL = "http://localhost:8000/api/v1"
 BASE_URL = "https://krave.yantrashala.com/api/v1"
@@ -94,3 +94,15 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
 
     def get_longitude(self, obj):
         return obj.longitude
+
+
+class RestaurantReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantReview
+        fields = ['review']
+
+
+class RestaurantRatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RestaurantRating
+        fields = ['rating']
