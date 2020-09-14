@@ -11,6 +11,8 @@ from api.serializers.food import FoodMenuListSerializer
 from core.models import Restaurant, FoodMenu
 from rest_framework.decorators import api_view, permission_classes
 
+from ..utils import popular_restaurants
+
 
 class RestaurantListViewSet(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -20,8 +22,25 @@ class RestaurantListViewSet(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         if self.request.query_params.get('search'):
             name = self.request.query_params.get('search', "")
-            return self.model.objects.filter(name__icontains=name)
-        return self.model.objects.all()
+            return self.model.objects.filter(name__icontains=name, hidden=False)
+        return self.model.objects.filter(hidden=False)
+
+    def get(self, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class PopularRestaurantListVS(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = RestaurantListSerializer
+    model = Restaurant
+
+    def get_queryset(self, *args, **kwargs):
+        restaurants = popular_restaurants()
+        return Restaurant.objects.filter(name__in=restaurants)
 
     def get(self, *args, **kwargs):
         serializer = self.get_serializer(self.get_queryset(), many=True)
