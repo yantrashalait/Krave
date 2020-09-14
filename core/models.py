@@ -262,6 +262,8 @@ class Order(models.Model):
         (2, 'Approved'),
         (3, 'Rejected'),
         (4, 'Prepared'),
+        (5, 'Picked'),
+        (6, 'Delivered')
     )
 
     PAYMENT_TYPE = (
