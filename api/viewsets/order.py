@@ -18,6 +18,7 @@ from core.views import randomString
 
 from user.models import User
 
+
 class AddToCartViewSet(CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CartSerializer
