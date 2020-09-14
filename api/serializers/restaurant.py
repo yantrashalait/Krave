@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, RestaurantImage
 
+from ..utils import get_restaurant_rating
+from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, RestaurantImage
 
 # BASE_URL = "http://localhost:8000/api/v1"
 BASE_URL = "https://krave.yantrashala.com/api/v1"
@@ -27,8 +28,7 @@ class RestaurantListSerializer(serializers.ModelSerializer):
         return BASE_URL + "/restaurant/" + str(obj.pk)
 
     def get_rating(self, obj):
-        # static for now
-        return 4.0
+        return get_restaurant_rating(obj.id)
 
     def get_review_count(self, obj):
         return obj.restaurant_review.count()
@@ -50,10 +50,12 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
     popular_dishes_url = serializers.SerializerMethodField(read_only=True)
     menu_url = serializers.SerializerMethodField(read_only=True)
     image = serializers.SerializerMethodField(read_only=True)
+    latitude = serializers.SerializerMethodField(read_only=True)
+    longitude = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Restaurant
-        exclude = ("joined_date", )
+        exclude = ("joined_date", "location_point")
 
     def get_rating(self, obj):
         # static for now
@@ -86,3 +88,9 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
                 return ""
         else:
             return ""
+
+    def get_latitude(self, obj):
+        return obj.latitude
+
+    def get_longitude(self, obj):
+        return obj.longitude

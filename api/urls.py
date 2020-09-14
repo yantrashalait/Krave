@@ -40,7 +40,7 @@ urlpatterns = [
 
     # apis for restaurant
     path('restaurant/list', restaurant_views.RestaurantListViewSet.as_view(), name='restaurant-list'),
-    path('restaurant/popular', restaurant_views.RestaurantListViewSet.as_view(), name='popular-restaurant'),
+    path('restaurant/popular', restaurant_views.PopularRestaurantListVS.as_view(), name='popular-restaurant'),
     path('restaurant/<int:rest_id>', restaurant_views.RestaurantDetailViewSet.as_view(), name='restaurant-single'),
     path('restaurant/<int:rest_id>/popular-dishes', restaurant_views.RestaurantPopularDishesViewSet.as_view(), name="restaurant-popular-dishes"),
     path('restaurant/<int:rest_id>/food/list', restaurant_views.RestaurantFoodListViewSet.as_view(), name="restaurant-food-list"),
