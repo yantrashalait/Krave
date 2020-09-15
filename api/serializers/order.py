@@ -64,6 +64,8 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
+    user_id = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Order
         fields = ('id', 'status', 'id_string', 'total_price', 'note', 'user_id')
