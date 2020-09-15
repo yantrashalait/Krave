@@ -10,7 +10,7 @@ from core.models import Restaurant, FoodStyle, FoodMenu, FoodExtra, FoodCart, Or
 from delivery.models import Delivery
 from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer
 from api.serializers.order import CartSerializer, OrderCreateSerializer, CartListSerializer,\
-    OrderListSerializer, OrderDetailSerializer
+    OrderListSerializer, OrderDetailSerializer, OrderStatusSerializer
 from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from api.permissions import IsOwner, IsOwnerOrReadOnly
@@ -269,7 +269,7 @@ class OrderOngoingHistoryViewSet(ListAPIView):
 
 
 class EditOrderStatusViewSet(RetrieveUpdateAPIView):
-    serializer_class = OrderListSerializer
+    serializer_class = OrderStatusSerializer
     permission_classes = [permissions.IsAuthenticated]
     model = Delivery
 
@@ -291,13 +291,14 @@ class EditOrderStatusViewSet(RetrieveUpdateAPIView):
                 'msg': serializer.errors
             }, status=status.HTTP_400_BAD_REQUEST)
 
-        status = serializer.validated_data.get('status')
-        delivery = self.get_queryset()
-        order = delivery.order
-        order.status = status
-        order.save()
+        else:
+            order_status =  serializer.validated_data.get('status')
+            delivery = self.get_queryset()
+            order = delivery.order
+            order.status = order_status
+            order.save()
 
-        return Response({
-            'status': True,
-            'msg': 'Updated successfully.'
-        }, status=status.HTTP_200_OK)
+            return Response({
+                'status': True,
+                'msg': 'Updated successfully.'
+            }, status=status.HTTP_200_OK)

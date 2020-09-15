@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from core.models import Restaurant, RestaurantCuisine, RestaurantFoodCategory, RestaurantImage, Order, FoodCart, FoodExtra
+from delivery.models import Delivery
 from django.db.models import Q
 from api.serializers.food import FoodDetailSerializer, FoodExtraSerializer, FoodStyleSerializer
 
@@ -67,6 +68,14 @@ class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ('id', 'status', 'id_string', 'total_price', 'note')
+
+
+class OrderStatusSerializer(serializers.ModelSerializer):
+    order = OrderListSerializer(read_only=True)
+
+    class Meta:
+        model = Delivery
+        fields = ('id', 'order', 'status')
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
