@@ -49,7 +49,7 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
     cuisines = serializers.SerializerMethodField(read_only=True)
     popular_dishes_url = serializers.SerializerMethodField(read_only=True)
     menu_url = serializers.SerializerMethodField(read_only=True)
-    image = serializers.SerializerMethodField(read_only=True)
+    images = serializers.SerializerMethodField(read_only=True)
     latitude = serializers.SerializerMethodField(read_only=True)
     longitude = serializers.SerializerMethodField(read_only=True)
 
@@ -80,14 +80,12 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
     def get_menu_url(self, obj):
         return BASE_URL + '/restaurant/' + str(obj.pk) + '/food/list'
 
-    def get_image(self, obj):
-        if obj.images.last():
-            if obj.images.last().image:
-                return MEDIA_URL + obj.images.last().image.url
-            else:
-                return ""
-        else:
-            return ""
+    def get_images(self, obj):
+        image_list = []
+        foods = obj.menu.all()[:5]
+        for item in foods:
+            image_list.append(MEDIA_URL + item.image.url)
+        return image_list
 
     def get_latitude(self, obj):
         return obj.latitude
