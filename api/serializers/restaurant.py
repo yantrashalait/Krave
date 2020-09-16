@@ -44,6 +44,7 @@ class RestaurantListSerializer(serializers.ModelSerializer):
 
 
 class RestaurantDetailSerializer(serializers.ModelSerializer):
+    image = serializers.SerializerMethodField(read_only=True)
     rating = serializers.SerializerMethodField(read_only=True)
     review_count = serializers.SerializerMethodField(read_only=True)
     cuisines = serializers.SerializerMethodField(read_only=True)
@@ -92,6 +93,15 @@ class RestaurantDetailSerializer(serializers.ModelSerializer):
 
     def get_longitude(self, obj):
         return obj.longitude
+
+    def get_image(self, obj):
+        if obj.images.last():
+            if obj.images.last().image:
+                return MEDIA_URL + obj.images.last().image.url
+            else:
+                return ""
+        else:
+            return ""
 
 
 class RestaurantReviewSerializer(serializers.ModelSerializer):
