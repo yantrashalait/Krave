@@ -24,10 +24,7 @@ def popular_restaurants():
 
 
 def trending_foods():
-    foods = FoodMenu.objects.filter(deleted=False).annotate(
+    foods = FoodMenu.objects.all().annotate(
         number_in_carts=Count('cart__number_of_food')
     ).order_by('-number_in_carts')
-    return foods[:10]
-
-
-
+    return foods

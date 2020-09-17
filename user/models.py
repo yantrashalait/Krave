@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db.models import PointField
 from geopy import units, distance
 
+from core.models import FoodMenu
+
 
 class LocationManager(models.Manager):
     def near(self, latitude=None, longitude=None, distance_range=10):
@@ -93,3 +95,11 @@ class UserLocationTrack(models.Model):
 
     def __str__(self):
         return "Last location of " + self.user.username
+
+
+class UserFavourite(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="favourites", on_delete=models.CASCADE)
+    food = models.ForeignKey(FoodMenu, related_name="favourites", on_delete=models.CASCADE)
+    added_date = models.DateTimeField(auto_now=True)
+    deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)

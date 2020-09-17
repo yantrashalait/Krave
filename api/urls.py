@@ -37,6 +37,11 @@ urlpatterns = [
     path('food/<int:food_id>/get/rating', food_views.FoodRatingViewSet.as_view(), name='food-rating'),
     path('food/<int:food_id>/post/review', food_views.FoodReviewPostViewSet.as_view(), name='food-review-post'),
     path('food/<int:food_id>/post/rating', food_views.FoodRatingPostViewSet.as_view(), name='food-rating-post'),
+    path('food/trending', food_views.TrendingFoodListVS.as_view(), name="trending-foods"),
+
+    path('favourites', food_views.UserFavouriteVS.as_view(), name="favourite-list"),
+    path('food/<int:food_id>/favourite/add', food_views.add_to_favourite, name="add-to-favourite"),
+    path('food/<int:food_id>/favourite/delete', food_views.delete_favourite, name="remove-from-favourite"),
 
     # apis for restaurant food category
     path('restaurant/<int:rest_id>/food/category', views.RestaurantFoodCategoryViewSet.as_view(), name='rest-food-cat-list'),
