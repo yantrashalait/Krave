@@ -1,4 +1,5 @@
-from core.models import FoodMenu, Restaurant, RestaurantRating, FoodRating
+from django.db.models import Count, Sum
+from core.models import FoodMenu, Restaurant, RestaurantRating, FoodRating, FoodCart, Order
 
 
 def get_restaurant_rating(restaurant_id):
@@ -22,4 +23,8 @@ def popular_restaurants():
     return sorted_restaurants
 
 
-
+def trending_foods():
+    foods = FoodMenu.objects.all().annotate(
+        number_in_carts=Count('cart__number_of_food')
+    ).order_by('-number_in_carts')
+    return foods

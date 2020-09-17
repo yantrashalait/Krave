@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from core.models import Category, RestaurantCuisine, FoodMenu, FoodExtra, FoodStyle, FoodReview, FoodRating
+from user.models import UserFavourite
 
 
 # BASE_URL = "http://localhost:8000/api/v1"
@@ -102,3 +104,4 @@ class FoodRatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = FoodRating
         fields = ['rating']
+
