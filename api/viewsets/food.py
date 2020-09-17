@@ -6,10 +6,13 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
     RetrieveUpdateDestroyAPIView, RetrieveAPIView, CreateAPIView
 from django.db import transaction
-from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra, Category, FoodReview, FoodRating
-from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, FoodDetailSerializer, FoodExtraSerializer, FoodStyleSerializer, FoodReviewSerializer, FoodRatingSerializer
+from core.models import RestaurantFoodCategory, RestaurantCuisine, Restaurant, FoodStyle, FoodMenu, FoodExtra, \
+    Category, FoodReview, FoodRating
+from api.serializers.food import CategoryListSerializer, CategoryDetailSerializer, FoodMenuListSerializer, \
+    FoodDetailSerializer, FoodExtraSerializer, FoodStyleSerializer, FoodReviewSerializer, FoodRatingSerializer
 from django.db.models import Q
 from rest_framework.decorators import api_view
+from ..utils import trending_foods
 
 
 class AllCategoryListViewSet(ListAPIView):
@@ -247,6 +250,22 @@ class FoodRatingPostViewSet(CreateAPIView):
         rating = serializer.validated_data['rating']
         self.model.objects.create(food=food, user=user, rating=rating)
 
+        return Response({
+            'status': True,
+            'data': serializer.data
+        }, status=status.HTTP_200_OK)
+
+
+class TrendingFoodListVS(ListAPIView):
+    serializer_class = FoodMenuListSerializer
+    model = FoodMenu
+    permission_classes = [permissions.IsAuthenticated, ]
+
+    def get_queryset(self, *args, **kwargs):
+        return trending_foods()
+
+    def get(self, *args, **kwargs):
+        serializer = self.get_serializer(self.get_queryset(), many=True)
         return Response({
             'status': True,
             'data': serializer.data
