@@ -6,6 +6,7 @@ from api.serializers.food import FoodDetailSerializer, FoodExtraSerializer, Food
 # BASE_URL = "http://localhost:8000/api/v1"
 BASE_URL = "http://krave.yantrashala.com/api/v1"
 
+MEDIA_URL = "https://krave.yantrashala.com"
 
 class CartListSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source="user.id")
@@ -85,7 +86,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
             food = {}
             food['food_name'] = item.food.name
             food['price'] = item.food.new_price
-            food['image_url'] = item.food.image.url
+            food['image_url'] = MEDIA_URL + item.food.image.url
             food['number'] = item.number_of_food
             if item.style:
                 food['style'] = item.style.name_of_style
