@@ -13,6 +13,7 @@ urlpatterns = [
     path('<int:rest_id>/orders/accepted', views.AcceptedOrderView.as_view(), name="accepted-order"),
 
     path('<int:rest_id>/menu', views.MenuListView.as_view(), name='menu-list'),
+    path('<int:rest_id>/menu/add-food-item/', views.MenuAddView.as_view(), name='menu-add'),
     path('<int:rest_id>/menu/<int:food_id>/edit', views.MenuEditView.as_view(), name="menu-edit"),
     path('<int:rest_id>/menu/<int:food_id>/delete', views.MenuDeleteView.as_view(), name="menu-delete"),
 
@@ -36,9 +37,12 @@ urlpatterns = [
 
     # restaurant earnings
     path('earnings/', views.PaymentListView.as_view(), name="earnings"),
+    path('earnings/search/', views.PaymentListSearchView.as_view(), name="earnings-search"),
 
     path('chef-special/list/', views.list_chef_special, name="chef-special"),
     path('chef-special/<int:pk>/delete/', views.delete_chef_special, name="chef-special-delete"),
     path('chef-special/add/', views.add_chef_special, name="chef-special-add"),
 
+    # old dashboard :
+    path('<int:rest_id>/rest-dashboard/', views.DashboardViewTestTest.as_view(), name='rest-dashboard'),
 ]

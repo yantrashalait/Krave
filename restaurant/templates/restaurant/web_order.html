@@ -1,0 +1,82 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block content %}
+
+	  <div class="col-md-9 ml-auto">
+		<div class="row">
+		  <div class="right__body__sec">
+			<div class="pd-tb-md">
+			  <div class="rb-pd-rl rs-in-hl">
+				<div class="rs-in">
+				  <div class="rs-lg">
+					<img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
+				  </div>
+				  <div class="rs-in-tx">
+					<div class="rs-nm">Name of the Restarurant</div>
+					<div class="rs-ad">Address Of the Restaurant</div>
+				  </div>
+				</div>
+				<div class="ac-bt-hl">
+					<a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
+				</div>
+			  </div>
+			</div>
+			<!-- right top menu -->
+			<div class="it-ad-hl pd-tb-md">
+			  <div class="rb-pd-rl">
+				<div class="it-ac-hd">
+				  <div class="sc-hd">
+					<h1>Web Orders</h1>
+				  </div>
+				</div>
+				<!-- heading -->
+				<div class="ad-fd-fm pd-tb-md">
+				  <table id="fd-it-ls-dt" class="display">
+					<thead>
+					  <tr>
+						<th>Order ID</th>
+						<th>Delivery ID</th>
+						<th>Order Item</th>
+						<th>Order Date and Time</th>
+						<th>Payment Type</th>
+						<th>Status</th>
+					  </tr>
+					</thead>
+					<tbody>
+					  <tr>
+						<td>
+						  <a href="#">1</a>
+						</td>
+						<td>Null</td>
+						<td>Somthing is ordered</td>
+						<td>
+						  2020/09/13
+						  <br />
+						  09:00AM
+						</td>
+						<td>
+						  Person Name <br />
+						  $110 - Cash on Delivery
+						</td>
+						<td>
+						  <form action="">
+							<select class="form-control ord_tbl_opt">
+							  <option disabled selected>Select Status</option>
+							  <option>Cooking</option>
+							  <option>Cooked</option>
+							  <option>Dispatched</option>
+							</select>
+						  </form>
+						</td>
+					  </tr>
+					</tbody>
+				  </table>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  <!-- right body part -->
+		</div>
+	  </div>
+{% endblock %}

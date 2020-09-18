@@ -1,0 +1,328 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block content %}
+	  <div class="col-md-9 ml-auto">
+		<div class="row">
+		  <div class="right__body__sec">
+			<div class="rb-pd-rl rs-in-hl dash__t_wrp">
+			  <div class="left_s_info">
+				<span>overview</span>
+			  </div>
+			  <div class="right_s_info">
+				<div class="dah_t_serch_bar">
+				  <form action="">
+					<input
+					  type="text"
+					  placeholder="Search.."
+					  class="t_nav_bar"
+					/>
+					<button type="submit">
+					  <i class="fa fa-search" aria-hidden="true"></i>
+					</button>
+				  </form>
+				  <div class="notfy_bel">
+					<a href="#" class="notfy_icon_b"
+					  ><i class="fa fa-bell-o" aria-hidden="true"></i
+					  ><span class="badge">5</span>
+					</a>
+				  </div>
+				</div>
+				<div class="user__prf">
+				  <span class="user_nam">Username Name</span>
+				  <a href="#" class="dsh_img_avt">
+					<img class="uer_img" src="{% static 'restaurant/images/custumer.png' %}" alt="" />
+				  </a>
+				</div>
+			  </div>
+			</div>
+			<div class="d_main_c">
+			  <div class="rest_overview_d">
+				<div class="rest_d_i">
+				  <span class="rest_o_t">order today</span>
+				  <h2>60</h2>
+				</div>
+				<div class="rest_d_i">
+				  <span class="rest_o_t">total earning</span>
+				  <h2>$160k</h2>
+				</div>
+				<div class="rest_d_i">
+				  <span class="rest_o_t">open orders</span>
+				  <h2>30</h2>
+				</div>
+				<div class="rest_d_i">
+				  <span class="rest_o_t">delivery trips</span>
+				  <h2>40</h2>
+				</div>
+			  </div>
+			  <div class="dsh_ord_detail">
+				<div class="left_s_info dsh_t_head">
+				  <span>orders snapshots</span>
+				</div>
+				<div class="wrp_r_w_ord">
+				  <div class="dsh_web_ord">
+					<div class="dsh_rest_ord">
+					  <div class="dsh_rest_ord_hed">
+						<a
+						  class="btn-link"
+						  data-toggle="collapse"
+						  data-target="#collapseOne"
+						  aria-expanded="true"
+						>
+						  <div class="ord_hed_lft">
+							<span class="d_rest_n">Restaurant order</span>
+							<span class="d_rest_ord">total orders: 60</span>
+						  </div>
+						</a>
+					  </div>
+					  <div
+						class="dsh_rest_ord_cont collapsed"
+						id="collapseOne"
+						class="collapse show"
+					  >
+						<ul class="r_ord_c_d">
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-11</span>
+							<span class="r_r_cls del_col">delivered</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-22</span>
+							<span class="r_r_cls cnc_col">canceled</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-33</span>
+							<span class="r_r_cls dipt_col">dispatched</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-22</span>
+							<span class="r_r_cls cnc_col">canceled</span>
+						  </li>
+						</ul>
+						<a href="#" class="rest_or_v_m_btn"> view all</a>
+					  </div>
+					</div>
+				  </div>
+				  <div class="dsh_web_ord">
+					<div class="dsh_rest_ord">
+					  <div class="dsh_rest_ord_hed">
+						<a
+						  class="btn-link"
+						  data-toggle="collapse"
+						  data-target="#collapseTwo"
+						  aria-expanded="true"
+						>
+						  <div class="ord_hed_lft">
+							<span class="d_rest_n">web order</span>
+							<span class="d_rest_ord">total orders: 100</span>
+						  </div>
+						</a>
+					  </div>
+					  <div
+						class="dsh_rest_ord_cont collapsed"
+						id="collapseTwo"
+						class="collapse show"
+					  >
+						<ul class="r_ord_c_d">
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-11</span>
+							<span class="r_r_cls del_col">delivered</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-22</span>
+							<span class="r_r_cls cnc_col">canceled</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-22</span>
+							<span class="r_r_cls cnc_col">canceled</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id">ord-11</span>
+							<span class="r_r_cls del_col">delivered</span>
+						  </li>
+						</ul>
+						<a href="#" class="rest_or_v_m_btn"> view all</a>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="graph_c_dash">
+				<div class="left_s_info">
+				  <span>order(Web and restaurant) </span>
+				</div>
+				<div class="wrp_graph_delivery">
+				  <div class="grp_container">
+					<canvas id="line-chart" width="550"></canvas>
+				  </div>
+				  <div class="dash_deli_stf">
+					<div class="dsh_rest_ord d_delivery">
+					  <div class="dsh_rest_ord_hed">
+						<div class="ord_hed_lft">
+						  <span class="d_rest_n">Delivery staffs</span>
+						  <span class="d_rest_ord">free to deliver: 4</span>
+						</div>
+					  </div>
+					  <div class="dsh_rest_ord_cont">
+						<ul class="r_ord_c_d d_delivery_p">
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id d_delivery">peter pan</span>
+							<span class="r_r_cls del_col">free</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id d_delivery">john frank</span>
+							<span class="r_r_cls cnc_col">on delivery</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id d_delivery">samules</span>
+							<span class="r_r_cls dipt_col">on leave</span>
+						  </li>
+						  <li class="r_ord_c_d_nm">
+							<span class="r_o_id d_delivery">rick</span>
+							<span class="r_r_cls cnc_col">free</span>
+						  </li>
+						</ul>
+						<a href="#" class="rest_or_v_m_btn"> view all</a>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			  <div class="dash_payment_snapst">
+				<div class="left_s_info dsh_t_head">
+				  <span>payment snapshots</span>
+				</div>
+				<div class="wrp_tbl_brd">
+				  <div class="table-responsive tbl_res_dash">
+					<table class="dash_tbl_rec table table-hover">
+					  <thead class="dash_tbl_hed">
+						<tr>
+						  <th scope="col">Date</th>
+						  <th scope="col">Payment ID</th>
+						  <th scope="col">Order ID</th>
+						  <th scope="col">Source</th>
+						  <th scope="col">Gross Amount</th>
+						  <th scope="col">Net Amount</th>
+						  <th scope="col">Action</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <th scope="row">10/4/2001</th>
+						  <td>#134131</td>
+						  <td>ORD-123</td>
+						  <td>Web</td>
+						  <td>$40.00</td>
+						  <td>$35.00</td>
+						  <td class="tbl_edit_btn">
+							<a class="btn_tbl_dsh"
+							  ><i
+								class="fa fa-ellipsis-h"
+								aria-hidden="true"
+							  ></i>
+
+							  <span class="m_inf_tab_dah">Ask Pay</span>
+							</a>
+						  </td>
+						</tr>
+						<tr>
+						  <th scope="row">2005-5-2</th>
+						  <td>#134324</td>
+						  <td>ORD-3</td>
+						  <td>Restaurant</td>
+						  <td>$40.00</td>
+						  <td>$35.00</td>
+						  <td class="tbl_edit_btn">
+							<a class="btn_tbl_dsh"
+							  ><i
+								class="fa fa-ellipsis-h"
+								aria-hidden="true"
+							  ></i>
+
+							  <span class="m_inf_tab_dah">Ask Pay</span>
+							</a>
+						  </td>
+						</tr>
+						<tr>
+						  <th scope="row">2001-1-2</th>
+						  <td>#134131</td>
+						  <td>ORD-123</td>
+						  <td>Web</td>
+						  <td>$40.00</td>
+						  <td>$35.00</td>
+						  <td class="tbl_edit_btn">
+							<a class="btn_tbl_dsh"
+							  ><i
+								class="fa fa-ellipsis-h"
+								aria-hidden="true"
+							  ></i>
+
+							  <span class="m_inf_tab_dah">Ask Pay</span>
+							</a>
+						  </td>
+						</tr>
+						<tr>
+						  <th scope="row">2001-1-2</th>
+						  <td>#134131</td>
+						  <td>ORD-123</td>
+						  <td>Web</td>
+						  <td>$40.00</td>
+						  <td>$35.00</td>
+						  <td class="tbl_edit_btn">
+							<a class="btn_tbl_dsh"
+							  ><i
+								class="fa fa-ellipsis-h"
+								aria-hidden="true"
+							  ></i>
+
+							  <span class="m_inf_tab_dah">Ask Pay</span>
+							</a>
+						  </td>
+						</tr>
+					  </tbody>
+					</table>
+				  </div>
+				  <a class="btn_m_t_dash" href="#">view more </a>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  <!-- right body part -->
+		</div>
+	  </div>
+  <!------------------ LINE GRAPH  -------------------->
+  <script>
+	new Chart(document.getElementById("line-chart"), {
+	  type: "line",
+	  data: {
+		labels: [
+		  "Jan",
+		  "Feb",
+		  "March",
+		  "April",
+		  "May",
+		  "June",
+		  "July",
+		  "Aug",
+		  "Sep",
+		  "Oct",
+		  "Nov",
+		  "Dec",
+		],
+		datasets: [
+		  {
+			data: [30, 60, 80, 90, 20, 40, 30, 50],
+			label: "Web",
+			borderColor: "#757575",
+			fill: true,
+		  },
+		  {
+			data: [30, 50, 80, 20, 50, 70, 80, 90],
+			label: "Resturant",
+			borderColor: "#69ca20",
+			fill: true,
+		  },
+		],
+	  },
+	});
+  </script>
+{% endblock %}

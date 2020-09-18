@@ -1,0 +1,118 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block content %}
+      <div class="col-md-9 ml-auto">
+        <div class="row">
+          <div class="right__body__sec">
+            <div class="pd-tb-md">
+              <div class="rb-pd-rl rs-in-hl">
+                <div class="rs-in">
+                  <div class="rs-lg">
+                    <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
+                  </div>
+                  <div class="rs-in-tx">
+                    <div class="rs-nm">Name of the Restarurant</div>
+                    <div class="rs-ad">Address Of the Restaurant</div>
+                  </div>
+                </div>
+                <div class="ac-bt-hl">
+                  <button class="ac-bt">Edit</button>
+                  <a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
+                </div>
+              </div>
+            </div>
+            <div class="rh-bd-tp-m-hl">
+              <div class="rb-pd-rl">
+                <div class="tp-m">
+                  <div class="fr-u">
+                    <ul>
+                      <li>
+                        <a href="#">Overview</a>
+                      </li>
+                      <li>
+                        <a href="{% url 'restaurant:menu-list' request.restaurant.id %}">Menus</a>
+                      </li>
+                      <li class="active">
+                        <a href="{% url 'restaurant:category-list' request.restaurant.id %}">Categories</a>
+                      </li>
+                      <li class="active">
+                        <a href="{% url 'restaurant:menu-add' request.restaurant.id %}">Items</a>
+                      </li>
+                      <li>
+                        <a href="#">Modifire Groups</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="fr-pr">
+                    <ul>
+                      <li>
+                        <a href="#"><i class="fa fa-eye" aria-hidden="true"></i>ViewOnline</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+			<div class="it-ad-hl pd-tb-md">
+				<div class="rb-pd-rl">
+					<div class="it-ac-hd">
+						<div class="sc-hd">
+							<h1>Add Category</h1>
+						</div>
+					</div>
+					<!-- heading -->
+					<div class="ad-fd-fm pd-tb-md">
+						<form method="post" enctype="multipart/form-data" action="{% if form.instance.pk %}{% url 'restaurant:category-edit' request.restaurant.id restaurantfoodcategory.id %}{% else %}{% url 'restaurant:category-add' request.restaurant.id %}{% endif %}">
+							{% csrf_token %}
+							<div class="fm-ls sm-mb">
+								<label>Category Name</label>
+								{{ form.category }}
+							</div>
+							<!-- form list -->
+							<div class="fm-ls sm-mb">
+								<div class="fm-ls-td">
+									<div class="up-im">
+										<input type='file' name="image" id="id_cat_image" />
+										<div class="up-im-bt">
+											<div class="up-im-cn">
+												<div class="up-im-bt-tl">
+													<p>Drop image here to upload</p>
+												</div>
+												<div class="up-im-bt-dv">
+													<p>or</p>
+												</div>
+												<div class="up-im-bt-bw">
+													Browse File
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="pv-im-hl">
+									{% if form.instance.image %}
+										<img id="cat_image_blah" src="{{ form.instance.image.url }}" alt="your image" />
+
+									{% else %}
+										<img id="cat_image_blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
+									{% endif  %}
+
+									</div>
+								</div>
+							</div>
+							<!-- form list -->
+							<div class="fm-ls sm-mb">
+								{% if form.instance.pk %}
+								<button class="sb-bt mx-auto d-flex">Edit Category</button>
+								{% else %}
+								<button class="sb-bt mx-auto d-flex">Add Category</button>
+								{% endif %}
+							</div>
+							</form>
+						</div>
+			</div>
+		</div>
+	</div>
+	<!-- right body part -->
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block content %}
+	  <div class="col-md-9 ml-auto">
+		<div class="row">
+		  <div class="right__body__sec">
+			<div class="pd-tb-md">
+			  <div class="rb-pd-rl rs-in-hl">
+				<div class="rs-in">
+				  <div class="rs-lg">
+					<img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
+				  </div>
+				  <div class="rs-in-tx">
+					<div class="rs-nm">Name of the Restarurant</div>
+					<div class="rs-ad">Address Of the Restaurant</div>
+				  </div>
+				</div>
+				<div class="ac-bt-hl">
+					<a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
+				</div>
+			  </div>
+			</div>
+			<!-- right top menu -->
+			<div class="it-ad-hl pd-tb-md">
+			  <div class="rb-pd-rl">
+				<div class="it-ac-hd">
+				  <div class="sc-hd">
+					<h1>Restarurant Orders</h1>
+				  </div>
+				</div>
+				<!-- heading -->
+				<div class="ad-fd-fm pd-tb-md">
+				  <form action="">
+					<div class="fm-ls sm-mb">
+					  <label>Food Name</label>
+					  <select class="fd-ct" multiple="multiple">
+						<option></option>
+						<option>Chef's Special</option>
+						<option>Shakes & desert</option>
+						<option>Snakers</option>
+					  </select>
+					</div>
+					<div class="fm-ls sm-mb">
+					  <label>Quantity</label>
+					  <input type="number" placeholder="Quantity" value="" />
+					</div>
+					<div class="fm-ls sm-mb">
+					  <label>Select Style</label>
+					  <select class="form-control">
+						<option disabled selected>Select your style</option>
+						<option>Veg</option>
+						<option>Chicken</option>
+						<option>Mixed</option>
+					  </select>
+					</div>
+					<div class="fm-ls sm-mb">
+					  <label> Select Extra</label>
+					  <select id="demo" multiple="multiple">
+						<option value="item1">Extra Kitchup</option>
+						<option value="item2">Green Kitchup</option>
+						<option value="item3">Chilly</option>
+					  </select>
+					</div>
+					<div class="fm-ls sm-mb">
+					  <button class="sb-bt mx-auto d-flex">Add Order</button>
+					</div>
+				  </form>
+				  <div class="wrp__t_d_rest_ord">
+					<div class="it-ac-hd res_or_tbl">
+					  <div class="sc-hd">
+						<h1>Orders List</h1>
+					  </div>
+					</div>
+					<table id="fd-it-ls-dt" class="display">
+					  <thead>
+						<tr>
+						  <th>Order ID</th>
+						  <th>Food Name</th>
+						  <th>Quantity</th>
+						  <th>Style Type</th>
+						  <th>Extra</th>
+						  <th>Action</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <td>
+							<a href="#">1</a>
+						  </td>
+						  <td>Somthing one</td>
+						  <td>2</td>
+						  <td>Mixed</td>
+						  <td>
+							Red Chilly <br />
+							Tomato Kitchup<br />
+						  </td>
+						  <td class="ac-bt-hl-fd-ls">
+							<button class="btn btn-primary">Edit</button>
+							<button class="btn btn-danger">Remove</button>
+						  </td>
+						</tr>
+					  </tbody>
+					</table>
+				  </div>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  <!-- right body part -->
+		</div>
+	  </div>
+{% endblock %}
