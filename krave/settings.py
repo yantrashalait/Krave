@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'widget_tweaks',
     'fcm_django',
+    'notification.apps.NotificationConfig',
 ]
 
 MIDDLEWARE = [
