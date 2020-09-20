@@ -1,0 +1,44 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="it-ad-hl pd-tb-md">
+        <div class="rb-pd-rl">
+            <div class="it-ac-hd">
+                <div class="sc-hd">
+                    <h1>Chef's Specials</h1>
+                </div>
+                <div class="ac-bt-hl">
+                    <a href="{% url 'restaurant:chef-special-add' %}">
+                        <button class="ac-bt">Add Chef's Special</button>
+                    </a>
+                </div>
+            </div>
+            <!-- heading -->
+            <div class="ad-fd-fm pd-tb-md">
+                <table id="fd-it-ls-dt" class="display">
+                    <thead>
+                        <tr>
+                            <th>Food Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list %}
+                            <tr>
+                                <td>{{ item.name }}</td>
+                                <td class="ac-bt-hl-fd-ls">
+                                  <a href="{% url 'restaurant:chef-special-delete' item.id  %}" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- right body part -->
+</div>
+</div>
+{% endblock %}

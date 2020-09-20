@@ -579,7 +579,7 @@ class PaymentListSearchView(ListView):
 
 def list_chef_special(request):
     object_list = FoodMenu.objects.filter(chef_special=True, restaurant=request.restaurant)
-    return render(request, 'restaurant/chef_special_list.php', {'object_list': object_list})
+    return render(request, 'restaurant/chef_special.html', {'object_list': object_list})
 
 
 def add_chef_special(request):
@@ -589,7 +589,7 @@ def add_chef_special(request):
         return HttpResponseRedirect(reverse('restaurant:chef-special'))
     else:
         foods = FoodMenu.objects.filter(restaurant=request.restaurant)
-        return render(request, 'restaurant/chef_special_add.php', {'foods': foods})
+        return render(request, 'restaurant/chef_special_add.html', {'foods': foods})
 
 
 def delete_chef_special(request, pk):
