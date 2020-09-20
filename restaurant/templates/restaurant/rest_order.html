@@ -16,83 +16,179 @@
 				</div>
 				<!-- heading -->
 				<div class="ad-fd-fm pd-tb-md">
-				  <form action="">
-					<div class="fm-ls sm-mb">
-					  <label>Food Name</label>
-					  <select class="fd-ct" multiple="multiple">
-						<option></option>
-						<option>Chef's Special</option>
-						<option>Shakes & desert</option>
-						<option>Snakers</option>
-					  </select>
+					<form method="POST" action=".">
+						{% csrf_token %}
+						<div class="fm-ls sm-mb">
+							<label>Food Name</label>
+							<!-- <select class="fd-ct" multiple="multiple"> -->
+							<select class="fd-ct" name="food" id="food-select">
+								<option></option>
+								{% for food in foods %}
+									<option value="{{ food.id }}">{{ food.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="fm-ls sm-mb">
+							<label>Quantity</label>
+							<input type="number" placeholder="Quantity" value="" name='qty' />
+						</div>
+
+						<div class="fm-ls sm-mb">
+							<label>Select Style</label>
+							<select class="form-control" name="radio3" id="styles">
+								<option></option>
+
+							</select>
+						</div>
+
+						<div class="fm-ls sm-mb">
+							<label> Select Extra</label>
+							<select id="demo" multiple="multiple" name="extras">
+
+							</select>
+						</div>
+
+						<div class="fm-ls sm-mb">
+							<button class="sb-bt mx-auto d-flex" type="submit">Add Order</button>
+						</div>
+					</form>
+					<div class="wrp__t_d_rest_ord">
+						<div class="it-ac-hd res_or_tbl">
+						<div class="sc-hd">
+							<h1>Orders List</h1>
+						</div>
+						</div>
+						<table id="fd-it-ls-dt" class="display">
+							<thead>
+								<tr>
+								<th>Order ID</th>
+								<th>Food Name</th>
+								<th>Quantity</th>
+								<th>Style Type</th>
+								<th>Extra</th>
+								<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for cart in carts %}
+									<tr>
+										<td>
+											<a href="#">{{ forloop.counter }}</a>
+										</td>
+
+										<td>{{ cart.food.name }}</td>
+
+										<td>{{ cart.number_of_food }}</td>
+										<td>
+											{% if cart.style %}
+												{{ cart.style.name_of_style }}
+											{% endif %}
+										</td>
+
+										<td>
+											{% for extra in cart.extras.all %}
+												{{ extra.name_of_extra }} <br>
+											{% endfor %}
+										</td>
+										<td class="ac-bt-hl-fd-ls">
+											<button class="btn btn-primary">Edit</button>
+											<a href="{% url 'restaurant:cart-delete' cart.pk %}" class="btn btn-danger">Remove</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
 					</div>
-					<div class="fm-ls sm-mb">
-					  <label>Quantity</label>
-					  <input type="number" placeholder="Quantity" value="" />
-					</div>
-					<div class="fm-ls sm-mb">
-					  <label>Select Style</label>
-					  <select class="form-control">
-						<option disabled selected>Select your style</option>
-						<option>Veg</option>
-						<option>Chicken</option>
-						<option>Mixed</option>
-					  </select>
-					</div>
-					<div class="fm-ls sm-mb">
-					  <label> Select Extra</label>
-					  <select id="demo" multiple="multiple">
-						<option value="item1">Extra Kitchup</option>
-						<option value="item2">Green Kitchup</option>
-						<option value="item3">Chilly</option>
-					  </select>
-					</div>
-					<div class="fm-ls sm-mb">
-					  <button class="sb-bt mx-auto d-flex">Add Order</button>
-					</div>
-				  </form>
-				  <div class="wrp__t_d_rest_ord">
-					<div class="it-ac-hd res_or_tbl">
-					  <div class="sc-hd">
-						<h1>Orders List</h1>
-					  </div>
-					</div>
-					<table id="fd-it-ls-dt" class="display">
-					  <thead>
-						<tr>
-						  <th>Order ID</th>
-						  <th>Food Name</th>
-						  <th>Quantity</th>
-						  <th>Style Type</th>
-						  <th>Extra</th>
-						  <th>Action</th>
-						</tr>
-					  </thead>
-					  <tbody>
-						<tr>
-						  <td>
-							<a href="#">1</a>
-						  </td>
-						  <td>Somthing one</td>
-						  <td>2</td>
-						  <td>Mixed</td>
-						  <td>
-							Red Chilly <br />
-							Tomato Kitchup<br />
-						  </td>
-						  <td class="ac-bt-hl-fd-ls">
-							<button class="btn btn-primary">Edit</button>
-							<button class="btn btn-danger">Remove</button>
-						  </td>
-						</tr>
-					  </tbody>
-					</table>
-				  </div>
 				</div>
 			  </div>
 			</div>
-		  </div>
-		  <!-- right body part -->
 		</div>
-	  </div>
+		<!-- right body part -->
+		</div>
+	</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+	$(document).ready(function(){
+	  var food_id = $("#food-select").children("option:selected").val();
+	  $.ajax({
+		url: "{% url 'core:get-food-detail' %}",
+		data: {
+		  'food_id': food_id,
+		},
+		dataType: 'json',
+		success: function(result){
+		  var data = result;
+
+		  $("#styles").html("<option></option>");
+		  var styles = [];
+		  styles = data.styles;
+		  styles = jQuery.parseJSON(styles);
+
+		  styles.forEach(function(style){
+			var style_content = '<option value="'+ style.fields.name_of_style.split(' ').join('_') +'"> '+ style.fields.name_of_style + '</option>'
+			$("#styles").append(style_content);
+		  });
+
+		  $("#demo").html("");
+		  var extras = [];
+		  extras = data.extras;
+		  extras = jQuery.parseJSON(extras);
+
+		//   extras.forEach(function(extra){
+		// 	var extra_content = '<div class="checkbox__wrapper__new"><div class="checkbox__wrapper__content"><input name="extras" type="checkbox" value="'+ extra.fields.name_of_extra.split(' ').join('_') +'"><span> '+ extra.fields.name_of_extra +'</span></div><div class="checkbox__price"><span>$5</span></div></div>'
+		// 	$("#extras").append(extra_content);
+		//   });
+
+		  extras.forEach(function(extra){
+			var extra_content = '<option value="'+ extra.fields.name_of_extra.split(' ').join('_') +'"> '+ extra.fields.name_of_extra + '</option>'
+			$("#demo").append(extra_content);
+		  });
+
+		}
+	  })
+	});
+	$('#food-select').on('change', function(){
+	  var food_id = $(this).children("option:selected").val();
+	  $.ajax({
+		url: "{% url 'core:get-food-detail' %}",
+		data: {
+		  'food_id': food_id,
+		},
+		dataType: 'json',
+		success: function(result){
+		  var data = result;
+
+		  $("#styles").html("<option></option>");
+		  var styles = [];
+		  styles = data.styles;
+		  styles = jQuery.parseJSON(styles);
+
+		  styles.forEach(function(style){
+			var style_content = '<option value="'+ style.fields.name_of_style.split(' ').join('_') +'"> '+ style.fields.name_of_style + '</option>'
+			$("#styles").append(style_content);
+		  });
+
+		  $("#demo").html("");
+		  var extras = [];
+		  extras = data.extras;
+		  extras = jQuery.parseJSON(extras);
+
+		//   extras.forEach(function(extra){
+		// 	var extra_content = '<div class="checkbox__wrapper__new"><div class="checkbox__wrapper__content"><input name="extras" type="checkbox" value="'+ extra.fields.name_of_extra.split(' ').join('_') +'"><span> '+ extra.fields.name_of_extra +'</span></div><div class="checkbox__price"><span>$5</span></div></div>'
+		// 	$("#extras").append(extra_content);
+		//   });
+
+		  extras.forEach(function(extra){
+			var extra_content = '<option value="'+ extra.fields.name_of_extra.split(' ').join('_') +'"> '+ extra.fields.name_of_extra + '</option>'
+			$("#demo").append(extra_content);
+		  });
+
+
+		}
+	  })
+	});
+  </script>
 {% endblock %}

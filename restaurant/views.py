@@ -429,7 +429,9 @@ def ready_order(request, *args, **kwargs):
 def manual_order(request, *args, **kwargs):
     if request.method == "GET":
         foods = FoodMenu.objects.filter(restaurant=request.restaurant.id, deleted=False)
-        return render(request, 'restaurant/order-place.php', {'foods': foods})
+        cart = FoodCart.objects.filter(session_key=request.session.session_key, checked_out=False)
+
+        return render(request, 'restaurant/rest_order.html', {'foods': foods, 'carts': cart})
 
     if request.method == "POST":
         food_id = int(request.POST.get('food'))
@@ -455,7 +457,7 @@ def manual_order(request, *args, **kwargs):
 
         cart.save()
 
-        return HttpResponseRedirect(reverse('restaurant:food-cart'))
+        return HttpResponseRedirect(reverse('restaurant:manual-order'))
 
 
 class FoodCartListView(ListView):
