@@ -1,72 +1,18 @@
 {% extends 'restaurant/base.html' %}
 {% load static %}
 
-{% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/tagsinput.css' %}" />
-{% endblock %}
-
 
 {% block content %}
-
-      <div class="col-md-9 ml-auto">
-        <div class="row">
-          <div class="right__body__sec">
-            <div class="pd-tb-md">
-              <div class="rb-pd-rl rs-in-hl">
-                <div class="rs-in">
-                  <div class="rs-lg">
-                    <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
-                  </div>
-                  <div class="rs-in-tx">
-                    <div class="rs-nm">Name of the Restarurant</div>
-                    <div class="rs-ad">Address Of the Restaurant</div>
-                  </div>
-                </div>
-                <div class="ac-bt-hl">
-                  <button class="ac-bt">Edit</button>
-                  <!-- <button class="ac-bt">Logout</button> -->
-                  <a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
-                </div>
-              </div>
-            </div>
-            <div class="rh-bd-tp-m-hl">
-              <div class="rb-pd-rl">
-                <div class="tp-m">
-                  <div class="fr-u">
-                    <ul>
-                      <li>
-                        <a href="#">Overview</a>
-                      </li>
-                      <li>
-                        <a href="{% url 'restaurant:menu-list' request.restaurant.id %}">Menus</a>
-                      </li>
-                      <li>
-                        <a href="{% url 'restaurant:category-list' request.restaurant.id %}">Categories</a>
-                      </li>
-                      <li class="active">
-                        <a href="{% url 'restaurant:menu-add' request.restaurant.id %}">Items</a>
-                      </li>
-                      <li>
-                        <a href="#">Modifire Groups</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="fr-pr">
-                    <ul>
-                      <li>
-                        <a href="#"><i class="fa fa-eye" aria-hidden="true"></i>ViewOnline</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
                 <!-- right top menu -->
                 <div class="it-ad-hl pd-tb-md">
                 <div class="rb-pd-rl">
                     <div class="it-ac-hd">
                     <div class="sc-hd">
+                        {% if form.instance.pk %}
+                        <h1>Edit Food Item</h1>
+                        {% else %}
                         <h1>Add Food Item</h1>
+                        {% endif %}
                     </div>
                     </div>
                     <!-- heading -->
@@ -80,11 +26,15 @@
                             <!-- form list restaurant logo button changed-->
                             <div class="rest__logo sm-mb">
                                 <div class="fild_inp_logo">
-                                <label>Restaurant Logo</label>
+                                <label>Food Image</label>
                                 <input type="file" id="imgInp" name="image" />
                                 </div>
                                 <div class="logo_pre">
-                                <img id="blah" src="#" alt=" Restaurant Image" />
+                                    {% if form.instance.image %}
+                                    <img id="blah" src="{{ form.instance.image.url }}" alt=" Food Image" />
+                                    {% else %}
+                                    <img id="blah" src="#" alt=" Food Image" />
+                                    {% endif %}
                                 </div>
                             </div>
                             <!-- form list ingredients change krave  -->
@@ -94,10 +44,7 @@
                             </div>
                             <div class="fm-ls sm-mb">
                                 <label>Ingredients</label>
-                                <div class="bootstrap-tagsinput">
-                                    {{ form.ingredients }}
-                                </div>
-                                <!-- <input class="ingd_rest_delt" type="text" data-role="tagsinput" value="" placeholder="Ingredients" name="ingredients" /> -->
+                                {{ form.ingredients }}
                             </div>
                             <!-- form list -->
                             <div class="fm-ls sm-mb">

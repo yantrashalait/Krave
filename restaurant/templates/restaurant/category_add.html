@@ -2,63 +2,15 @@
 {% load static %}
 
 {% block content %}
-      <div class="col-md-9 ml-auto">
-        <div class="row">
-          <div class="right__body__sec">
-            <div class="pd-tb-md">
-              <div class="rb-pd-rl rs-in-hl">
-                <div class="rs-in">
-                  <div class="rs-lg">
-                    <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
-                  </div>
-                  <div class="rs-in-tx">
-                    <div class="rs-nm">Name of the Restarurant</div>
-                    <div class="rs-ad">Address Of the Restaurant</div>
-                  </div>
-                </div>
-                <div class="ac-bt-hl">
-                  <button class="ac-bt">Edit</button>
-                  <a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
-                </div>
-              </div>
-            </div>
-            <div class="rh-bd-tp-m-hl">
-              <div class="rb-pd-rl">
-                <div class="tp-m">
-                  <div class="fr-u">
-                    <ul>
-                      <li>
-                        <a href="#">Overview</a>
-                      </li>
-                      <li>
-                        <a href="{% url 'restaurant:menu-list' request.restaurant.id %}">Menus</a>
-                      </li>
-                      <li class="active">
-                        <a href="{% url 'restaurant:category-list' request.restaurant.id %}">Categories</a>
-                      </li>
-                      <li class="active">
-                        <a href="{% url 'restaurant:menu-add' request.restaurant.id %}">Items</a>
-                      </li>
-                      <li>
-                        <a href="#">Modifire Groups</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="fr-pr">
-                    <ul>
-                      <li>
-                        <a href="#"><i class="fa fa-eye" aria-hidden="true"></i>ViewOnline</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
 			<div class="it-ad-hl pd-tb-md">
 				<div class="rb-pd-rl">
 					<div class="it-ac-hd">
 						<div class="sc-hd">
+							{% if form.instance.pk %}
+							<h1>Edit Category</h1>
+							{% else %}
 							<h1>Add Category</h1>
+							{% endif %}
 						</div>
 					</div>
 					<!-- heading -->

@@ -46,7 +46,10 @@
                                 <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i>Restaurant Detail</a>
                             </li>
                             <li>
-                                <a href="{% url 'restaurant:menu-add' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i> Add Food Item</a>
+                                <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menus</a>
+                            </li>
+                            <li>
+                            <a href="{% url 'restaurant:category-list' request.restaurant.id %}"><i class="fa fa-cubes" aria-hidden="true"></i> Restaurant Food Categories</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-file" aria-hidden="true"></i> Web Orders</a>
@@ -62,6 +65,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-9 ml-auto">
+                <div class="row">
+                  <div class="right__body__sec">
+                    <div class="pd-tb-md">
+                      <div class="rb-pd-rl rs-in-hl">
+                        <div class="rs-in">
+                          <div class="rs-lg">
+                            <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
+                          </div>
+                          <div class="rs-in-tx">
+                            <div class="rs-nm">{{ request.restaurant.name }}</div>
+                            <div class="rs-ad">{{ request.restaurant.street }}, {{ request.restaurant.town }}, {{ request.restaurant.state }} - {{ request.restaurant.zip_code }}</div>
+                          </div>
+                        </div>
+                        <div class="ac-bt-hl">
+                            <a href="{% url 'restaurant:restaurant-detail-edit' request.restaurant.id %}"><button class="ac-bt">Edit</button></a>
+                          <a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
+                        </div>
+                      </div>
+                    </div>
         {% block content %} {% endblock %}
 
         </section>
@@ -75,6 +98,7 @@
     <script src="{% static 'restaurant/js/select2.js' %}"></script>
     <script src="{% static 'restaurant/js/datatables.js' %}"></script>
     <script src="{% static 'restaurant/js/main.js' %}"></script>
+    <script src="{% static 'restaurant/js/tagsinput.js' %}"></script>
     {% block script %} {% endblock %}
 </body>
 </html>
