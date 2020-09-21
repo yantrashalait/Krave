@@ -50,8 +50,36 @@
       }
     }
 
+    function readRestaurantLogoURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          $('#rest_blah').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function readRestaurantImgURL(input) {
+      if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function(e) {
+          $('#rest_img_blah').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
     $("#id_logo").change(function() {
       readURL(this);
+    });
+
+    $("#imgInp").change(function() {
+      readFoodURL(this);
     });
 
     $('#id_img').change(function(){
@@ -64,6 +92,14 @@
 
     $("#id_cat_image").change(function(){
       readCatURL(this);
+    });
+
+    $("#restImgInp").change(function() {
+      readRestaurantImgURL(this);
+    });
+
+    $("#restInp").change(function() {
+      readRestaurantLogoURL(this);
     });
 
     $('.fd-ct').select2({

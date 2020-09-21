@@ -21,7 +21,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/owl.carousel.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/owl.theme.default.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/select2.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/fileinput.css' %}" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     {% block css %} {% endblock %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
@@ -47,9 +46,6 @@
                             </li>
                             <li>
                                 <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menus</a>
-                            </li>
-                            <li>
-                            <a href="{% url 'restaurant:category-list' request.restaurant.id %}"><i class="fa fa-cubes" aria-hidden="true"></i> Restaurant Food Categories</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-file" aria-hidden="true"></i> Web Orders</a>

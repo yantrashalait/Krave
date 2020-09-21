@@ -53,6 +53,7 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         context = super(RestaurantDetailView, self).get_context_data(*args, **kwargs)
         context['cuisine'] = Cuisine.objects.all()
+        context['categories'] = RestaurantFoodCategory.objects.filter(restaurant=self.request.restaurant)
         try:
             context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
         except RestaurantCuisine.DoesNotExist:
@@ -303,9 +304,8 @@ class CategoryEditView(RestaurantAdminMixin, UpdateView):
         id_ = self.kwargs.get('category_id')
         return get_object_or_404(RestaurantFoodCategory, pk=id_)
 
-
     def get_success_url(self):
-        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
+        return reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id})
 
 
 class CategoryDeleteView(RestaurantAdminMixin, DeleteView):
@@ -318,7 +318,7 @@ class CategoryDeleteView(RestaurantAdminMixin, DeleteView):
         return get_object_or_404(RestaurantFoodCategory, pk=id_)
 
     def get_success_url(self):
-        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
+        return reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id})
 
     def delete(self, request, *args, **kwargs):
         """
@@ -350,8 +350,7 @@ class CategoryCreateView(RestaurantAdminMixin, CreateView):
             self.object.restaurant = self.request.restaurant
             self.object.save()
 
-            return HttpResponseRedirect(reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id}))
-        return super().form_valid(form)
+            return HttpResponseRedirect(reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id}))
 
     def get_success_url(self):
         return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})

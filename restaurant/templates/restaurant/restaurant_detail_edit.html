@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block css %}
-<!--<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/easySelectStyle.css' %}" />-->
+<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/easySelectStyle.css' %}" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
    crossorigin=""/>
@@ -25,103 +25,79 @@
                 <form method="POST" action="." enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="fm-ls sm-mb">
-                        <label>Restaurant Name</label>
-                        {{ form.name }}
-                    </div>
-                    <!-- form list -->
-                    <div class="fm-ls sm-mb">
-                        <div class="fm-ls-td">
-                            <div class="up-im">
-                                <input type='file' name="logo" id="id_logo" />
-                                <div class="up-im-bt">
-                                    <div class="up-im-cn">
-                                        <div class="up-im-bt-tl">
-                                            <p>Drop image here to upload</p>
-                                        </div>
-                                        <div class="up-im-bt-dv">
-                                            <p>or</p>
-                                        </div>
-                                        <div class="up-im-bt-bw">
-                                            Browse File
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pv-im-hl">
-                            {% if request.restaurant.logo %}
-                                <img id="blah" src="{{ request.restaurant.logo.url }}" alt="your image" />
-
-                            {% else %}
-                                <img id="blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
-                            {% endif  %}
-
-                            </div>
+                        <div class="fm-ls-td js-sb">
+                          <div class="fm-hf-ls">
+                            <label>Restaurant Name</label>
+                              {{ form.name }}
+                          </div>
+                          <div class="fm-hf-ls">
+                            <label>Registration Number </label>
+                              {{ form.registration_number }}
+                          </div>
                         </div>
                     </div>
                     <!-- form list -->
-                    <!-- form list -->
-                    <div class="fm-ls sm-mb">
-                        <div class="fm-ls-td">
-                            <div class="up-im">
-                                <input type='file' name="image" id="id_image" />
-                                <div class="up-im-bt">
-                                    <div class="up-im-cn">
-                                        <div class="up-im-bt-tl">
-                                            <p>Drop image here to upload</p>
-                                        </div>
-                                        <div class="up-im-bt-dv">
-                                            <p>or</p>
-                                        </div>
-                                        <div class="up-im-bt-bw">
-                                            Browse File
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="pv-im-hl">
-                            {% if request.restaurant.images.last %}
-                                <img id="image_blah" src="{{ request.restaurant.images.last.image.url }}" alt="your image" />
+                    <div class="rest__logo sm-mb">
+                        <div class="fild_inp_logo">
+                          <label>Restaurant Logo</label>
+                          <input type="file" id="restInp" name="logo" />
+                        </div>
+                        <div class="logo_pre">
+                          {% if request.restaurant.logo %}
+                                <img id="rest_blah" src="{{ request.restaurant.logo.url }}" alt="your image" />
 
                             {% else %}
-                                <img id="image_blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
+                                <img id="rest_blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
                             {% endif  %}
+                        </div>
+                    </div>
+                    <div class="rest__logo sm-mb">
+                        <div class="fild_inp_logo">
+                          <label>Restaurant Image</label>
+                          <input type="file" id="restImgInp" name="image" />
+                        </div>
+                        <div class="logo_pre">
+                          {% if request.restaurant.images.last %}
+                                <img id="rest_img_blah" src="{{ request.restaurant.images.last.image.url }}" alt="your image" />
 
-                            </div>
+                            {% else %}
+                                <img id="rest_img_blah" src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="your image" />
+                            {% endif  %}
                         </div>
                     </div>
                     <!-- form list -->
                     <div class="fm-ls sm-mb">
-                        <label>Street</label>
-                        {{ form.street }}
-                    </div>
-                    <!-- form list -->
+                        <div class="fm-ls-td js-sb">
+                          <div class="fm-hf-ls m_qurt_inp_fld">
+                            <label>State</label>
+                            {{ form.state }}
+                          </div>
+                          <div class="fm-hf-ls m_qurt_inp_fld">
+                            <label>Town</label>
+                            {{ form.town }}
+                          </div>
+                          <div class="fm-hf-ls m_qurt_inp_fld">
+                            <label>Street</label>
+                            {{ form.street }}
+                          </div>
+                        </div>
+                     </div>
                     <div class="fm-ls sm-mb">
-                        <label>Town</label>
-                        {{ form.town }}
-                    </div>
-                    <!-- form list -->
-                    <div class="fm-ls sm-mb">
-                        <label>State</label>
-                        {{ form.state }}
-                    </div>
-                    <!-- form list -->
-                    <div class="fm-ls sm-mb">
-                        <label>Zip Code</label>
-                        {{ form.zip_code }}
-                    </div>
-                    <div class="fm-ls sm-mb">
-                        <label>Restaurant Contact Number</label>
-                        {{ form.contact }}
+                        <div class="fm-ls-td js-sb">
+                          <div class="fm-hf-ls">
+                            <label>Zip Code</label>
+                              {{ form.zip_code }}
+                          </div>
+                          <div class="fm-hf-ls">
+                            <label>Restaurant Contact Number </label>
+                              {{ form.contact }}
+                          </div>
+                        </div>
                     </div>
                     <!-- form list -->
                     <div class="fm-ls sm-mb">
                         <label>Email Address</label>
                         {{ form.email }}
-                    </div>
-                    <!-- form list -->
-                    <div class="fm-ls sm-mb">
-                        <label>Restaurant Registration Number</label>
-                        {{ form.registration_number }}
                     </div>
                     <!-- form list -->
                     <div class="fm-ls sm-mb">
@@ -149,29 +125,15 @@
                             </div>
                         </div>
                     </div>
-
-                    {% if rest_cuisine %}
-                    <div class="fm-ls sm-mb">
-                        <label>Selected Cuisines</label>
-                        <p>
-                        {% for item in rest_cuisine.cuisine.all %}
-                            {{ item.name }}
-                        {% endfor %}
-                        </p>
-
-                    </div>
-                    {% endif %}
                     <!-- form list -->
-                    <div class="fm-ls sm-mb">
-                        <label>Types of Cuisines</label>
-
-                            <select name="cuisines[]" class="fd-ct" multiple="multiple">
-                                <option></option>
-                                {% for item in cuisine %}
+                     <div class="fm-ls sm-mb">
+                        <label> Types of Cuisines</label>
+                        <select name="cuisines[]" id="cus_itm" multiple="multiple">
+                            {% for item in cuisine %}
                                 <option value="{{ item.id }}">{{ item.name }}</option>
-                                {% endfor %}
-                            </select>
-                    </div>
+                            {% endfor %}
+                        </select>
+                     </div>
                     {{ form.media }}
                     <div class="fm-ls sm-mb">
                         <div id="map" style="height: 500px; width: 100%; z-index: 0;"></div>
