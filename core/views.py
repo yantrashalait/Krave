@@ -165,7 +165,7 @@ def get_food_detail(request, *args, **kwargs):
         This view is called by ajax request to get the detail of a food item
     """
     if request.method == 'GET':
-        food = FoodMenu.objects.get(pk=request.GET.get('food_id'))
+        food = FoodMenu.objects.get(pk=int(request.GET.get('food_id', 1)))
         restaurant = food.restaurant
         styles = food.styles.all()
         extras = food.extras.all()

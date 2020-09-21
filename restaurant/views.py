@@ -442,13 +442,20 @@ def manual_order(request, *args, **kwargs):
         if 'extras' in request.POST:
             extras = request.POST.getlist('extras')
             for item in extras:
-                extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                try:
+                    extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                except:
+                    extra = FoodExtra.objects.filter(name_of_extra=item.replace("_", " "), food=food)[0]
                 cart.extras.add(extra)
 
         if 'radio3' in request.POST:
-            style = FoodStyle.objects.get(name_of_style=request.POST.get('radio3', None).replace("_", " "), food=food)
+            try:
+                style = FoodStyle.objects.get(
+                    name_of_style=request.POST.get('radio3', '').replace("_", " "), food=food)
+            except:
+                style = FoodStyle.objects.filter(
+                    name_of_style=request.POST.get('radio3', '').replace("_", ""), food=food)[0]
             cart.style = style
-
         cart.save()
 
         return HttpResponseRedirect(reverse('restaurant:manual-order'))
