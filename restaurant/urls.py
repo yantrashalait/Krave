@@ -43,6 +43,4 @@ urlpatterns = [
     path('chef-special/<int:pk>/delete/', views.delete_chef_special, name="chef-special-delete"),
     path('chef-special/add/', views.add_chef_special, name="chef-special-add"),
 
-    # old dashboard :
-    path('<int:rest_id>/rest-dashboard/', views.DashboardViewTestTest.as_view(), name='rest-dashboard'),
 ]

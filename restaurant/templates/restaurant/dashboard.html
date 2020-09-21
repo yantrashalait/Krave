@@ -43,21 +43,26 @@
                             <li>
                                 <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i>Restaurant Detail</a>
                             </li>
+                            {% if request.restaurant.email %}
                             <li>
                                 <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menus</a>
-                            </li>
-                            <li>
-                            <a href="{% url 'restaurant:category-list' request.restaurant.id %}"><i class="fa fa-cubes" aria-hidden="true"></i> Restaurant Food Categories</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-file" aria-hidden="true"></i> Web Orders</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-file" aria-hidden="true"></i> Restaurant Order</a>
+                                <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-file" aria-hidden="true"></i> Restaurant Order</a>
                             </li>
                             <li>
                                 <a href="{% url 'restaurant:earnings' %}">
                                 <i class="fa fa-file" aria-hidden="true"></i> My Earning Orders</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:chef-special' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Chef's Specials </a>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
                             </li>
                         </ul>
                     </div>

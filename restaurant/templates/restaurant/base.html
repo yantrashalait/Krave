@@ -44,6 +44,7 @@
                             <li>
                                 <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i>Restaurant Detail</a>
                             </li>
+                            {% if request.restaurant.email %}
                             <li>
                                 <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menus</a>
                             </li>
@@ -59,6 +60,10 @@
                             </li>
                             <li>
                                 <a href="{% url 'restaurant:chef-special' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Chef's Specials </a>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
                             </li>
                         </ul>
                     </div>

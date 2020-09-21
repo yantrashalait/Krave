@@ -36,11 +36,6 @@ class DashboardView(RestaurantAdminMixin, TemplateView):
     template_name = 'restaurant/dashboard.html'
 
 
-# old dashboard view
-class DashboardViewTestTest(RestaurantAdminMixin, TemplateView):
-    template_name = 'restaurant/index.php'
-
-
 class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
     template_name = 'restaurant/restaurant_detail.html'
     form_class = RestaurantForm
