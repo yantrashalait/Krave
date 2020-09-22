@@ -29,6 +29,8 @@ urlpatterns = [
     path('order/decline/<int:order_id>', views.decline_order, name="decline-order"),
     path('order/ready/<int:order_id>', views.ready_order, name="ready-order"),
 
+    path('order/status/<int:order_id>', views.change_order_status, name="change-order-status"),
+
     path('order/add/', views.manual_order, name="manual-order"),
     path('cart/', views.FoodCartListView.as_view(), name="food-cart"),
     path('cart/delete/<int:pk>/', views.FoodCartDeleteView.as_view(), name="cart-delete"),

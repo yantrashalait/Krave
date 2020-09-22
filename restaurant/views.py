@@ -379,6 +379,22 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
         return get_object_or_404(Order, id=self.kwargs.get('order_id'))
 
 
+def change_order_status(request, *args, **kwargs):
+    if request.method == 'POST':
+        try:
+            order = Order.objects.get(id=kwargs.get('order_id'))
+            status = request.POST.get('status_id')
+            order.status = status
+            order._prepared = False
+            order._runsignal = False
+            order._approved = True
+            order.save()
+        except Order.DoesNotExist:
+            return JsonResponse({'success': False})
+
+    return JsonResponse({'success': True})
+
+
 def accept_order(request, *args, **kwargs):
     try:
         order = Order.objects.get(id=kwargs.get('order_id'))

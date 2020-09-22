@@ -51,8 +51,9 @@
 								<span class="total_price" data-id="{{ order.cart.all|get_total_price }}"></span> - {{ order.get_payment_display }}
 							</td>
 							<td>
-								<form action="">
-									<select class="form-control ord_tbl_opt">
+								<form action="{% url 'restaurant:change-order-status' order.id %}" method="POST" class="order-status">
+									{% csrf_token %}
+									<select class="form-control ord_tbl_opt" name="status_id" form_id='{{ order.id }}'>
 										{% for key, value in order.STATUS_CHOICES %}
 											<option value="{{ key }}" {% if value in order.get_status_display %}selected{% endif %}>{{ value }}</option>
 										{% endfor %}
@@ -74,7 +75,7 @@
 
 
 {% block script %}
-<script>
+<script >
 	$(document).ready(function(){
 		var food_total = $(".total_price")
 		food_total.each(
@@ -84,7 +85,40 @@
 				var total = parseInt(food_price) + parseInt(delivery_cost);
 				$(value).html("$" + total);
 			}
-		)
+		) // price
+
+
+		$( '.order-status select' ).on( 'change', function() {
+			var id = $( this ).attr( 'form_id' );
+			var url = $('.order-status').attr('action');
+
+			form_data = new FormData($('.order-status')[0]);
+			form_data.append('status_id', $(this).val());
+
+			$.ajaxSetup({
+				headers: { "X-CSRFToken": '{{csrf_token}}' }
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: '/restaurant/order/status/' + id,
+				data: form_data,
+				processData: false,
+				contentType: false,
+				cache : false,
+				// success: function(response){
+				// 	console.log(response.success)
+				// 	if (response.success == true) {
+				// 		alert('success');
+				// 	}
+				// 	else {
+				// 		alert('no');
+				// 	}
+				// }
+			});
+		}); //form
+
 	});
+
 </script>
 {% endblock %}
