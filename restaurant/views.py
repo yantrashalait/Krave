@@ -115,11 +115,13 @@ class RestaurantEditDetailView(RestaurantAdminMixin, UpdateView):
 class OrderView(RestaurantAdminMixin, ListView):
     login_url = 'login'
     model = Order
-    template_name = 'restaurant/orders.php'
+    # template_name = 'restaurant/orders.php'
+    template_name = 'restaurant/web_order.html'
     context_object_name = 'orders'
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1).order_by('-added_date')
+        # return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1).order_by('-added_date')
+        return self.model.objects.all()
 
 
 class AcceptedOrderView(RestaurantAdminMixin, ListView):

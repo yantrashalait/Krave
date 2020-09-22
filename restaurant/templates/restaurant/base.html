@@ -49,7 +49,7 @@
                                 <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menus</a>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-file" aria-hidden="true"></i> Web Orders</a>
+                                <a href="{% url 'restaurant:order' request.restaurant.id %}"><i class="fa fa-file" aria-hidden="true"></i> Web Orders</a>
                             </li>
                             <li>
                                 <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-file" aria-hidden="true"></i> Restaurant Order</a>

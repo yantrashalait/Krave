@@ -1,5 +1,6 @@
 {% extends 'restaurant/base.html' %}
 {% load static %}
+{% load rest_filters %}
 
 
 {% block css %}
@@ -29,32 +30,37 @@
 					  </tr>
 					</thead>
 					<tbody>
-					  <tr>
-						<td>
-						  <a href="#">1</a>
-						</td>
-						<td>Null</td>
-						<td>Somthing is ordered</td>
-						<td>
-						  2020/09/13
-						  <br />
-						  09:00AM
-						</td>
-						<td>
-						  Person Name <br />
-						  $110 - Cash on Delivery
-						</td>
-						<td>
-						  <form action="">
-							<select class="form-control ord_tbl_opt">
-							  <option disabled selected>Select Status</option>
-							  <option>Cooking</option>
-							  <option>Cooked</option>
-							  <option>Dispatched</option>
-							</select>
-						  </form>
-						</td>
-					  </tr>
+						{% for order in orders %}
+						<tr>
+							<td>
+								<a href="{% url 'restaurant:order-detail' request.restaurant.id order.id %}">#{{ order.id_string }}</a>
+							</td>
+							<td>{{ order.id_string }}</td>
+							<td>
+								{% for item in order.cart.all %}
+									{{ item.food.name }} <br>
+								{% endfor %}
+							</td>
+							<td>
+								{{ order.added_date.date }}
+								<br />
+								{{ order.added_date.time }}
+							</td>
+							<td>
+								{{ order.user }} <br />
+								<span class="total_price" data-id="{{ order.cart.all|get_total_price }}"></span> - {{ order.get_payment_display }}
+							</td>
+							<td>
+								<form action="">
+									<select class="form-control ord_tbl_opt">
+										{% for key, value in order.STATUS_CHOICES %}
+											<option value="{{ key }}" {% if value in order.get_status_display %}selected{% endif %}>{{ value }}</option>
+										{% endfor %}
+									</select>
+								</form>
+							</td>
+						</tr>
+						{% endfor %}
 					</tbody>
 				  </table>
 				</div>
@@ -64,4 +70,21 @@
 		  <!-- right body part -->
 		</div>
 	  </div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+	$(document).ready(function(){
+		var food_total = $(".total_price")
+		food_total.each(
+			function(index, value){
+				var food_price = $(value).attr("data-id");
+				var delivery_cost = "{{ request.restaurant.delivery_charge }}";
+				var total = parseInt(food_price) + parseInt(delivery_cost);
+				$(value).html("$" + total);
+			}
+		)
+	});
+</script>
 {% endblock %}
