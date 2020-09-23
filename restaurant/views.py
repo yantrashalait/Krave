@@ -381,16 +381,13 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
 
 def change_order_status(request, *args, **kwargs):
     if request.method == 'POST':
-        try:
-            order = Order.objects.get(id=kwargs.get('order_id'))
-            status = request.POST.get('status_id')
-            order.status = status
-            order._prepared = False
-            order._runsignal = False
-            order._approved = True
-            order.save()
-        except Order.DoesNotExist:
-            return JsonResponse({'success': False})
+        order = Order.objects.get(id=kwargs.get('order_id'))
+        status = request.POST.get('status_id')
+        order.status = status
+        # order._prepared = False
+        # order._runsignal = False
+        # order._approved = True
+        order.save()
 
     return JsonResponse({'success': True})
 
