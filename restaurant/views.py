@@ -1,4 +1,6 @@
 import json
+from datetime import date
+from django.utils.timezone import get_current_timezone
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -34,6 +36,16 @@ ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm
 # new dashboard
 class DashboardView(RestaurantAdminMixin, TemplateView):
     template_name = 'restaurant/dashboard.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(DashboardView, self).get_context_data(*args, **kwargs)
+
+        context['orders_today'] = Order.objects.filter(cart__restaurant=self.request.restaurant, created_at__date=date.today())
+        context['total_earning'] = Order.objects.filter(Q(status=5)|Q(status=6), cart__restaurant=self.request.restaurant)
+        context['open_orders'] = Order.objects.filter(Q(status=0), cart__restaurant=self.request.restaurant)
+        context['delivery_trips'] = Order.objects.filter(Q(status=6), cart__restaurant=self.request.restaurant)
+
+        return context
 
 
 class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
@@ -120,8 +132,7 @@ class OrderView(RestaurantAdminMixin, ListView):
     context_object_name = 'orders'
 
     def get_queryset(self, *args, **kwargs):
-        # return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1).order_by('-added_date')
-        return self.model.objects.all()
+        return self.model.objects.filter(cart__restaurant=self.request.restaurant).order_by('-added_date')
 
 
 class AcceptedOrderView(RestaurantAdminMixin, ListView):

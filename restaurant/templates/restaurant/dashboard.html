@@ -1,4 +1,5 @@
 {% load static %}
+{% load rest_filters %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -106,19 +107,24 @@
                     <div class="rest_overview_d">
                         <div class="rest_d_i">
                         <span class="rest_o_t">order today</span>
-                        <h2>60</h2>
+                        <h2>{{ orders_today.count }}</h2>
                         </div>
                         <div class="rest_d_i">
                         <span class="rest_o_t">total earning</span>
-                        <h2>$160k</h2>
+                        <h2>
+                            {% for earning in total_earning %}
+                                <span class="total_price" data-id="{{ earning.cart.all|get_total_price }}"></span>
+                            {% endfor %}
+                            <span class="total_earning" ></span>
+                        </h2>
                         </div>
                         <div class="rest_d_i">
                         <span class="rest_o_t">open orders</span>
-                        <h2>30</h2>
+                        <h2>{{ open_orders.count }}</h2>
                         </div>
                         <div class="rest_d_i">
                         <span class="rest_o_t">delivery trips</span>
-                        <h2>40</h2>
+                        <h2>{{ delivery_trips.count }}</h2>
                         </div>
                     </div>
                     <div class="dsh_ord_detail">
@@ -399,5 +405,23 @@
     <script src="{% static 'restaurant/js/select2.js' %}"></script>
     <script src="{% static 'restaurant/js/datatables.js' %}"></script>
     <script src="{% static 'restaurant/js/main.js' %}"></script>
+
+    <script >
+        $(document).ready(function(){
+            var food_total = $(".total_price")
+            var total_earning = 0
+            food_total.each(
+                function(index, value){
+                    var food_price = $(value).attr("data-id");
+                    console.log(food_price)
+                    var delivery_cost = "{{ request.restaurant.delivery_charge }}";
+                    var total = parseInt(food_price) + parseInt(delivery_cost);
+                    total_earning = total_earning + total
+                }
+            )
+            $('.total_earning').html("$" + total_earning);
+        });
+    </script>
+
 </body>
 </html>
