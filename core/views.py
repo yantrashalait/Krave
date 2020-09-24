@@ -153,7 +153,7 @@ def search(request, *args, **kwargs):
     if request.method == 'POST':
         food_menu = FoodMenu.objects.filter(
             Q(name__icontains=request.POST.get('search', '')) |
-            Q(category__category__icontains=request.POST.get('search', '')))
+            Q(main_category__name__icontains=request.POST.get('search', '')))
         return render(request, 'core/search.html', {'foods': food_menu})
 
     else:
