@@ -115,10 +115,10 @@ class FoodMenuForm(forms.ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Item Name'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keep it more descriptive in less words'}))
     ingredients = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Ingredients', 'data-role': 'tagsinput'}))
-    old_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Old Price'}))
+    old_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Old Price'}), required=False)
     new_price = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
-    main_category = forms.ModelChoiceField(queryset=Category.objects.all())
+    main_category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)
     rest_category = forms.ModelChoiceField(queryset=RestaurantFoodCategory.objects.all(), required=False)
 
     def __init__(self, *args, **kwargs):
