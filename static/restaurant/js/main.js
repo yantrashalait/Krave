@@ -106,6 +106,10 @@
         placeholder: "Select a Category"
     });
 
+    $('#food-select').select2({
+      placeholder: "Select Food"
+    });
+
 
 
     $("#cl-bt").click(function (e) {

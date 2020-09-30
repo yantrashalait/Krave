@@ -114,7 +114,7 @@ class FoodMenuForm(forms.ModelForm):
     # category = forms.ChoiceField(widget=forms.Select(attrs={'class': 'fd-ct'}))
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Item Name'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Keep it more descriptive in less words'}))
-    ingredients = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Ingredients', 'data-role': 'tagsinput'}))
+    ingredients = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Ingredients', 'data-role': 'tagsinput', 'class': 'ingd_rest_delt'}))
     old_price = forms.FloatField(widget=forms.TextInput(attrs={'placeholder': 'Old Price'}), required=False)
     new_price = forms.FloatField(widget=forms.TextInput(attrs={'placeholder': 'New Price'}))
     preparation_time = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'E.g. (10-20)'}))
