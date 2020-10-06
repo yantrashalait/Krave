@@ -4,26 +4,32 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.http import HttpResponse
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.contrib.auth import logout
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.views import APIView
-from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateAPIView,\
     RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from api.serializers.user_auth import UserProfileSerializer, UserSerializer
 from userrole.models import UserRole
 from user.models import UserProfile
 from api.permissions import IsOwnerOrReadOnly, IsOwner
+from user.utils import send_user_verification_email
+from user.auth_tokens import account_activation_token
 
 from social_django.models import UserSocialAuth
 from social_django.utils import psa, load_strategy, load_backend
+
+User = get_user_model()
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -56,13 +62,22 @@ class UserCreationViewSet(APIView):
     def post(self, request, format=None):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()
-            user.is_customer = True
-            user.save()
-            group = Group.objects.get(name='customer')
-            userrole = UserRole.objects.get_or_create(user=user, group=group)
-            user.groups.add(group)
+            try:
+                user = serializer.save()
+                user.is_customer = True
+                user.is_active = False
+                user.save()
+                group = Group.objects.get(name='customer')
+                userrole = UserRole.objects.get_or_create(user=user, group=group)
+                user.groups.add(group)
+            except Exception as e:
+                return Response({
+                    'status': False,
+                    'msg': "Registration failed. Please contact the administrator.",
+                    'err': str(e)
+                })
             if user:
+                send_user_verification_email(user_id=user.id)
                 return Response(
                     {
                         'status': True,
@@ -70,9 +85,14 @@ class UserCreationViewSet(APIView):
                     }, status=status.HTTP_200_OK
                 )
         else:
+            if 'email' in serializer.errors:
+                msg = "User with this email already exists."
+            if 'username' in serializer.errors:
+                msg = "User with this username already exists."
+
             return Response({
                 'status': False,
-                'msg': serializer.errors,
+                'msg': msg,
             }, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -241,3 +261,46 @@ class UserProfileLogoutViewSet(APIView):
                 'msg': 'Logged out.'
             }, status=status.HTTP_200_OK
         )
+
+
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def activate(request):
+    uidb64 = request.data.get('uidb64')
+    token = request.data.get('token')
+    if not uidb64:
+        return Response({
+            'ack': False,
+            'msg': 'User id missing',
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+    if not token:
+        return Response({
+            'ack': False,
+            'msg': 'Token missing',
+        }, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        uid = urlsafe_base64_decode(request.data.get('uidb64'))
+        user = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return Response({
+            'ack': False,
+            'msg': 'User with given id does not exist.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        token, _created = Token.objects.get_or_create(user=user)
+        return Response({
+            'ack': True,
+            'msg': 'User activation successful.',
+            'data': {
+                'token': token.key,
+            }
+        }, status=status.HTTP_200_OK)
+    else:
+        return Response({
+            'ack': True,
+            'msg': 'Cannot activate user. Contact administrator.'
+        }, status=status.HTTP_401_UNAUTHORIZED)
