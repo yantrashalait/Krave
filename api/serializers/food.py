@@ -17,7 +17,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('name', 'image', 'detail_url', 'id', foods)
+        fields = ('name', 'image', 'detail_url', 'id')
 
     def get_detail_url(self, obj):
         return BASE_URL + "/category/" + str(obj.id)
