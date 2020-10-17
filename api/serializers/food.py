@@ -17,7 +17,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('name', 'image', 'detail_url', 'id')
+        fields = ('name', 'image', 'detail_url', 'id', foods)
 
     def get_detail_url(self, obj):
         return BASE_URL + "/category/" + str(obj.id)
@@ -55,10 +55,11 @@ class CategoryDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     image = serializers.SerializerMethodField(read_only=True)
     name = serializers.ReadOnlyField()
+    food = FoodMenuListSerializer(many=True)
 
     class Meta:
         model = Category
-        fields = ('id', 'image', 'name')
+        fields = ('id', 'image', 'name', 'food')
 
     def get_image(self, obj):
         if obj.image:
