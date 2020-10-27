@@ -1,0 +1,112 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        rel="stylesheet"
+    />
+
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/common.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/responsive.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/tagsinput.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/jquery.dataTables.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/owl.carousel.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/owl.theme.default.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/select2.css' %}" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    {% block css %} {% endblock %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+
+</head>
+
+<body>
+    <section class="whole__body__wrapper">
+        <section class="inner__body__wrapper">
+            <div class="col-md-3 for__sidemenu__bg">
+                <div class="dash__left__sitemenu">
+                    <div class="site_logo__holder">
+                        <img src="{% static 'restaurant/images/logo.png' %}" alt="" />
+                    </div>
+                    <div class="left__menu__lists">
+                        <ul>
+                            <li>
+                                <a href="{% url 'restaurant:dashboard' request.restaurant.id %}">
+                                <i class="fa fa-file" aria-hidden="true"></i> Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:restaurant-detail' request.restaurant.id %}"><i class="fa fa-tachometer" aria-hidden="true"></i>Restaurant Detail</a>
+                            </li>
+                            {% if request.restaurant.email %}
+                            <li>
+                                <a href="{% url 'restaurant:menu-list' request.restaurant.id %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Menus</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:order' request.restaurant.id %}"><i class="fa fa-file" aria-hidden="true"></i> Web Orders</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:manual-order' %}"><i class="fa fa-file" aria-hidden="true"></i> Restaurant Order</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:earnings' %}">
+                                <i class="fa fa-file" aria-hidden="true"></i> My Earning Orders</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'restaurant:chef-special' %}"><i class="fa fa-cutlery" aria-hidden="true"></i> Chef's Specials </a>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'restaurant:change-password' %}"><i class="fa fa-wrench" aria-hidden="true"></i> Change Password</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9 ml-auto">
+                <div class="row">
+                  <div class="right__body__sec">
+                    <div class="pd-tb-md">
+                      <div class="rb-pd-rl rs-in-hl">
+                        <div class="rs-in">
+                          <div class="rs-lg">
+                              {% if request.restaurant.logo %}
+                                <img src="{{ request.restaurant.logo.url }}" />
+                              {% else %}
+                                <img src="{% static 'restaurant/images/rest_logo.jpg' %}" alt="" />
+                              {% endif %}
+                          </div>
+                          <div class="rs-in-tx">
+                            <div class="rs-nm">{{ request.restaurant.name }}</div>
+                            <div class="rs-ad">{{ request.restaurant.street }}, {{ request.restaurant.town }}, {{ request.restaurant.state }} - {{ request.restaurant.zip_code }}</div>
+                          </div>
+                        </div>
+                        <div class="ac-bt-hl">
+                            <a href="{% url 'restaurant:restaurant-detail-edit' request.restaurant.id %}"><button class="ac-bt">Edit</button></a>
+                          <a href="{% url 'logout' %}"><button class="ac-bt">Logout</button></a>
+                        </div>
+                      </div>
+                    </div>
+        {% block content %} {% endblock %}
+
+        </section>
+    </section>
+
+    <script src="{% static 'restaurant/js/jquery.min.js' %}"></script>
+    <script src="{% static 'restaurant/js/bootstrap.js' %}"></script>
+    <script src="{% static 'restaurant/js/datepicker.js' %}"></script>
+    <script src="{% static 'restaurant/js/easySelect.js' %}"></script>
+    <script src="{% static 'restaurant/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'restaurant/js/select2.js' %}"></script>
+    <script src="{% static 'restaurant/js/datatables.js' %}"></script>
+    <script src="{% static 'restaurant/js/main.js' %}"></script>
+    <script src="{% static 'restaurant/js/tagsinput.js' %}"></script>
+    {% block script %} {% endblock %}
+</body>
+</html>

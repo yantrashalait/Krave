@@ -1,0 +1,124 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+{% load rest_filters %}
+
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/easySelectStyle.css' %}" />
+{% endblock %}
+
+{% block content %}
+			<!-- right top menu -->
+			<div class="it-ad-hl pd-tb-md">
+			  <div class="rb-pd-rl">
+				<div class="it-ac-hd">
+				  <div class="sc-hd">
+					<h1>Web Orders</h1>
+				  </div>
+				</div>
+				<!-- heading -->
+				<div class="ad-fd-fm pd-tb-md">
+				  <table id="fd-it-ls-dt" class="display">
+					<thead>
+					  <tr>
+						<th>Order ID</th>
+						<th>Delivery ID</th>
+						<th>Order Item</th>
+						<th>Order Date and Time</th>
+						<th>Payment Type</th>
+						<th>Status</th>
+					  </tr>
+					</thead>
+					<tbody>
+						{% for order in orders %}
+						<tr>
+							<td>
+								<a href="{% url 'restaurant:order-detail' request.restaurant.id order.id %}">#{{ order.id_string }}</a>
+							</td>
+							<td>{{ order.id_string }}</td>
+							<td>
+								{% for item in order.cart.all %}
+									{{ item.food.name }} <br>
+								{% endfor %}
+							</td>
+							<td>
+								{{ order.added_date.date }}
+								<br />
+								{{ order.added_date.time }}
+							</td>
+							<td>
+								{{ order.user }} <br />
+								<span class="total_price" data-id="{{ order.cart.all|get_total_price }}"></span> - {{ order.get_payment_display }}
+							</td>
+							<td>
+								<form action="{% url 'restaurant:change-order-status' order.id %}" method="POST" class="order-status">
+									{% csrf_token %}
+									<select class="form-control ord_tbl_opt" name="status_id" form_id='{{ order.id }}'>
+										{% for key, value in order.STATUS_CHOICES %}
+											<option value="{{ key }}" {% if value in order.get_status_display %}selected{% endif %}>{{ value }}</option>
+										{% endfor %}
+									</select>
+								</form>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				  </table>
+				</div>
+			  </div>
+			</div>
+		  </div>
+		  <!-- right body part -->
+		</div>
+	  </div>
+{% endblock %}
+
+
+{% block script %}
+<script >
+	$(document).ready(function(){
+		var food_total = $(".total_price")
+		food_total.each(
+			function(index, value){
+				var food_price = $(value).attr("data-id");
+				var delivery_cost = "{{ request.restaurant.delivery_charge }}";
+				var total = parseInt(food_price) + parseInt(delivery_cost);
+				$(value).html("$" + total);
+			}
+		) // price
+
+
+		$( '.order-status select' ).on( 'change', function() {
+			var id = $( this ).attr( 'form_id' );
+			var url = $('.order-status').attr('action');
+
+			form_data = new FormData($('.order-status')[0]);
+			form_data.append('status_id', $(this).val());
+
+			$.ajaxSetup({
+				headers: { "X-CSRFToken": '{{csrf_token}}' }
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: '/restaurant/order/status/' + id,
+				data: form_data,
+				processData: false,
+				contentType: false,
+				cache : false,
+				// success: function(response){
+				// 	console.log(response.success)
+				// 	if (response.success == true) {
+				// 		alert('success');
+				// 	}
+				// 	else {
+				// 		alert('no');
+				// 	}
+				// }
+			});
+		}); //form
+
+	});
+
+</script>
+{% endblock %}

@@ -12,7 +12,7 @@ def space_to_underscore(obj):
 
 @register.filter
 def get_food_items(obj, rest):
-    return FoodMenu.objects.filter(category=obj, restaurant=rest)
+    return FoodMenu.objects.filter(rest_category=obj, restaurant=rest)
 
 
 @register.filter

@@ -1,13 +1,15 @@
-{% include 'restaurant/header.php' %}
+{% extends 'restaurant/base.html' %}
 {% load static %}
+
+{% block content %}
     <div class="it-ad-hl pd-tb-md">
         <div class="rb-pd-rl">
             <div class="it-ac-hd">
                 <div class="sc-hd">
-                    <h1>Items</h1>
+                    <h1>Food Menu</h1>
                 </div>
                 <div class="ac-bt-hl">
-                    <a href="{% url 'restaurant:dashboard' request.restaurant.id %}">
+                    <a href="{% url 'restaurant:menu-add' request.restaurant.id %}">
                         <button class="ac-bt">Add Food Item</button>
                     </a>
                 </div>
@@ -46,9 +48,4 @@
 <!-- right body part -->
 </div>
 </div>
-
-    </section>
-    {% include 'restaurant/footer.php' %}
-
-  </body>
-</html>
+{% endblock %}

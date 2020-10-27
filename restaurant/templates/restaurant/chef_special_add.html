@@ -1,0 +1,42 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+
+{% block content %}
+                <!-- right top menu -->
+                <div class="it-ad-hl pd-tb-md">
+                    <div class="rb-pd-rl">
+                    <div class="it-ac-hd">
+                    <div class="sc-hd">
+                        <h1>Add Food To Chef's Special</h1>
+                    </div>
+                    </div>
+                    <!-- heading -->
+                    <div class="ad-fd-fm pd-tb-md">
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'restaurant:chef-special-add' %}">
+                            {% csrf_token %}
+                            <div class="fm-ls sm-mb" id="foods">
+                            <label>Select Food</label>
+                            <select name="food" class="fd-ct" id="food-select">
+                                {% for food in foods %}
+                                    <option value="{{ food.id }}">{{ food.name }}</option>
+                                {% endfor %}
+                             </select>
+                            </div>
+                            {% for error in form.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                            <!-- form list -->
+                            <div class="fm-ls sm-mb">
+                                <button class="sb-bt mx-auto d-flex">Add To Chef's Special</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+          <!-- right body part -->
+        </div>
+      </div>
+{% endblock %}
+

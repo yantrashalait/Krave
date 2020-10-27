@@ -1,4 +1,6 @@
 import json
+from datetime import date
+from django.utils.timezone import get_current_timezone
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -31,59 +33,23 @@ StyleFormSet = inlineformset_factory(FoodMenu, FoodStyle, form=FoodMenuStyleForm
 ExtraFormSet = inlineformset_factory(FoodMenu, FoodExtra, form=FoodMenuExtraForm, fields=['name_of_extra', 'cost'], extra=1, max_num=10)
 
 
-class DashboardView(RestaurantAdminMixin, CreateView):
-    model = FoodMenu
-    template_name = 'restaurant/index.php'
-    form_class = FoodMenuForm
+# new dashboard
+class DashboardView(RestaurantAdminMixin, TemplateView):
+    template_name = 'restaurant/dashboard.html'
 
     def get_context_data(self, *args, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        if self.request.method == "POST":
-            context['styleform'] = StyleFormSet(self.request.POST, prefix='styleform', instance=self.object)
-            context['extraform'] = ExtraFormSet(self.request.POST, prefix='extraform', instance=self.object)
+        context = super(DashboardView, self).get_context_data(*args, **kwargs)
 
-        else:
-            context['styleform'] = StyleFormSet(prefix='styleform', instance=self.object)
-            context['extraform'] = ExtraFormSet(prefix='extraform', instance=self.object)
+        context['orders_today'] = Order.objects.filter(cart__restaurant=self.request.restaurant, created_at__date=date.today())
+        context['total_earning'] = Order.objects.filter(Q(status=5)|Q(status=6), cart__restaurant=self.request.restaurant)
+        context['open_orders'] = Order.objects.filter(Q(status=0), cart__restaurant=self.request.restaurant)
+        context['delivery_trips'] = Order.objects.filter(Q(status=6), cart__restaurant=self.request.restaurant)
+
         return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        styleform = context['styleform']
-        extraform = context['extraform']
-        with transaction.atomic():
-            self.object = form.save(commit=False)
-            self.object.restaurant = self.request.restaurant
-            self.object.save()
-            if styleform.is_valid() and extraform.is_valid():
-                for form in styleform:
-                    name_of_style = form.cleaned_data.get('name_of_style')
-                    if name_of_style != '' and name_of_style != None and name_of_style != ' ':
-                        print(name_of_style)
-                        f = form.save(commit=False)
-                        f.food = self.object
-                        f.save()
-                for form in extraform:
-                    name_of_extra = form.cleaned_data.get('name_of_extra')
-                    if name_of_extra != '' and name_of_extra != None and name_of_extra != ' ':
-                        f = form.save(commit=False)
-                        f.food = self.object
-                        f.save()
-
-                return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
-
-    def get_form_kwargs(self, *args, **kwargs):
-        kwargs = super(DashboardView, self).get_form_kwargs(*args, **kwargs)
-        kwargs['restaurant'] = self.request.restaurant
-        return kwargs
 
 
 class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
-    template_name = 'restaurant/rest_detail.php'
+    template_name = 'restaurant/restaurant_detail.html'
     form_class = RestaurantForm
     model = Restaurant
 
@@ -94,6 +60,7 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         context = super(RestaurantDetailView, self).get_context_data(*args, **kwargs)
         context['cuisine'] = Cuisine.objects.all()
+        context['categories'] = RestaurantFoodCategory.objects.filter(restaurant=self.request.restaurant)
         try:
             context['rest_cuisine'] = RestaurantCuisine.objects.get(restaurant=self.request.restaurant)
         except RestaurantCuisine.DoesNotExist:
@@ -102,7 +69,7 @@ class RestaurantDetailView(RestaurantAdminMixin, UpdateView):
 
 
 class RestaurantEditDetailView(RestaurantAdminMixin, UpdateView):
-    template_name = 'restaurant/rest_detail_edit.php'
+    template_name = 'restaurant/restaurant_detail_edit.html'
     form_class = RestaurantEditForm
     model = Restaurant
 
@@ -160,11 +127,12 @@ class RestaurantEditDetailView(RestaurantAdminMixin, UpdateView):
 class OrderView(RestaurantAdminMixin, ListView):
     login_url = 'login'
     model = Order
-    template_name = 'restaurant/orders.php'
+    # template_name = 'restaurant/orders.php'
+    template_name = 'restaurant/web_order.html'
     context_object_name = 'orders'
 
     def get_queryset(self, *args, **kwargs):
-        return self.model.objects.filter(Q(paid=True)|Q(payment=1), cart__restaurant=self.request.restaurant, status=1).order_by('-added_date')
+        return self.model.objects.filter(cart__restaurant=self.request.restaurant).order_by('-added_date')
 
 
 class AcceptedOrderView(RestaurantAdminMixin, ListView):
@@ -180,7 +148,8 @@ class AcceptedOrderView(RestaurantAdminMixin, ListView):
 class MenuListView(RestaurantAdminMixin, ListView):
     login_url = 'login'
     model = FoodMenu
-    template_name = 'restaurant/food-items.php'
+    # template_name = 'restaurant/food-items.php'
+    template_name = 'restaurant/food_list.html'
     context_object_name = 'foods'
 
     def get_queryset(self, *args, **kwargs):
@@ -189,7 +158,8 @@ class MenuListView(RestaurantAdminMixin, ListView):
 
 class MenuEditView(RestaurantAdminMixin, UpdateView):
     model = FoodMenu
-    template_name = 'restaurant/index.php'
+    # template_name = 'restaurant/index.php'
+    template_name = 'restaurant/add_food_item.html'
     form_class = FoodMenuForm
 
     def get_object(self):
@@ -244,7 +214,7 @@ class MenuEditView(RestaurantAdminMixin, UpdateView):
 
 class MenuDeleteView(RestaurantAdminMixin, DeleteView):
     model = FoodMenu
-    template_name = 'restaurant/food_confirm_delete.php'
+    template_name = 'restaurant/food_confirm_delete.html'
 
     def get_object(self):
         id_ = self.kwargs.get('food_id')
@@ -270,11 +240,62 @@ class MenuDeleteView(RestaurantAdminMixin, DeleteView):
         return HttpResponseRedirect(success_url)
 
 
+class MenuAddView(RestaurantAdminMixin, CreateView):
+    model = FoodMenu
+    template_name = 'restaurant/add_food_item.html'
+    form_class = FoodMenuForm
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(MenuAddView, self).get_context_data(**kwargs)
+        if self.request.method == "POST":
+            context['styleform'] = StyleFormSet(self.request.POST, prefix='styleform', instance=self.object)
+            context['extraform'] = ExtraFormSet(self.request.POST, prefix='extraform', instance=self.object)
+
+        else:
+            context['styleform'] = StyleFormSet(prefix='styleform', instance=self.object)
+            context['extraform'] = ExtraFormSet(prefix='extraform', instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        styleform = context['styleform']
+        extraform = context['extraform']
+        with transaction.atomic():
+            self.object = form.save(commit=False)
+            self.object.restaurant = self.request.restaurant
+            self.object.save()
+            if styleform.is_valid() and extraform.is_valid():
+                for form in styleform:
+                    name_of_style = form.cleaned_data.get('name_of_style')
+                    if name_of_style != '' and name_of_style != None and name_of_style != ' ':
+                        print(name_of_style)
+                        f = form.save(commit=False)
+                        f.food = self.object
+                        f.save()
+                for form in extraform:
+                    name_of_extra = form.cleaned_data.get('name_of_extra')
+                    if name_of_extra != '' and name_of_extra != None and name_of_extra != ' ':
+                        f = form.save(commit=False)
+                        f.food = self.object
+                        f.save()
+
+                return HttpResponseRedirect(reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id}))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('restaurant:menu-list', kwargs={'rest_id': self.request.restaurant.id})
+
+    def get_form_kwargs(self, *args, **kwargs):
+        kwargs = super(MenuAddView, self).get_form_kwargs(*args, **kwargs)
+        kwargs['restaurant'] = self.request.restaurant
+        return kwargs
+
+
 # crud for restaurant food categories
 class CategoryListView(RestaurantAdminMixin, ListView):
     login_url = 'login'
     model = RestaurantFoodCategory
-    template_name = 'restaurant/categories-list.php'
+    template_name = 'restaurant/category_list.html'
     context_object_name = 'categories'
 
     def get_queryset(self, *args, **kwargs):
@@ -284,29 +305,28 @@ class CategoryListView(RestaurantAdminMixin, ListView):
 class CategoryEditView(RestaurantAdminMixin, UpdateView):
     login_url = 'login'
     model = RestaurantFoodCategory
-    template_name = 'restaurant/categories-add.php'
+    template_name = 'restaurant/category_add.html'
     form_class = RestaurantCategoryForm
 
     def get_object(self):
         id_ = self.kwargs.get('category_id')
         return get_object_or_404(RestaurantFoodCategory, pk=id_)
 
-
     def get_success_url(self):
-        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
+        return reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id})
 
 
 class CategoryDeleteView(RestaurantAdminMixin, DeleteView):
     login_url = 'login'
     model = RestaurantFoodCategory
-    template_name = 'restaurant/restaurantfoodcategory-confirm-delete.php'
+    template_name = 'restaurant/restaurantfoodcategory-confirm-delete.html'
 
     def get_object(self):
         id_ = self.kwargs.get('category_id')
         return get_object_or_404(RestaurantFoodCategory, pk=id_)
 
     def get_success_url(self):
-        return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
+        return reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id})
 
     def delete(self, request, *args, **kwargs):
         """
@@ -327,7 +347,7 @@ class CategoryDeleteView(RestaurantAdminMixin, DeleteView):
 
 class CategoryCreateView(RestaurantAdminMixin, CreateView):
     login_url = 'login'
-    template_name = 'restaurant/categories-add.php'
+    template_name = 'restaurant/category_add.html'
     form_class = RestaurantCategoryForm
     model = RestaurantFoodCategory
 
@@ -338,8 +358,7 @@ class CategoryCreateView(RestaurantAdminMixin, CreateView):
             self.object.restaurant = self.request.restaurant
             self.object.save()
 
-            return HttpResponseRedirect(reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id}))
-        return super().form_valid(form)
+            return HttpResponseRedirect(reverse('restaurant:restaurant-detail', kwargs={'rest_id': self.request.restaurant.id}))
 
     def get_success_url(self):
         return reverse('restaurant:category-list', kwargs={'rest_id': self.request.restaurant.id})
@@ -369,6 +388,19 @@ class OrderDetailView(RestaurantAdminMixin, DetailView):
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(Order, id=self.kwargs.get('order_id'))
+
+
+def change_order_status(request, *args, **kwargs):
+    if request.method == 'POST':
+        order = Order.objects.get(id=kwargs.get('order_id'))
+        status = request.POST.get('status_id')
+        order.status = status
+        # order._prepared = False
+        # order._runsignal = False
+        # order._approved = True
+        order.save()
+
+    return JsonResponse({'success': True})
 
 
 def accept_order(request, *args, **kwargs):
@@ -417,7 +449,9 @@ def ready_order(request, *args, **kwargs):
 def manual_order(request, *args, **kwargs):
     if request.method == "GET":
         foods = FoodMenu.objects.filter(restaurant=request.restaurant.id, deleted=False)
-        return render(request, 'restaurant/order-place.php', {'foods': foods})
+        cart = FoodCart.objects.filter(session_key=request.session.session_key, checked_out=False)
+
+        return render(request, 'restaurant/rest_order.html', {'foods': foods, 'carts': cart})
 
     if request.method == "POST":
         food_id = int(request.POST.get('food'))
@@ -434,16 +468,23 @@ def manual_order(request, *args, **kwargs):
         if 'extras' in request.POST:
             extras = request.POST.getlist('extras')
             for item in extras:
-                extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                try:
+                    extra = FoodExtra.objects.get(name_of_extra=item.replace("_", " "), food=food)
+                except:
+                    extra = FoodExtra.objects.filter(name_of_extra=item.replace("_", " "), food=food)[0]
                 cart.extras.add(extra)
 
         if 'radio3' in request.POST:
-            style = FoodStyle.objects.get(name_of_style=request.POST.get('radio3', None).replace("_", " "), food=food)
+            try:
+                style = FoodStyle.objects.get(
+                    name_of_style=request.POST.get('radio3', '').replace("_", " "), food=food)
+            except:
+                style = FoodStyle.objects.filter(
+                    name_of_style=request.POST.get('radio3', '').replace("_", ""), food=food)[0]
             cart.style = style
-
         cart.save()
 
-        return HttpResponseRedirect(reverse('restaurant:food-cart'))
+        return HttpResponseRedirect(reverse('restaurant:manual-order'))
 
 
 class FoodCartListView(ListView):
@@ -546,16 +587,28 @@ def add_to_order(request, *args, **kwargs):
 
 class PaymentListView(ListView):
     model = RestaurantPayment
-    template_name = "restaurant/my-payment.php"
+    template_name = "restaurant/my_payment.html"
     context_object_name = "earnings"
 
     def get_queryset(self, *args, **kwargs):
         return RestaurantPayment.objects.filter(restaurant=self.request.restaurant)
 
 
+class PaymentListSearchView(ListView):
+    model = RestaurantPayment
+    template_name = "restaurant/my_payment.html"
+    context_object_name = "earnings"
+
+    def get_queryset(self, *args, **kwargs):
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
+        if start_date and end_date:
+            return RestaurantPayment.objects.filter(date__range=[start_date, end_date])
+
+
 def list_chef_special(request):
     object_list = FoodMenu.objects.filter(chef_special=True, restaurant=request.restaurant)
-    return render(request, 'restaurant/chef_special_list.php', {'object_list': object_list})
+    return render(request, 'restaurant/chef_special.html', {'object_list': object_list})
 
 
 def add_chef_special(request):
@@ -565,7 +618,7 @@ def add_chef_special(request):
         return HttpResponseRedirect(reverse('restaurant:chef-special'))
     else:
         foods = FoodMenu.objects.filter(restaurant=request.restaurant)
-        return render(request, 'restaurant/chef_special_add.php', {'foods': foods})
+        return render(request, 'restaurant/chef_special_add.html', {'foods': foods})
 
 
 def delete_chef_special(request, pk):

@@ -1,0 +1,152 @@
+{% extends 'restaurant/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'restaurant/css/easySelectStyle.css' %}" />
+{% endblock %}
+
+{% block content %}
+			<!-- right top menu -->
+			<div class="it-ad-hl pd-tb-md">
+			  <div class="rb-pd-rl">
+				<div class="it-ac-hd">
+				  <div class="sc-hd">
+					<h1>Restarurant Orders</h1>
+				  </div>
+				</div>
+				<!-- heading -->
+				<div class="ad-fd-fm pd-tb-md">
+					<form method="POST" action=".">
+						{% csrf_token %}
+						<div class="fm-ls sm-mb">
+							<label>Food Name</label>
+							<!-- <select class="fd-ct" multiple="multiple"> -->
+							<select class="fd-ct" name="food" id="food-select">
+								<option></option>
+								{% for food in foods %}
+									<option value="{{ food.id }}">{{ food.name }}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="fm-ls sm-mb">
+							<label>Quantity</label>
+							<input type="number" placeholder="Quantity" value="" name='qty' />
+						</div>
+
+						<div class="fm-ls sm-mb">
+							<label>Select Style</label>
+							<select class="form-control" name="radio3" id="styles">
+
+							</select>
+						</div>
+
+						<div class="fm-ls sm-mb">
+							<label> Select Extra</label>
+							<select class="form-control" name="extras" multiple="multiple" id="extras">
+
+							</select>
+						</div>
+
+						<div class="fm-ls sm-mb">
+							<button class="sb-bt mx-auto d-flex" type="submit">Add Order</button>
+						</div>
+					</form>
+					<div class="wrp__t_d_rest_ord">
+						<div class="it-ac-hd res_or_tbl">
+						<div class="sc-hd">
+							<h1>Orders List</h1>
+						</div>
+						</div>
+						<table id="fd-it-ls-dt" class="display">
+							<thead>
+								<tr>
+								<th>Order ID</th>
+								<th>Food Name</th>
+								<th>Quantity</th>
+								<th>Style Type</th>
+								<th>Extra</th>
+								<th>Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for cart in carts %}
+									<tr>
+										<td>
+											<a href="#">{{ forloop.counter }}</a>
+										</td>
+
+										<td>{{ cart.food.name }}</td>
+
+										<td>{{ cart.number_of_food }}</td>
+										<td>
+											{% if cart.style %}
+												{{ cart.style.name_of_style }}
+											{% endif %}
+										</td>
+
+										<td>
+											{% for extra in cart.extras.all %}
+												{{ extra.name_of_extra }} <br>
+											{% endfor %}
+										</td>
+										<td class="ac-bt-hl-fd-ls">
+											<button class="btn btn-primary">Edit</button>
+											<a href="{% url 'restaurant:cart-delete' cart.pk %}" class="btn btn-danger">Remove</a>
+										</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</div>
+			  </div>
+			</div>
+		</div>
+		<!-- right body part -->
+		</div>
+	</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+	$('#food-select').on('change', function(){
+	  var food_id = $(this).children("option:selected").val();
+	  $.ajax({
+		url: "{% url 'core:get-food-detail' %}",
+		data: {
+		  'food_id': food_id,
+		},
+		dataType: 'json',
+		success: function(result){
+		  var data = result;
+
+		  $("#styles").html("<option></option>");
+		  var styles = [];
+		  styles = data.styles;
+		  styles = jQuery.parseJSON(styles);
+
+		  styles.forEach(function(style){
+			var style_content = '<option value="'+ style.fields.name_of_style.split(' ').join('_') +'"> '+ style.fields.name_of_style + '</option>';
+			$("#styles").append(style_content);
+		  });
+
+		  var $extra_select = $("#extras");
+		  $extra_select.empty();
+		  var extras = [];
+		  extras = data.extras;
+		  extras = jQuery.parseJSON(extras);
+
+		  extras.forEach(function(extra){
+		    var extra_content = '<option value="'+ extra.fields.name_of_extra.split(' ').join('_') +'">'+ extra.fields.name_of_extra +'</option>';
+			$extra_select.append(extra_content);
+		  });
+		  $extra_select.easySelect({
+		  	showEachItem: true,
+        	dropdownMaxHeight: "100px",
+		  });
+		}
+	  })
+	});
+  </script>
+{% endblock %}
